@@ -4,7 +4,6 @@ function HTMLGenerator() {
 
 HTMLGenerator.prototype.generateTiddler = function(tiddler) {
 	var id = 'tiddler' + tiddler.title.replace(/ /g,"_")
-
 	var container = new HTML('section', undefined, { id: id, class: 'tiddler' });
 	var header = new HTML('section');
 	var h3 = new HTML('h3', tiddler.title , { class: 'tiddler-title' });
@@ -15,7 +14,7 @@ HTMLGenerator.prototype.generateTiddler = function(tiddler) {
 	var text = (tiddler.render ? tiddler.render : tiddler.text);
 	var content = new HTML('article');
 
-	if (tiddler.type === 'application/json' || tiddler.type === 'text/css' ) {
+	if (tiddler.type === 'application/javascript' || tiddler.type === 'application/json' || tiddler.type === 'text/css' ) {
 		var code = new HTML('code', text);
 		content.append(code);
 	} else {
