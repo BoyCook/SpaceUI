@@ -1,0 +1,36 @@
+tags: meta
+type: text/css
+
+@import url(font-awesome.css);
+@import url(/tsblog.css);
+
+#container {
+	background: #f0f4f8;
+	border-radius: 8px;
+	padding: 45px 65px;
+	width: 535px; /* 665 - 65 - 65 */
+	margin-left: 475px;
+}
+
+#container a {
+	color: #0082AF;
+	text-decoration: none;
+}
+
+#container h1 {
+	font-size: 36px;
+	text-transform: uppercase;
+}
+
+#header {
+	text-align: center;
+}
+
+#header .date {
+	font-size: 16px;
+	color: #0082af;
+}
+
+p.tags {
+	font-weight: bold;
+}

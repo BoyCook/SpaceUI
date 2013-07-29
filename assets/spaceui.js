@@ -29,7 +29,7 @@ SPA.prototype.loadRecent = function() {
 }
 
 SPA.prototype.renderTiddlers = function(html) {
-   $('#content').html(html);	
+   $('.nav').html(html);	
 }
 
 SPA.prototype.putTiddler = function(url, data, success, error) {
