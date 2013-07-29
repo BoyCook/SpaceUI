@@ -14,7 +14,8 @@ function SPA(host) {
 }
 
 SPA.prototype.setup = function() {
-	this.loadRecent();   
+	this.loadRecent(); 
+    this.getTiddler('Space UI')  
 }
 
 SPA.prototype.loadConfig = function() {
