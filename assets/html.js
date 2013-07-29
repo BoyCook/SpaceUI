@@ -1,10 +1,9 @@
 
 function HTML() {
-
 }
 
 HTML.prototype.generateTiddler = function(tiddler) {
-	return "<article>" + tiddler.text + "</article>"
+	return "<article class='tiddler'>" + tiddler.render + "</article>"
 }
 
 HTML.prototype.generateTiddlerList = function(tiddler) {

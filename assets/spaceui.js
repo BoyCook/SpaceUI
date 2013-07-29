@@ -42,7 +42,7 @@ SPA.prototype.loadTiddler = function(title) {
 		alert(error);
 	};
 
-	this.load(this.host + '/bags/' + this.bagName + '/tiddlers/' + title, success, error);
+	this.load(this.host + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', success, error);
 }
 
 SPA.prototype.renderTiddlers = function(html) {
