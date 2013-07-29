@@ -10,10 +10,6 @@ HTML.prototype.generateTiddler = function(tiddler) {
 
 HTML.prototype.generateTiddlerList = function(tiddler) {
 	var onclick = "app.getTiddler('" + tiddler.title + "\')";
-	return "<article>" + this.a({href: '#', title: tiddler.title, onclick: onclick}) + "</article>"
-}
-
-HTML.prototype.a = function(a) {
-	var onclick = a.onclick ? " onclick=\"" + a.onclick + "\"" : "";
-	return "<a href=\"" + a.href + "\" " + onclick + ">" + a.title + "</a>"
+	var a = new DOM('a', tiddler.title, { href: '#', onclick: onclick });
+	return "<article>" + a.render() + "</article>"
 }
