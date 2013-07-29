@@ -1,0 +1,54 @@
+body {
+	margin: 0;
+	font-family: Arial;
+}
+
+header {
+	position: absolute;
+	top: 0;
+	background-color: lightPink;
+	width: 100%;
+	padding-left: 1%;
+}
+
+#actions {
+	position: absolute;
+	top: 80px;
+	bottom: 40px;
+	width: 25%;
+	padding-left: 1%;
+	background-color: lightBlue;
+}
+
+#content {
+	position: fixed;
+	left: 25%;
+	right: 0;
+	top: 80px;
+	bottom: 36px;
+	overflow: auto;
+	padding-left: 1%;
+	padding-right: 1%;
+	background-color: lightYellow;
+}
+
+#following a {
+	text-decoration: none;
+	font-size: 20px;
+}
+
+footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: white;
+	padding-left: 1%;
+}
+
+pre {
+    word-wrap: break-word;
+}
+
+.icon-remove {
+	color: red;
+}
