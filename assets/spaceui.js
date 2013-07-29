@@ -20,8 +20,8 @@ SPA.prototype.setup = function() {
 }
 
 SPA.prototype.loadConfig = function() {
-	this.load(this.host + '/bags/' + this.bagName + '/tiddlers/SiteTitle', success, this.ajaxError);
-	this.load(this.host + '/bags/' + this.bagName + '/tiddlers/SiteSubTitle', success, this.ajaxError);
+	// this.load(this.host + '/bags/' + this.bagName + '/tiddlers/SiteTitle', success, this.ajaxError);
+	// this.load(this.host + '/bags/' + this.bagName + '/tiddlers/SiteSubTitle', success, this.ajaxError);
 }
 
 SPA.prototype.getRecent = function() {
@@ -50,22 +50,6 @@ SPA.prototype.renderTiddlers = function(tiddlers) {
 
 SPA.prototype.renderTiddler = function(tiddler) {
    $('#content').prepend(this.html.generateTiddler(tiddler));	
-}
-
-SPA.prototype.putTiddler = function(url, data, success, error) {
-    $.ajax({
-        url: url,
-        type: 'PUT',
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify(data),        
-        success: function(data, status, xhr) {
-            success(data);
-        },
-        error: function(xhr, error, exc) {
-            error(error);
-        }
-    });	
 }
 
 SPA.prototype.load = function(url, success, error) {

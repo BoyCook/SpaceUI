@@ -14,15 +14,15 @@ Space.prototype.getTiddler = function(title, success, error) {
 };
 
 Space.prototype._getTiddler = function(title, success, error) {
-	this.load(this.host + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', success, error);
+	this.goGet(this.host + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', success, error);
 };
 
 Space.prototype.getRecent = function(success, error) {
-	this.load(this.host + '/bags/spaceui_public/tiddlers?sort=-modified;limit=10', success, this.ajaxError);
+	this.getAll('?sort=-modified;limit=50', success, error);
 };
 
-Space.prototype.getAll = function() {
-
+Space.prototype.getAll = function(params, success, error) {
+	this.goGet(this.host + '/bags/' + this.bagName + '/tiddlers', success, error);
 };
 
 Space.prototype.filter = function() {
@@ -41,7 +41,7 @@ Space.prototype.deleteTiddler = function() {
 
 };
 
-Space.prototype.load = function(url, success, error) {
+Space.prototype.goGet = function(url, success, error) {
     $.ajax({
         url: url,
         type: "GET",
@@ -51,6 +51,22 @@ Space.prototype.load = function(url, success, error) {
         },
         error: function(xhr, error, exc) {
             error(xhr, error, exc);
+        }
+    });	
+}
+
+Space.prototype.doPut = function(url, data, success, error) {
+    $.ajax({
+        url: url,
+        type: 'PUT',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(data),        
+        success: function(data, status, xhr) {
+            success(data);
+        },
+        error: function(xhr, error, exc) {
+            error(error);
         }
     });	
 }
