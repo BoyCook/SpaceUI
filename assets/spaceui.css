@@ -7,7 +7,10 @@ header {
 }
 
 nav {
-	border-left: solid 1px #e3e3e3;
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 
 #content {
@@ -18,7 +21,30 @@ footer {
 	border-top: solid 1px #e3e3e3;
 }
 
+.tiddler {
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-top: 15px;
+	padding-bottom: 15px;	
+}
+
 .tiddler:nth-child(even) {
     border-top: solid 1px #e3e3e3;    
     border-bottom: solid 1px #e3e3e3;    
+}
+
+.tiddler-title {
+	display: inline;
+}
+
+.tiddler-modified {
+	display: inline;
+	font-style: italic;
+	text-decoration: none;
+	color: gray;
+	font-size: 12px;	
+}
+
+.givefocus {
+	top: 50px;
 }

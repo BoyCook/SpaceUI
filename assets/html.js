@@ -3,7 +3,9 @@ function HTML() {
 }
 
 HTML.prototype.generateTiddler = function(tiddler) {
-	return "<article class='tiddler'>" + tiddler.render + "</article>"
+	var id = 'tiddler' + tiddler.title.replace(/ /g,"_")
+	return 	"<section class='tiddler' id='" + id + "'><section><p class='tiddler-title'>" + tiddler.title + "</p> <p class='tiddler-modified'>" + tiddler.modified + "</p></section>" +
+			"<article>" + (tiddler.render ? tiddler.render : tiddler.text) + "</article></section>"	
 }
 
 HTML.prototype.generateTiddlerList = function(tiddler) {

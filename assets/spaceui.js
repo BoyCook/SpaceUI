@@ -9,48 +9,47 @@ function SPA(host) {
 	this.currentSpace = host.substring(host.indexOf('://') + 3, host.indexOf('.'));
 	this.bagName = 'spaceui_public'; //TODO calculate bag name
 	this.html = new HTML();
-	this.spaces = undefined;
+	this.tiddlers = {};
 	//TODO: do something with this data - i.e. provide client filter
-	this.loadRecent();    
+	this.loadRecent();   
 }
 
 SPA.prototype.loadRecent = function() {
 	var context = this;	
 	var success = function(data) {
-		var tiddlerText = '';
-		for (var i=0,len=data.length;i<len;i++) {
-			tiddlerText += context.html.generateTiddlerList(data[i]);
-		}
-		context.renderTiddlers(tiddlerText);
+		context.renderTiddlers(data);
 	};
-	
-	var error = function(error) {
-		alert(error);
-	};
+	this.load(this.host + '/bags/spaceui_public/tiddlers?sort=-modified;limit=10', success, this.ajaxError);
+}
 
-	
-	this.load(this.host + '/bags/spaceui_public/tiddlers?sort=-modified;limit=10', success, error);
+SPA.prototype.getTiddler = function(title) {
+	var tiddler = this.tiddlers[title]; 
+	if (tiddler != undefined) {
+		this.renderTiddler(tiddler);
+	} else {
+		this.loadTiddler(title);
+	}
 }
 
 SPA.prototype.loadTiddler = function(title) {
 	var context = this;	
 	var success = function(data) {
-		context.renderTiddler(context.html.generateTiddler(data));
+		context.tiddlers[title] = data;
+		context.renderTiddler(data);
 	};
-	
-	var error = function(error) {
-		alert(error);
-	};
-
-	this.load(this.host + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', success, error);
+	this.load(this.host + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', success, this.ajaxError);
 }
 
-SPA.prototype.renderTiddlers = function(html) {
+SPA.prototype.renderTiddlers = function(tiddlers) {
+	var html = '';
+	for (var i=0,len=tiddlers.length; i<len; i++) {
+		html += this.html.generateTiddlerList(tiddlers[i]);
+	}
    $('.nav').html(html);	
 }
 
-SPA.prototype.renderTiddler = function(html) {
-   $('#content').append(html);	
+SPA.prototype.renderTiddler = function(tiddler) {
+   $('#content').append(this.html.generateTiddler(tiddler));	
 }
 
 SPA.prototype.putTiddler = function(url, data, success, error) {
@@ -78,7 +77,11 @@ SPA.prototype.load = function(url, success, error) {
             success(data);
         },
         error: function(xhr, error, exc) {
-            error(error);
+            error(xhr, error, exc);
         }
     });	
+}
+
+SPA.prototype.ajaxError = function(xhr, error, exc) {
+	alert(error);
 }
