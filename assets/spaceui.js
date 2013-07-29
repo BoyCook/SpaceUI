@@ -2,6 +2,7 @@ var app = undefined;
 
 $(document).ready(function () {
     app = new SPA("http://" + window.location.hostname + ':' + window.location.port);
+    app.setup();
 });
 
 function SPA(host) {
@@ -10,8 +11,15 @@ function SPA(host) {
 	this.bagName = 'spaceui_public'; //TODO calculate bag name
 	this.html = new HTML();
 	this.tiddlers = {};
-	//TODO: do something with this data - i.e. provide client filter
+}
+
+SPA.prototype.setup = function() {
 	this.loadRecent();   
+}
+
+SPA.prototype.loadConfig = function() {
+	this.load(this.host + '/bags/' + this.bagName + '/tiddlers/SiteTitle', success, this.ajaxError);
+	this.load(this.host + '/bags/' + this.bagName + '/tiddlers/SiteSubTitle', success, this.ajaxError);
 }
 
 SPA.prototype.loadRecent = function() {
@@ -24,9 +32,7 @@ SPA.prototype.loadRecent = function() {
 
 SPA.prototype.getTiddler = function(title) {
 	var tiddler = this.tiddlers[title]; 
-	if (tiddler != undefined) {
-		this.renderTiddler(tiddler);
-	} else {
+	if (typeof tiddler === "undefined") {
 		this.loadTiddler(title);
 	}
 }
@@ -49,7 +55,7 @@ SPA.prototype.renderTiddlers = function(tiddlers) {
 }
 
 SPA.prototype.renderTiddler = function(tiddler) {
-   $('#content').append(this.html.generateTiddler(tiddler));	
+   $('#content').prepend(this.html.generateTiddler(tiddler));	
 }
 
 SPA.prototype.putTiddler = function(url, data, success, error) {
