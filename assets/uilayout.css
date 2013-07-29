@@ -1,0 +1,82 @@
+/* Page structure */
+
+body {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+}
+
+nav {
+    /*position: fixed;*/
+    float: right;    
+    /*width: 100%;*/
+}
+
+nav ul {
+    list-style: none;   
+}
+
+nav li {
+    display: list-item;
+}
+
+#content {
+    float: left;
+    min-height: 400px;
+    margin-right: 20%;
+    /*position: relative;*/
+}
+
+footer {
+    clear: both;
+}
+
+/* MEDIA QUERIES */
+/* for 980px or less */
+@media screen and (max-width: 980px) {
+    .content {
+        min-height: 900px;
+        margin-left: 25%;
+        position: relative;
+    }    
+}
+
+/* for 768px (iPad mini) or less */
+@media screen and (max-width: 768px) {
+    nav {
+        position: relative;
+        text-align: center;        
+    }
+    nav li {
+        display: inline;
+    }       
+    .content {
+        margin-left: 0%;        
+        float: none;
+        width: auto;
+        float: none;
+    }
+    .welcome-image {
+        display: none;
+    }
+    nav h1 {
+        padding: 0px;
+    }    
+    .navigation {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+/* for 568px (iPhone) or less */
+@media screen and (max-width: 568px) {
+    h1 {
+        font-size: 18px;
+    }
+    .welcome-text {
+        font-size: 12pt;
+    }    
+    .navigation p {
+        display:none;
+    }    
+}
