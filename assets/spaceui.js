@@ -9,7 +9,7 @@ function SPA(host) {
     this.host = host;
 	this.currentSpace = host.substring(host.indexOf('://') + 3, host.indexOf('.'));
 	this.bagName = 'spaceui_public'; //TODO calculate bag name
-	this.html = new HTML();
+	this.html = new HTMLGenerator();
 	this.tiddlers = {};
 }
 

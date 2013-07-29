@@ -1,20 +1,20 @@
 
-function DOM(tag, value, attributes) {
+function HTML(tag, value, attributes) {
 	this.tag = tag;
 	this.value = value;
 	this.attributes = attributes;
 	this.children = [];
 }
 
-DOM.prototype.append = function(child) {
+HTML.prototype.append = function(child) {
 	this.children.push(child);
 }
 
-DOM.prototype.render = function() {
+HTML.prototype.render = function() {
 	return this.getStartTag() + this.getValue() + this.getEndTag();
 }
    
-DOM.prototype.getStartTag = function() {
+HTML.prototype.getStartTag = function() {
 	if (typeof this.attributes === "undefined") {
 		return "<" + this.tag + ">";
 	} else {
@@ -22,11 +22,11 @@ DOM.prototype.getStartTag = function() {
 	}
 }
 
-DOM.prototype.getEndTag = function() {
+HTML.prototype.getEndTag = function() {
     return "</" + this.tag + ">";
 }
 
-DOM.prototype.getAttributes = function() {
+HTML.prototype.getAttributes = function() {
 	var value = ' ';
 	for (var key in this.attributes) {
 		if (this.attributes.hasOwnProperty(key)) {
@@ -36,14 +36,14 @@ DOM.prototype.getAttributes = function() {
 	return value;
 }
 
-DOM.prototype.getValue = function() {
-	// var value = '';
-	// if (typeof this.value !== "undefined") {
-	// 	value += this.value;
-	// } else {
-	// 	for (var i=0,len<this.children.length; i<len; i++) {
-	// 		value += this.children[i].render();
-	// 	}	
-	// }
-    return this.value;
+HTML.prototype.getValue = function() {
+	var value = '';
+	if (typeof this.value !== "undefined") {
+		value += this.value;
+	} else {
+		for (i in this.children) {
+			value += this.children[i].render();
+		}
+	}
+    return value;
 }
