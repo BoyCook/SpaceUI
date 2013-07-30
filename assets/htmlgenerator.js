@@ -29,13 +29,13 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 	var container = new HTML('section', undefined, { id: tiddler.id, class: 'tiddler tiddler-edit-mode' });
 	var header = new HTML('section');
-	var headerText = new HTML('input', undefined, { type: 'text', value: tiddler.title });
+	var headerText = new HTML('input', undefined, { type: 'text', value: tiddler.title, class: 'tiddler-title' });
 	header.append(headerText);
 	var content = new HTML('section');
-	var contentText = new HTML('textarea', tiddler.text);
+	var contentText = new HTML('textarea', tiddler.text, { class: 'tiddler-text'});
 	content.append(contentText);	
 	var footer = new HTML('section');
-	var footerText = new HTML('input', undefined, { type: 'text', value: tiddler.tags });
+	var footerText = new HTML('input', undefined, { type: 'text', value: tiddler.tags, class: 'tiddler-tags' });
 	footer.append(footerText);
 
 	container.append(this.generateEditToolbar(tiddler));
@@ -65,7 +65,7 @@ HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 }
 
 HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
-	var saveClick = "app.saveTiddler('" + tiddler.id + "\')";
+	var saveClick = "app.saveTiddler('" + tiddler.title + "\')";
 	var cancelClick = "app.cancelEditTiddler('" + tiddler.title + "\')";
 	var deleteClick = "app.deleteTiddler('" + tiddler.title + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });

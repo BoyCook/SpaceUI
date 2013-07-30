@@ -26,7 +26,7 @@ Space.prototype._getTiddler = function(title, success, error) {
             success(tiddler);
         }
     }
-	this.goGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', callBack, error);
+	this.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', callBack, error);
 };
 
 Space.prototype.getRecent = function(success, error) {
@@ -34,15 +34,22 @@ Space.prototype.getRecent = function(success, error) {
 };
 
 Space.prototype.getAll = function(params, success, error) {
-	this.goGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers', success, error);
+	this.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers', success, error);
 };
 
 Space.prototype.filter = function() {
-
 };
 
-Space.prototype.createTiddler = function(tiddler) {
-    //TODO: service call to create
+Space.prototype.createTiddler = function(tiddler, success, error) {
+    var context = this;
+    var callBack = function(tiddler) {
+        tiddler.id = context.getId(tiddler);
+        context.tiddlers[title] = tiddler;
+        if (success) {
+            success(tiddler);
+        }
+    }    
+    this.doPut(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + tiddler.title, tiddler, callBack, error)
 };
 
 Space.prototype.updateTiddler = function(tiddler) {
@@ -57,7 +64,7 @@ Space.prototype.getId = function(tiddler) {
     return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_");
 }
 
-Space.prototype.goGet = function(url, success, error) {
+Space.prototype.doGet = function(url, success, error) {
     $.ajax({
         url: url,
         type: "GET",
@@ -69,7 +76,7 @@ Space.prototype.goGet = function(url, success, error) {
             error(xhr, error, exc);
         }
     });	
-}
+};
 
 Space.prototype.doPut = function(url, data, success, error) {
     $.ajax({
@@ -85,4 +92,4 @@ Space.prototype.doPut = function(url, data, success, error) {
             error(error);
         }
     });	
-}
+};

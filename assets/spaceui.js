@@ -26,7 +26,7 @@ SPA.prototype.setup = function() {
 	this.getRecent(); 
     //TODO - read this from DefaultTiddler tiddler
     this.openTiddler('Space UI');
-}
+};
 
 SPA.prototype.getRecent = function() {
 	var context = this;	
@@ -34,7 +34,7 @@ SPA.prototype.getRecent = function() {
 		context.renderTiddlers(data);
 	};
     this.space.getRecent(success, this.ajaxError);
-}
+};
 
 SPA.prototype.openTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
@@ -47,35 +47,31 @@ SPA.prototype.openTiddler = function(title) {
     } else {
         //TODO: jump to tiddler
     }
-}
+};
 
 SPA.prototype.closeAllTiddlers = function() {
     $('.tiddler').remove();
-}
+};
 
 SPA.prototype.closeTiddler = function(id) {
     $('#' + id).remove();
-}
+};
 
 SPA.prototype.newTiddler = function() {
-    /* TODO: 
-        - generate UI    
-        - save to service
-    */    
     var id = 'tiddlerNew_Tiddler';
-    //Only if not alreay creating tiddler
+    //Only if New Tiddler box not open
     if ($('#' + id).length == 0) {
         var tiddler = { title: 'New Tiddler', id: id, text: "Type the text for 'New Tiddler'" };
         var html = this.html.generateEditTiddler(tiddler);
         $('#content').prepend(html);  
     }
-}
+};
 
 SPA.prototype.editTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
     var html = this.html.generateEditTiddler(tiddler);
     $('#' + tiddler.id).replaceWith(html);   
-}
+};
 
 SPA.prototype.cancelEditTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
@@ -85,17 +81,35 @@ SPA.prototype.cancelEditTiddler = function(title) {
         var html = this.html.generateViewTiddler(tiddler);
         $('#' + tiddler.id).replaceWith(html);           
     }
-}
+};
 
-SPA.prototype.saveTiddler = function(id) {
+SPA.prototype.saveTiddler = function(title) {
+    var context = this; 
+    var success = function(data) {
+        context.renderTiddler(data);
+    };
 
-}
+    var tiddler = this.space.tiddlers[title];
+    if (typeof tiddler === "undefined") {
+        var id = this.space.getId(title);
+        tiddler = {};
+        tiddler.title = $('#' + id + ' .tiddler-title').val();
+        tiddler.text = $('#' + id + ' .tiddler-text').val();
+        tiddler.tags = $('#' + id + ' .tiddler-tags').val();
+        this.space.createTiddler(tiddler, success, this.ajaxError);
+    } else {
+        tiddler.title = $('#' + tiddler.id + ' .tiddler-title').val();
+        tiddler.text = $('#' + tiddler.id + ' .tiddler-text').val();
+        tiddler.tags = $('#' + tiddler.id + ' .tiddler-tags').val();
+        this.space.updateTiddler(tiddler, success, this.ajaxError);
+    }
+};
 
 SPA.prototype.deleteTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
     $('#' + tiddler.id).remove();
     this.space.deleteTiddler(title);
-}
+};
 
 SPA.prototype.renderTiddlers = function(tiddlers) {
 	var html = '';
@@ -103,12 +117,12 @@ SPA.prototype.renderTiddlers = function(tiddlers) {
 		html += this.html.generateTiddlerList(tiddlers[i]);
 	}
    $('.nav').html(html);	
-}
+};
 
 SPA.prototype.renderTiddler = function(tiddler) {
    $('#content').prepend(this.html.generateViewTiddler(tiddler));	
-}
+};
 
 SPA.prototype.ajaxError = function(xhr, error, exc) {
 	alert(error);
-}
+};
