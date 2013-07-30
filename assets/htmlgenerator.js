@@ -66,7 +66,7 @@ HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 
 HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	var saveClick = "app.saveTiddler('" + tiddler.id + "\')";
-	var cancelClick = "app.cancelEditTiddler('" + tiddler.id + "\')";
+	var cancelClick = "app.cancelEditTiddler('" + tiddler.title + "\')";
 	var deleteClick = "app.deleteTiddler('" + tiddler.title + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
 	var saveButton = new HTML('button', 'Save', { onclick: saveClick });

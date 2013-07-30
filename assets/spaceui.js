@@ -79,8 +79,12 @@ SPA.prototype.editTiddler = function(title) {
 
 SPA.prototype.cancelEditTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
-    var html = this.html.generateViewTiddler(tiddler);
-    $('#' + tiddler.id).replaceWith(html);   
+    if (typeof tiddler === "undefined") {
+        $('#' + this.space.getId({title: title})).remove();   
+    } else {
+        var html = this.html.generateViewTiddler(tiddler);
+        $('#' + tiddler.id).replaceWith(html);           
+    }
 }
 
 SPA.prototype.saveTiddler = function(id) {
