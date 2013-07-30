@@ -3,8 +3,7 @@ function HTMLGenerator() {
 }
 
 HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
-	var id = 'tiddler' + tiddler.title.replace(/ /g,"_");
-	var container = new HTML('section', undefined, { id: id, class: 'tiddler' });
+	var container = new HTML('section', undefined, { id: this.getId(tiddler), class: 'tiddler' });
 	var header = new HTML('section');
 	var h3 = new HTML('h3', tiddler.title , { class: 'tiddler-title' });
 	var p = new HTML('p', tiddler.modified , { class: 'tiddler-modified' });
@@ -27,7 +26,7 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 }
 
 HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
-	var container = new HTML('section');
+	var container = new HTML('section', undefined, { id: this.getId(tiddler), class: 'tiddler' });
 	var header = new HTML('section');
 	var headerText = new HTML('input', undefined, { type: 'text', value: tiddler.title });
 	header.append(headerText);
@@ -50,4 +49,9 @@ HTMLGenerator.prototype.generateTiddlerList = function(tiddler) {
 	var article = new HTML('article');
 	article.append(a);
 	return article.render();
+}
+
+//TODO: consider moving this out and make 'id' a tiddler property
+HTMLGenerator.prototype.getId = function(tiddler) {
+	return 'tiddler' + tiddler.title.replace(/ /g,"_");
 }

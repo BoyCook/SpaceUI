@@ -42,9 +42,16 @@ SPA.prototype.openTiddler = function(title) {
 
 SPA.prototype.editTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
-    var id = 'tiddler' + tiddler.title.replace(/ /g,"_");
+    var id = this.getId(tiddler);
     var html = this.html.generateEditTiddler(tiddler);
-    $('#' + id).html(html);   
+    $('#' + id).replaceWith(html);   
+}
+
+SPA.prototype.cancelEditTiddler = function(title) {
+    var tiddler = this.space.tiddlers[title];
+    var id = this.getId(tiddler);
+    var html = this.html.generateViewTiddler(tiddler);
+    $('#' + id).replaceWith(html);   
 }
 
 SPA.prototype.renderTiddlers = function(tiddlers) {
@@ -57,6 +64,11 @@ SPA.prototype.renderTiddlers = function(tiddlers) {
 
 SPA.prototype.renderTiddler = function(tiddler) {
    $('#content').prepend(this.html.generateViewTiddler(tiddler));	
+}
+
+//TODO: consider moving this out and make 'id' a tiddler property
+SPA.prototype.getId = function(tiddler) {
+    return 'tiddler' + tiddler.title.replace(/ /g,"_");
 }
 
 SPA.prototype.load = function(url, success, error) {
