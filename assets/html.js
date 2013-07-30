@@ -10,7 +10,7 @@ HTML.prototype.append = function(child) {
 	this.children.push(child);
 }
 
-HTML.prototype.render = function() {
+HTML.prototype.asHTML = function() {
 	return this.getStartTag() + this.getValue() + this.getEndTag();
 }
    
@@ -42,7 +42,7 @@ HTML.prototype.getValue = function() {
 		value += this.value;
 	} else {
 		for (i in this.children) {
-			value += this.children[i].render();
+			value += this.children[i].asHTML();
 		}
 	}
     return value;

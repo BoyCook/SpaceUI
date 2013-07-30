@@ -22,7 +22,7 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 
 	container.append(header);
 	container.append(content);
-	return container.render();
+	return container.asHTML();
 }
 
 HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
@@ -40,7 +40,7 @@ HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 	container.append(header);
 	container.append(content);
 	container.append(footer);
-	return container.render();
+	return container.asHTML();
 }
 
 HTMLGenerator.prototype.generateTiddlerList = function(tiddler) {
@@ -48,7 +48,7 @@ HTMLGenerator.prototype.generateTiddlerList = function(tiddler) {
 	var a = new HTML('a', tiddler.title, { href: '#', onclick: onclick });
 	var article = new HTML('article');
 	article.append(a);
-	return article.render();
+	return article.asHTML();
 }
 
 //TODO: consider moving this out and make 'id' a tiddler property
