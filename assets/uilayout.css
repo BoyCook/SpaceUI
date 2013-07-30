@@ -26,6 +26,7 @@ nav li {
     min-height: 400px;
     margin-right: 20%;
     width: 75%;
+    border-right: solid 2px #e9e9e9;    
     /*position: relative;*/
 }
 
@@ -36,38 +37,12 @@ footer {
 /* MEDIA QUERIES */
 /* for 980px or less */
 @media screen and (max-width: 980px) {
-    .content {
-        min-height: 900px;
-        margin-left: 25%;
-        position: relative;
-    }    
+
 }
 
 /* for 768px (iPad mini) or less */
 @media screen and (max-width: 768px) {
-    nav {
-        position: relative;
-        text-align: center;        
-    }
-    nav li {
-        display: inline;
-    }       
-    .content {
-        margin-left: 0%;        
-        float: none;
-        width: auto;
-        float: none;
-    }
-    .welcome-image {
-        display: none;
-    }
-    nav h1 {
-        padding: 0px;
-    }    
-    .navigation {
-        padding-left: 30px;
-        padding-right: 30px;
-    }
+
 }
 
 /* for 568px (iPhone) or less */
@@ -75,10 +50,11 @@ footer {
     h1 {
         font-size: 18px;
     }
-    .welcome-text {
-        font-size: 12pt;
-    }    
-    .navigation p {
-        display:none;
+    nav {
+        display: none;
+    }
+    #content {
+        border-right: 0px;    
+        width: 100%;
     }    
 }
