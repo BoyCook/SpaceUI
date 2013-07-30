@@ -3,7 +3,7 @@ function HTMLGenerator() {
 }
 
 HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
-	var container = new HTML('section', undefined, { id: this.getId(tiddler), class: 'tiddler' });
+	var container = new HTML('section', undefined, { id: tiddler.id, class: 'tiddler' });
 	var header = new HTML('section');
 	var h3 = new HTML('h3', tiddler.title , { class: 'tiddler-title' });
 	var p = new HTML('p', tiddler.modified , { class: 'tiddler-modified' });
@@ -27,7 +27,7 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 }
 
 HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
-	var container = new HTML('section', undefined, { id: this.getId(tiddler), class: 'tiddler' });
+	var container = new HTML('section', undefined, { id: tiddler.id, class: 'tiddler tiddler-edit-mode' });
 	var header = new HTML('section');
 	var headerText = new HTML('input', undefined, { type: 'text', value: tiddler.title });
 	header.append(headerText);
@@ -76,9 +76,4 @@ HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	toolbar.append(cancelButton);
 	toolbar.append(deleteButton);
 	return toolbar;
-}
-
-//TODO: consider moving this out and make 'id' a tiddler property
-HTMLGenerator.prototype.getId = function(tiddler) {
-	return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_");
 }

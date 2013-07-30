@@ -33,8 +33,8 @@ SPA.prototype.getRecent = function() {
 }
 
 SPA.prototype.openTiddler = function(title) {
-    var id = this.getId({title: title})
-    if ($('#' + id).length == 0) {
+    var tiddler = this.space.tiddlers[title];
+    if (typeof tiddler === "undefined") {
         var context = this; 
         var success = function(data) {
             context.renderTiddler(data);
@@ -50,8 +50,8 @@ SPA.prototype.closeAllTiddlers = function() {
 }
 
 SPA.prototype.closeTiddler = function(title) {
-    var id = this.getId({title: title});
-    $('#' + id).remove();
+    var tiddler = this.space.tiddlers[title];
+    $('#' + tiddler.id).remove();
 }
 
 SPA.prototype.newTiddler = function() {
@@ -63,21 +63,19 @@ SPA.prototype.newTiddler = function() {
 
 SPA.prototype.editTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
-    var id = this.getId(tiddler);
     var html = this.html.generateEditTiddler(tiddler);
-    $('#' + id).replaceWith(html);   
+    $('#' + tiddler.id).replaceWith(html);   
 }
 
 SPA.prototype.cancelEditTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
-    var id = this.getId(tiddler);
     var html = this.html.generateViewTiddler(tiddler);
-    $('#' + id).replaceWith(html);   
+    $('#' + tiddler.id).replaceWith(html);   
 }
 
 SPA.prototype.deleteTiddler = function(title) {
-    var id = this.getId({title: title});
-    $('#' + id).remove();
+    var tiddler = this.space.tiddlers[title];
+    $('#' + tiddler.id).remove();
     this.space.deleteTiddler(title);
 }
 
@@ -91,11 +89,6 @@ SPA.prototype.renderTiddlers = function(tiddlers) {
 
 SPA.prototype.renderTiddler = function(tiddler) {
    $('#content').prepend(this.html.generateViewTiddler(tiddler));	
-}
-
-//TODO: consider moving this out and make 'id' a tiddler property
-SPA.prototype.getId = function(tiddler) {
-    return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_");
 }
 
 SPA.prototype.load = function(url, success, error) {

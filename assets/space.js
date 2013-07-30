@@ -19,10 +19,11 @@ Space.prototype.getTiddler = function(title, success, error) {
 
 Space.prototype._getTiddler = function(title, success, error) {
     var context = this;
-    var callBack = function(data) {
-        context.tiddlers[title] = data;
+    var callBack = function(tiddler) {
+        tiddler.id = context.getId(tiddler);
+        context.tiddlers[title] = tiddler;
         if (success) {
-            success(data);
+            success(tiddler);
         }
     }
 	this.goGet(this.host + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', callBack, error);
@@ -51,6 +52,10 @@ Space.prototype.updateTiddler = function(tiddler) {
 Space.prototype.deleteTiddler = function(title) {
     //TODO: service call to remove
 };
+
+Space.prototype.getId = function(tiddler) {
+    return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_");
+}
 
 Space.prototype.goGet = function(url, success, error) {
     $.ajax({
