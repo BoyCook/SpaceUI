@@ -23,6 +23,7 @@ footer {
 }
 
 .tiddler {
+	position: relative;
 	padding-left: 25px;
 	padding-right: 25px;
 	padding-top: 15px;
@@ -48,6 +49,6 @@ footer {
 }
 
 .toolbar {
+	right: 20px;
 	position: absolute;
-	text-align: right;
 }
