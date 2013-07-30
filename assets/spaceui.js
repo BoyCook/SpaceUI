@@ -7,7 +7,15 @@ $(document).ready(function () {
 
 function SPA(host, port) {
     this.baseURL = "http://" + host + ':' + port;  
-    this.spaceName = (host === 'localhost' ? 'spaceui' : host);
+
+    if (host === 'localhost') {
+        this.spaceName = 'spaceui';
+    } else if (host.indexOf('.') > 0) {
+        this.spaceName = host.substring(0, host.indexOf('.'));
+    } else {
+        this.spaceName = host;
+    }
+
 	this.html = new HTMLGenerator();
     this.space = new Space(this.baseURL, this.spaceName);
 }
