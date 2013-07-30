@@ -20,6 +20,7 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 		content.value = text;
 	}
 
+	container.append(this.generateViewToolbar(tiddler));
 	container.append(header);
 	container.append(content);
 	return container.asHTML();
@@ -37,6 +38,7 @@ HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 	var footerText = new HTML('input', undefined, { type: 'text', value: tiddler.tags });
 	footer.append(footerText);
 
+	container.append(this.generateEditToolbar(tiddler));
 	container.append(header);
 	container.append(content);
 	container.append(footer);
@@ -49,6 +51,31 @@ HTMLGenerator.prototype.generateTiddlerList = function(tiddler) {
 	var article = new HTML('article');
 	article.append(a);
 	return article.asHTML();
+}
+
+HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
+	var editClick = "app.editTiddler('" + tiddler.title + "\')";
+	var closeClick = "app.closeTiddler('" + tiddler.title + "\')";
+	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
+	var editButton = new HTML('button', 'Edit', { onclick: editClick });
+	var closeButton = new HTML('button', 'X', { onclick: closeClick });
+	toolbar.append(editButton);
+	toolbar.append(closeButton);
+	return toolbar;
+}
+
+HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
+	var saveClick = "app.saveTiddler('" + tiddler.title + "\')";
+	var cancelClick = "app.cancelEditTiddler('" + tiddler.title + "\')";
+	var deleteClick = "app.deleteTiddler('" + tiddler.title + "\')";
+	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
+	var saveButton = new HTML('button', 'Save', { onclick: saveClick });
+	var cancelButton = new HTML('button', 'Cancel', { onclick: cancelClick });
+	var deleteButton = new HTML('button', 'Delete', { onclick: deleteClick });
+	toolbar.append(saveButton);
+	toolbar.append(cancelButton);
+	toolbar.append(deleteButton);
+	return toolbar;
 }
 
 //TODO: consider moving this out and make 'id' a tiddler property

@@ -36,16 +36,16 @@ Space.prototype.filter = function() {
 
 };
 
-Space.prototype.createTiddler = function() {
-
+Space.prototype.createTiddler = function(tiddler) {
+    //TODO: service call to create
 };
 
-Space.prototype.updateTiddler = function() {
-
+Space.prototype.updateTiddler = function(tiddler) {
+    //TODO: service call to update
 };
 
-Space.prototype.deleteTiddler = function() {
-
+Space.prototype.deleteTiddler = function(title) {
+    //TODO: service call to remove
 };
 
 Space.prototype.goGet = function(url, success, error) {

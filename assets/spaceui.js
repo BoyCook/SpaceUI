@@ -40,6 +40,11 @@ SPA.prototype.openTiddler = function(title) {
     this.space.getTiddler(title, success, this.ajaxError);
 }
 
+SPA.prototype.closeTiddler = function(title) {
+    var id = this.getId({title: title});
+    $('#' + id).remove();
+}
+
 SPA.prototype.editTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
     var id = this.getId(tiddler);
@@ -52,6 +57,12 @@ SPA.prototype.cancelEditTiddler = function(title) {
     var id = this.getId(tiddler);
     var html = this.html.generateViewTiddler(tiddler);
     $('#' + id).replaceWith(html);   
+}
+
+SPA.prototype.deleteTiddler = function(title) {
+    var id = this.getId({title: title});
+    $('#' + id).remove();
+    this.space.deleteTiddler(title);
 }
 
 SPA.prototype.renderTiddlers = function(tiddlers) {
