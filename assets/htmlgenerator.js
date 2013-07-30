@@ -14,7 +14,7 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 	var content = new HTML('article');
 
 	if (tiddler.type === 'application/javascript' || tiddler.type === 'application/json' || tiddler.type === 'text/css' ) {
-		var code = new HTML('code', text);
+		var code = new HTML('pre', text);
 		content.append(code);
 	} else {
 		content.value = text;
