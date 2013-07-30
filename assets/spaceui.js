@@ -45,9 +45,20 @@ SPA.prototype.openTiddler = function(title) {
     }
 }
 
+SPA.prototype.closeAllTiddlers = function() {
+    $('.tiddler').remove();
+}
+
 SPA.prototype.closeTiddler = function(title) {
     var id = this.getId({title: title});
     $('#' + id).remove();
+}
+
+SPA.prototype.newTiddler = function() {
+    /* TODO: 
+        - generate UI    
+        - save to service
+    */
 }
 
 SPA.prototype.editTiddler = function(title) {
