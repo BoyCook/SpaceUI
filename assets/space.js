@@ -10,7 +10,11 @@ Space.prototype.getTiddler = function(title, success, error) {
 	var tiddler = this.tiddlers[title]; 
 	if (typeof tiddler === "undefined") {
 		this._getTiddler(title, success, error);
-	}	
+	} else {
+        if (success) {
+            success(tiddler);
+        }
+    }
 };
 
 Space.prototype._getTiddler = function(title, success, error) {

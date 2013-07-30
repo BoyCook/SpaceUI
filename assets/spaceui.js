@@ -33,11 +33,16 @@ SPA.prototype.getRecent = function() {
 }
 
 SPA.prototype.openTiddler = function(title) {
-    var context = this; 
-    var success = function(data) {
-        context.renderTiddler(data);
-    };
-    this.space.getTiddler(title, success, this.ajaxError);
+    var id = this.getId({title: title})
+    if ($('#' + id).length == 0) {
+        var context = this; 
+        var success = function(data) {
+            context.renderTiddler(data);
+        };
+        this.space.getTiddler(title, success, this.ajaxError);        
+    } else {
+        //TODO: jump to tiddler
+    }
 }
 
 SPA.prototype.closeTiddler = function(title) {
