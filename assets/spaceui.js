@@ -68,7 +68,7 @@ SPA.prototype.renderTiddler = function(tiddler) {
 
 //TODO: consider moving this out and make 'id' a tiddler property
 SPA.prototype.getId = function(tiddler) {
-    return 'tiddler' + tiddler.title.replace(/ /g,"_");
+    return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_");
 }
 
 SPA.prototype.load = function(url, success, error) {

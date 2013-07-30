@@ -53,5 +53,5 @@ HTMLGenerator.prototype.generateTiddlerList = function(tiddler) {
 
 //TODO: consider moving this out and make 'id' a tiddler property
 HTMLGenerator.prototype.getId = function(tiddler) {
-	return 'tiddler' + tiddler.title.replace(/ /g,"_");
+	return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_");
 }

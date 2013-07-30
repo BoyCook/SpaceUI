@@ -30,7 +30,7 @@ HTML.prototype.getAttributes = function() {
 	var value = ' ';
 	for (var key in this.attributes) {
 		if (this.attributes.hasOwnProperty(key)) {
-			value += key + "=\"" + this.attributes[key] + "\"";
+			value += key + "=\"" + this.attributes[key] + "\" ";
 		}
 	}
 	return value;
