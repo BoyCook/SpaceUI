@@ -14,7 +14,14 @@ Space.prototype.getTiddler = function(title, success, error) {
 };
 
 Space.prototype._getTiddler = function(title, success, error) {
-	this.goGet(this.host + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', success, error);
+    var context = this;
+    var callBack = function(data) {
+        context.tiddlers[title] = data;
+        if (success) {
+            success(data);
+        }
+    }
+	this.goGet(this.host + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', callBack, error);
 };
 
 Space.prototype.getRecent = function(success, error) {
