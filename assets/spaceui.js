@@ -1,27 +1,23 @@
 var app = undefined;
 
 $(document).ready(function () {
-    app = new SPA("http://" + window.location.hostname + ':' + window.location.port);
+    app = new SPA(window.location.hostname, window.location.port);
     app.setup();
 });
 
-function SPA(host) {
-    this.host = host;
-	this.currentSpace = host.substring(host.indexOf('://') + 3, host.indexOf('.'));
-    this.bagName = (this.currentSpace === 'localhost' ? 'spaceui_public' : this.currentSpace + '__public');
+function SPA(host, port) {
+    this.baseURL = "http://" + host + ':' + port;  
+    this.spaceName = (host === 'localhost' ? 'spaceui' : host);
 	this.html = new HTMLGenerator();
-    this.space = new Space(this.host, this.currentSpace);
+    this.space = new Space(this.baseURL, this.spaceName);
 }
 
 SPA.prototype.setup = function() {
+    $('title').text(this.spaceName);
+    $('header h1').text(this.spaceName);    
 	this.getRecent(); 
     //TODO - read this from DefaultTiddler tiddler
     this.openTiddler('Space UI');
-}
-
-SPA.prototype.loadConfig = function() {
-	this.load(this.host + '/bags/' + this.bagName + '/tiddlers/SiteTitle', success, this.ajaxError);
-	this.load(this.host + '/bags/' + this.bagName + '/tiddlers/SiteSubTitle', success, this.ajaxError);
 }
 
 SPA.prototype.getRecent = function() {
@@ -49,16 +45,22 @@ SPA.prototype.closeAllTiddlers = function() {
     $('.tiddler').remove();
 }
 
-SPA.prototype.closeTiddler = function(title) {
-    var tiddler = this.space.tiddlers[title];
-    $('#' + tiddler.id).remove();
+SPA.prototype.closeTiddler = function(id) {
+    $('#' + id).remove();
 }
 
 SPA.prototype.newTiddler = function() {
     /* TODO: 
         - generate UI    
         - save to service
-    */
+    */    
+    var id = 'tiddlerNew_Tiddler';
+    //Only if not alreay creating tiddler
+    if ($('#' + id).length == 0) {
+        var tiddler = { title: 'New Tiddler', id: id, text: "Type the text for 'New Tiddler'" };
+        var html = this.html.generateEditTiddler(tiddler);
+        $('#content').prepend(html);  
+    }
 }
 
 SPA.prototype.editTiddler = function(title) {
@@ -71,6 +73,10 @@ SPA.prototype.cancelEditTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
     var html = this.html.generateViewTiddler(tiddler);
     $('#' + tiddler.id).replaceWith(html);   
+}
+
+SPA.prototype.saveTiddler = function(id) {
+
 }
 
 SPA.prototype.deleteTiddler = function(title) {
@@ -89,20 +95,6 @@ SPA.prototype.renderTiddlers = function(tiddlers) {
 
 SPA.prototype.renderTiddler = function(tiddler) {
    $('#content').prepend(this.html.generateViewTiddler(tiddler));	
-}
-
-SPA.prototype.load = function(url, success, error) {
-    $.ajax({
-        url: url,
-        type: "GET",
-        dataType: "json",
-        success: function(data, status, xhr) {
-            success(data);
-        },
-        error: function(xhr, error, exc) {
-            error(xhr, error, exc);
-        }
-    });	
 }
 
 SPA.prototype.ajaxError = function(xhr, error, exc) {

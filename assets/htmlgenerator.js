@@ -55,7 +55,7 @@ HTMLGenerator.prototype.generateTiddlerList = function(tiddler) {
 
 HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 	var editClick = "app.editTiddler('" + tiddler.title + "\')";
-	var closeClick = "app.closeTiddler('" + tiddler.title + "\')";
+	var closeClick = "app.closeTiddler('" + tiddler.id + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
 	var editButton = new HTML('button', 'Edit', { onclick: editClick });
 	var closeButton = new HTML('button', 'X', { onclick: closeClick });
@@ -65,8 +65,8 @@ HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 }
 
 HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
-	var saveClick = "app.saveTiddler('" + tiddler.title + "\')";
-	var cancelClick = "app.cancelEditTiddler('" + tiddler.title + "\')";
+	var saveClick = "app.saveTiddler('" + tiddler.id + "\')";
+	var cancelClick = "app.cancelEditTiddler('" + tiddler.id + "\')";
 	var deleteClick = "app.deleteTiddler('" + tiddler.title + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
 	var saveButton = new HTML('button', 'Save', { onclick: saveClick });

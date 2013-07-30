@@ -1,8 +1,8 @@
 
-function Space(host, name) {
-	this.host = host;
+function Space(baseURL, name) {
+	this.baseURL = baseURL;
 	this.name = name;
-	this.bagName = 'spaceui_public'; //TODO calculate bag name
+	this.bagName = this.name + '_public';
 	this.tiddlers = {};
 }
 
@@ -26,7 +26,7 @@ Space.prototype._getTiddler = function(title, success, error) {
             success(tiddler);
         }
     }
-	this.goGet(this.host + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', callBack, error);
+	this.goGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', callBack, error);
 };
 
 Space.prototype.getRecent = function(success, error) {
@@ -34,7 +34,7 @@ Space.prototype.getRecent = function(success, error) {
 };
 
 Space.prototype.getAll = function(params, success, error) {
-	this.goGet(this.host + '/bags/' + this.bagName + '/tiddlers', success, error);
+	this.goGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers', success, error);
 };
 
 Space.prototype.filter = function() {
