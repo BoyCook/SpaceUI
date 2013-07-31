@@ -3,6 +3,10 @@ var app = undefined;
 $(document).ready(function () {
     app = new SPA(window.location.hostname, window.location.port);
     app.setup();
+
+    $('#searchBox').change(function(){
+        console.log($('#searchBox').val());
+    });
 });
 
 function SPA(host, port) {
