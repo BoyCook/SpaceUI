@@ -24,7 +24,7 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 	container.append(header);
 	container.append(content);
 	return container.asHTML();
-}
+};
 
 HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 	var container = new HTML('section', undefined, { id: tiddler.id, class: 'tiddler tiddler-edit-mode' });
@@ -43,20 +43,23 @@ HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 	container.append(content);
 	container.append(footer);
 	return container.asHTML();
-}
+};
 
-HTMLGenerator.prototype.generateTiddlerList = function(tiddlers) {
+HTMLGenerator.prototype.generateTiddlersList = function(tiddlers) {
 	var list = new HTML('ul');
 	for (var i=0,len=tiddlers.length; i<len; i++) {
-		var tiddler = tiddlers[i];
-		var onclick = "app.openTiddler('" + tiddler.title + "\')";
-		var a = new HTML('a', tiddler.title, { href: '#' + this.getId(tiddler), onclick: onclick });
-		var item = new HTML('li');
-		item.append(a);
-		list.append(item);
+		list.append(this.generateTiddlerItem(tiddlers[i]));
 	}
 	return list.asHTML();
-}
+};
+
+HTMLGenerator.prototype.generateTiddlerItem = function(tiddler) {
+	var onclick = "app.openTiddler('" + tiddler.title + "\')";
+	var a = new HTML('a', tiddler.title, { href: '#' + this.getId(tiddler), onclick: onclick });
+	var item = new HTML('li');
+	item.append(a);	
+	return item;
+};
 
 HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 	var editClick = "app.editTiddler('" + tiddler.title + "\')";
@@ -67,7 +70,7 @@ HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 	toolbar.append(editButton);
 	toolbar.append(closeButton);
 	return toolbar;
-}
+};
 
 HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	var saveClick = "app.saveTiddler('" + tiddler.title + "\')";
@@ -81,7 +84,7 @@ HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	toolbar.append(cancelButton);
 	toolbar.append(deleteButton);
 	return toolbar;
-}
+};
 
 HTMLGenerator.prototype.getId = function(tiddler) {
     return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_");
