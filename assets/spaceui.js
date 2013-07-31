@@ -53,7 +53,7 @@ SPA.prototype.openTiddler = function(title) {
     } else {
         // alert(tiddler.id);
         // window.location.href = "#" + tiddler.id;
-        window.history.pushState(null, null, '#' + tiddler.id)
+        // window.history.pushState(null, null, '#' + tiddler.id)
     }
 };
 
