@@ -61,7 +61,7 @@ SPA.prototype.newTiddler = function() {
     var id = 'tiddlerNew_Tiddler';
     //Only if New Tiddler box not open
     if ($('#' + id).length == 0) {
-        var tiddler = { title: 'New Tiddler', id: id, text: "Type the text for 'New Tiddler'" };
+        var tiddler = { title: 'New Tiddler', id: id, text: "Type the text for 'New Tiddler'", tags: '' };
         var html = this.html.generateEditTiddler(tiddler);
         $('#content').prepend(html);  
     }
@@ -85,30 +85,34 @@ SPA.prototype.cancelEditTiddler = function(title) {
 
 SPA.prototype.saveTiddler = function(title) {
     var context = this; 
-    var success = function(data) {
-        context.renderTiddler(data);
-    };
-
     var tiddler = this.space.tiddlers[title];
+
     if (typeof tiddler === "undefined") {
-        var id = this.space.getId(title);
+        var id = this.space.getId({title: title});
         tiddler = {};
         tiddler.title = $('#' + id + ' .tiddler-title').val();
         tiddler.text = $('#' + id + ' .tiddler-text').val();
-        tiddler.tags = $('#' + id + ' .tiddler-tags').val();
-        this.space.createTiddler(tiddler, success, this.ajaxError);
+        tiddler.tags = $('#' + id + ' .tiddler-tags').val().split(' ');
+        this.space.createTiddler(tiddler, function() {
+            $('#tiddlerNew_Tiddler').remove();
+            context.openTiddler(tiddler.title);
+        }, this.ajaxError);
     } else {
         tiddler.title = $('#' + tiddler.id + ' .tiddler-title').val();
         tiddler.text = $('#' + tiddler.id + ' .tiddler-text').val();
-        tiddler.tags = $('#' + tiddler.id + ' .tiddler-tags').val();
-        this.space.updateTiddler(tiddler, success, this.ajaxError);
+        tiddler.tags = $('#' + tiddler.id + ' .tiddler-tags').val().split(' ');
+        this.space.updateTiddler(tiddler, function() {
+            context.openTiddler(tiddler.title);
+        }, this.ajaxError);
     }
 };
 
 SPA.prototype.deleteTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
-    $('#' + tiddler.id).remove();
-    this.space.deleteTiddler(title);
+    var success = function() {
+        $('#' + tiddler.id).remove();
+    };
+    this.space.deleteTiddler(title, success, this.ajaxError);
 };
 
 SPA.prototype.renderTiddlers = function(tiddlers) {

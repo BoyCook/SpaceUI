@@ -41,23 +41,22 @@ Space.prototype.filter = function() {
 };
 
 Space.prototype.createTiddler = function(tiddler, success, error) {
-    var context = this;
-    var callBack = function(tiddler) {
-        tiddler.id = context.getId(tiddler);
-        context.tiddlers[title] = tiddler;
-        if (success) {
-            success(tiddler);
-        }
-    }    
-    this.doPut(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + tiddler.title, tiddler, callBack, error)
+    this.doPut(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + tiddler.title, tiddler, success, error)
 };
 
 Space.prototype.updateTiddler = function(tiddler) {
     //TODO: service call to update
 };
 
-Space.prototype.deleteTiddler = function(title) {
-    //TODO: service call to remove
+Space.prototype.deleteTiddler = function(title, success, error) {
+    var context = this;
+    var callBack = function() {
+        delete context.tiddlers[title];
+        if (success) {
+            success();
+        }
+    }
+    this.doDelete(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title, callBack, error)
 };
 
 Space.prototype.getId = function(tiddler) {
@@ -92,4 +91,19 @@ Space.prototype.doPut = function(url, data, success, error) {
             error(error);
         }
     });	
+};
+
+Space.prototype.doDelete = function(url, success, error) {
+    $.ajax({
+        url: url,
+        type: "DELETE",
+        contentType: 'application/json',
+        dataType: 'json',        
+        success: function(data, status, xhr) {
+            success(data);
+        },
+        error: function(xhr, error, exc) {
+            error(xhr, error, exc);
+        }
+    }); 
 };

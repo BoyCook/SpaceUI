@@ -7,6 +7,7 @@ body {
 }
 
 nav {
+    min-height: 400px;
     margin-left: 80%;
     position: fixed;
     float: right;    
