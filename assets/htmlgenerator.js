@@ -45,12 +45,17 @@ HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 	return container.asHTML();
 }
 
-HTMLGenerator.prototype.generateTiddlerList = function(tiddler) {
-	var onclick = "app.openTiddler('" + tiddler.title + "\')";
-	var a = new HTML('a', tiddler.title, { href: '#' + this.getId(tiddler), onclick: onclick });
-	var article = new HTML('article');
-	article.append(a);
-	return article.asHTML();
+HTMLGenerator.prototype.generateTiddlerList = function(tiddlers) {
+	var list = new HTML('ul');
+	for (var i=0,len=tiddlers.length; i<len; i++) {
+		var tiddler = tiddlers[i];
+		var onclick = "app.openTiddler('" + tiddler.title + "\')";
+		var a = new HTML('a', tiddler.title, { href: '#' + this.getId(tiddler), onclick: onclick });
+		var item = new HTML('li');
+		item.append(a);
+		list.append(item);
+	}
+	return list.asHTML();
 }
 
 HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {

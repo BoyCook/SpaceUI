@@ -131,11 +131,7 @@ SPA.prototype.deleteTiddler = function(title) {
 };
 
 SPA.prototype.renderTiddlers = function(tiddlers) {
-	var html = '';
-	for (var i=0,len=tiddlers.length; i<len; i++) {
-		html += this.html.generateTiddlerList(tiddlers[i]);
-	}
-   $('.nav').html(html);	
+   $('.nav').html(this.html.generateTiddlerList(tiddlers));	
 };
 
 SPA.prototype.renderTiddler = function(tiddler) {
