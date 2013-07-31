@@ -4,6 +4,7 @@ function Space(baseURL, name) {
 	this.name = name;
 	this.bagName = this.name + '_public';
 	this.tiddlers = {};
+    this.http = new HTTP();
 }
 
 Space.prototype.getTiddler = function(title, success, error) {
@@ -26,7 +27,7 @@ Space.prototype._getTiddler = function(title, success, error) {
             success(tiddler);
         }
     }
-	this.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', callBack, error);
+	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', callBack, error);
 };
 
 Space.prototype.getRecent = function(success, error) {
@@ -34,14 +35,14 @@ Space.prototype.getRecent = function(success, error) {
 };
 
 Space.prototype.getAll = function(params, success, error) {
-	this.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers', success, error);
+	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers', success, error);
 };
 
 Space.prototype.filter = function() {
 };
 
 Space.prototype.createTiddler = function(tiddler, success, error) {
-    this.doPut(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + tiddler.title, tiddler, success, error)
+    this.http.doPut(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + tiddler.title, tiddler, success, error)
 };
 
 Space.prototype.updateTiddler = function(tiddler) {
@@ -56,54 +57,9 @@ Space.prototype.deleteTiddler = function(title, success, error) {
             success();
         }
     }
-    this.doDelete(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title, callBack, error)
+    this.http.doDelete(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title, callBack, error)
 };
 
 Space.prototype.getId = function(tiddler) {
     return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_");
-};
-
-Space.prototype.doGet = function(url, success, error) {
-    $.ajax({
-        url: url,
-        type: "GET",
-        dataType: "json",
-        success: function(data, status, xhr) {
-            success(data);
-        },
-        error: function(xhr, err, exc) {
-            error(xhr, err, exc);
-        }
-    });	
-};
-
-Space.prototype.doPut = function(url, data, success, error) {
-    $.ajax({
-        url: url,
-        type: 'PUT',
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify(data),        
-        success: function(data, status, xhr) {
-            success(data);
-        },
-        error: function(xhr, err, exc) {
-            error(xhr, err, exc);
-        }
-    });	
-};
-
-Space.prototype.doDelete = function(url, success, error) {
-    $.ajax({
-        url: url,
-        type: "DELETE",
-        contentType: 'application/json',
-        dataType: 'json',        
-        success: function(data, status, xhr) {
-            success(data);
-        },
-        error: function(xhr, err, exc) {
-            error(xhr, err, exc);
-        }
-    }); 
 };

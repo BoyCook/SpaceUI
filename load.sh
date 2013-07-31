@@ -4,6 +4,7 @@
 tsapp push spaceui index.html
 tsapp push spaceui html.js
 tsapp push spaceui htmlgenerator.js
+tsapp push spaceui http.js
 tsapp push spaceui space.js
 tsapp push spaceui spaceui.js
 tsapp push spaceui spaceui.css
