@@ -43,16 +43,18 @@ SPA.prototype.getRecent = function() {
 };
 
 SPA.prototype.openTiddler = function(title) {
+    var context = this; 
+    var success = function(data) {
+        context.renderTiddler(data);
+    };
+
     var tiddler = this.space.tiddlers[title];
     if (typeof tiddler === "undefined") {
-        var context = this; 
-        var success = function(data) {
-            context.renderTiddler(data);
-        };
         this.space.getTiddler(title, success, this.ajaxError);        
     } else {
-        // alert(tiddler.id);
-        // window.location.href = "#" + tiddler.id;
+        if ($('#' + tiddler.id).length == 0) {
+            this.space.getTiddler(title, success, this.ajaxError);        
+        }
         // window.history.pushState(null, null, '#' + tiddler.id)
     }
 };
