@@ -18,6 +18,12 @@ function SPA(host, port) {
 
 	this.html = new HTMLGenerator();
     this.space = new Space(this.baseURL, this.spaceName);
+    this.newTiddlerJSON = {
+        id: 'tiddlerNew_Tiddler',
+        title: 'New Tiddler',
+        text: "Type the text for 'New Tiddler'",
+        tags: ''
+    };
 }
 
 SPA.prototype.setup = function() {
@@ -45,7 +51,9 @@ SPA.prototype.openTiddler = function(title) {
         };
         this.space.getTiddler(title, success, this.ajaxError);        
     } else {
-        //TODO: jump to tiddler
+        // alert(tiddler.id);
+        // window.location.href = "#" + tiddler.id;
+        window.history.pushState(null, null, '#' + tiddler.id)
     }
 };
 
@@ -58,13 +66,19 @@ SPA.prototype.closeTiddler = function(id) {
 };
 
 SPA.prototype.newTiddler = function() {
-    var id = 'tiddlerNew_Tiddler';
-    //Only if New Tiddler box not open
-    if ($('#' + id).length == 0) {
-        var tiddler = { title: 'New Tiddler', id: id, text: "Type the text for 'New Tiddler'", tags: '' };
-        var html = this.html.generateEditTiddler(tiddler);
+    var tiddler = this.space.tiddlers[this.newTiddlerJSON.title];
+
+    if (typeof tiddler === "undefined") {
+        var html = this.html.generateEditTiddler(this.newTiddlerJSON);
         $('#content').prepend(html);  
+    } else {
+        // If 'New Tiddler' exists then open it and becomes update operation
+        this.editTiddler(this.newTiddlerJSON.title);
     }
+
+    // //Only if New Tiddler box not open
+    // if ($('#' + context.newTiddler.id).length == 0) {
+    // }
 };
 
 SPA.prototype.editTiddler = function(title) {
@@ -86,7 +100,6 @@ SPA.prototype.cancelEditTiddler = function(title) {
 SPA.prototype.saveTiddler = function(title) {
     var context = this; 
     var tiddler = this.space.tiddlers[title];
-
     if (typeof tiddler === "undefined") {
         var id = this.space.getId({title: title});
         tiddler = {};
@@ -128,5 +141,7 @@ SPA.prototype.renderTiddler = function(tiddler) {
 };
 
 SPA.prototype.ajaxError = function(xhr, error, exc) {
-	alert(error);
+    console.log('ERROR: ' + error);
+    //TODO: proper error handling
+	// alert(error);
 };

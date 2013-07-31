@@ -47,7 +47,7 @@ HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 
 HTMLGenerator.prototype.generateTiddlerList = function(tiddler) {
 	var onclick = "app.openTiddler('" + tiddler.title + "\')";
-	var a = new HTML('a', tiddler.title, { href: '#', onclick: onclick });
+	var a = new HTML('a', tiddler.title, { href: '#' + this.getId(tiddler), onclick: onclick });
 	var article = new HTML('article');
 	article.append(a);
 	return article.asHTML();
@@ -77,3 +77,7 @@ HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	toolbar.append(deleteButton);
 	return toolbar;
 }
+
+HTMLGenerator.prototype.getId = function(tiddler) {
+    return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_");
+};

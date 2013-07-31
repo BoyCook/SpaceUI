@@ -61,7 +61,7 @@ Space.prototype.deleteTiddler = function(title, success, error) {
 
 Space.prototype.getId = function(tiddler) {
     return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_");
-}
+};
 
 Space.prototype.doGet = function(url, success, error) {
     $.ajax({
@@ -71,8 +71,8 @@ Space.prototype.doGet = function(url, success, error) {
         success: function(data, status, xhr) {
             success(data);
         },
-        error: function(xhr, error, exc) {
-            error(xhr, error, exc);
+        error: function(xhr, err, exc) {
+            error(xhr, err, exc);
         }
     });	
 };
@@ -87,8 +87,8 @@ Space.prototype.doPut = function(url, data, success, error) {
         success: function(data, status, xhr) {
             success(data);
         },
-        error: function(xhr, error, exc) {
-            error(error);
+        error: function(xhr, err, exc) {
+            error(xhr, err, exc);
         }
     });	
 };
@@ -102,8 +102,8 @@ Space.prototype.doDelete = function(url, success, error) {
         success: function(data, status, xhr) {
             success(data);
         },
-        error: function(xhr, error, exc) {
-            error(xhr, error, exc);
+        error: function(xhr, err, exc) {
+            error(xhr, err, exc);
         }
     }); 
 };
