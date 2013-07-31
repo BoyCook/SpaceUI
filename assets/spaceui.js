@@ -81,10 +81,6 @@ SPA.prototype.newTiddler = function() {
         // If 'New Tiddler' exists then open it and becomes update operation
         this.editTiddler(this.newTiddlerJSON.title);
     }
-
-    // //Only if New Tiddler box not open
-    // if ($('#' + context.newTiddler.id).length == 0) {
-    // }
 };
 
 SPA.prototype.editTiddler = function(title) {
