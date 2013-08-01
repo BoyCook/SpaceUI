@@ -3,10 +3,10 @@ var app = undefined;
 $(document).ready(function () {
     app = new SPA(window.location.hostname, window.location.port);
     app.setup();
-    
-    $('#searchBox').keyup(function (e) {
+
+    $('#filterBox').keyup(function (e) {
         if (!(e.keyCode >= 37 && e.keyCode <= 40)) {
-            console.log($('#searchBox').val());
+            app.filter($('#filterBox').val());
         }
     });    
 });
@@ -21,7 +21,7 @@ function SPA(host, port) {
     } else {
         this.spaceName = host;
     }
-
+    this.tiddlerFilter = undefined;
 	this.html = new HTMLGenerator();
     this.space = new Space(this.baseURL, this.spaceName);
     this.newTiddlerJSON = {
@@ -43,9 +43,15 @@ SPA.prototype.setup = function() {
 SPA.prototype.getRecent = function() {
 	var context = this;	
 	var success = function(data) {
-		context.renderTiddlers(data);
+		context.renderTiddlerList(data);
+        context.tiddlerFilter = new Filter(data);
 	};
     this.space.getRecent(success, this.ajaxError);
+};
+
+SPA.prototype.filter = function(text) {
+    var filtered = this.tiddlerFilter.filter('title', text);
+    this.renderTiddlerList(filtered);
 };
 
 SPA.prototype.openTiddler = function(title) {
@@ -135,7 +141,7 @@ SPA.prototype.deleteTiddler = function(title) {
     this.space.deleteTiddler(title, success, this.ajaxError);
 };
 
-SPA.prototype.renderTiddlers = function(tiddlers) {
+SPA.prototype.renderTiddlerList = function(tiddlers) {
    $('.nav').html(this.html.generateTiddlersList(tiddlers));	
 };
 

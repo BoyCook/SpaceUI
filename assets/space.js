@@ -4,6 +4,7 @@ function Space(baseURL, name) {
 	this.name = name;
 	this.bagName = this.name + '_public';
 	this.tiddlers = {};
+    this.tiddlerList = [];
     this.http = new HTTP();
 }
 
@@ -35,7 +36,14 @@ Space.prototype.getRecent = function(success, error) {
 };
 
 Space.prototype.getAll = function(params, success, error) {
-	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers' + params, success, error);
+    var context = this;
+    var callBack = function(data) {
+         context.tiddlerList = data;
+         if (success) {
+             success(data);
+         }
+    };
+	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers' + params, callBack, error);
 };
 
 Space.prototype.filter = function() {
