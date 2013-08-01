@@ -1,11 +1,10 @@
 #!/bin/bash
 
-tsapp push spacefollower Elusive-Icons.eot
-tsapp push spacefollower Elusive-Icons.svg
-tsapp push spacefollower Elusive-Icons.ttf
-tsapp push spacefollower Elusive-Icons.woff
-tsapp push spacefollower elusive-webfont.css
-
+tsapp push spaceui Elusive-Icons.eot
+tsapp push spaceui Elusive-Icons.svg
+tsapp push spaceui Elusive-Icons.ttf
+tsapp push spaceui Elusive-Icons.woff
+tsapp push spaceui elusive-webfont.css
 tsapp push spaceui index.html
 tsapp push spaceui html.js
 tsapp push spaceui htmlgenerator.js
