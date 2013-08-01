@@ -8,14 +8,14 @@ header {
 }
 
 nav {
-	padding-left: 25px;
+/*	padding-left: 25px;
 	padding-right: 25px;
 	padding-top: 15px;
-	padding-bottom: 15px;
+	padding-bottom: 15px;*/
 }
 
-footer {
-	border-top: solid 2px #e9e9e9;
+nav a {
+	text-decoration: none;
 }
 
 .tiddler {
@@ -24,16 +24,18 @@ footer {
 	padding-right: 25px;
 	padding-top: 15px;
 	padding-bottom: 15px;	
+	border-right: solid 2px #e9e9e9;    
+	border-bottom: solid 2px #e9e9e9;    
 }
 
 .tiddler pre {
 	 white-space: pre-wrap;
 }
 
-.tiddler:nth-child(even) {
+/*.tiddler:nth-child(even) {
     border-top: solid 2px #e9e9e9;    
     border-bottom: solid 2px #e9e9e9;    
-}
+}*/
 
 .tiddler-title {
 	display: inline;

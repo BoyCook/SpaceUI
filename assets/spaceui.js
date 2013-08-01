@@ -3,10 +3,12 @@ var app = undefined;
 $(document).ready(function () {
     app = new SPA(window.location.hostname, window.location.port);
     app.setup();
-
-    $('#searchBox').change(function(){
-        console.log($('#searchBox').val());
-    });
+    
+    $('#searchBox').keyup(function (e) {
+        if (!(e.keyCode >= 37 && e.keyCode <= 40)) {
+            console.log($('#searchBox').val());
+        }
+    });    
 });
 
 function SPA(host, port) {

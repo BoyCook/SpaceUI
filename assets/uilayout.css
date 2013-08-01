@@ -12,11 +12,11 @@ body {
 
 nav {
     min-height: 400px;
-    margin-left: 80%;
+    margin-left: 74%;
     position: fixed;
-    top: 100px;
     float: right;    
     /*width: 100%;*/
+    /*border: solid 2px #e9e9e9;*/
 }
 
 nav ul {
@@ -32,12 +32,8 @@ nav li {
     min-height: 400px;
     margin-right: 20%;
     width: 75%;
-    border-right: solid 2px #e9e9e9;    
+    /*border-right: solid 2px #e9e9e9;    */
     /*position: relative;*/
-}
-
-footer {
-    clear: both;
 }
 
 /* MEDIA QUERIES */

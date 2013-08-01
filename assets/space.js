@@ -35,7 +35,7 @@ Space.prototype.getRecent = function(success, error) {
 };
 
 Space.prototype.getAll = function(params, success, error) {
-	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers', success, error);
+	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers' + params, success, error);
 };
 
 Space.prototype.filter = function() {

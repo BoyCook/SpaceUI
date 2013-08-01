@@ -3,7 +3,7 @@ function HTTP() {
 }
 
 HTTP.prototype.doGet = function(url, success, error) {
-    t§is.doAjax(url, 'GET', undefined, success, error);
+    this.doAjax(url, 'GET', undefined, success, error);
 };
 
 HTTP.prototype.doPut = function(url, data, success, error) {
