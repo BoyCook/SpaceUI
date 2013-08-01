@@ -177,7 +177,11 @@ SPA.prototype.deleteTiddler = function(title) {
 };
 
 SPA.prototype.viewMenu = function(tiddlers) {
-    $('nav').toggle();
+    if ($('nav').hasClass('visible')) {
+        $('nav').removeClass('visible');
+    } else {
+        $('nav').addClass('visible');
+    }
 };
 
 SPA.prototype.renderTiddlerList = function(tiddlers) {
