@@ -49,6 +49,9 @@ nav li {
 
 /* for 568px (iPhone) or less */
 @media screen and (max-width: 568px) {
+    body {
+        font-size: 12px;
+    }
     h1 {
         font-size: 18px;
     }

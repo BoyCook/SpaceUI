@@ -177,7 +177,10 @@ SPA.prototype.deleteTiddler = function(title) {
 };
 
 SPA.prototype.renderTiddlerList = function(tiddlers) {
-   $('.nav').html(this.html.generateTiddlersList(tiddlers));	
+    if ($('nav ul li').length > 1) {
+        $('nav ul li:not(:first-child)').remove();
+    } 
+    $('.nav ul').append(this.html.generateTiddlersList(tiddlers).getChildren());   
 };
 
 SPA.prototype.renderTiddler = function(tiddler) {

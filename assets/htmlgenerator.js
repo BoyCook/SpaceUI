@@ -50,7 +50,7 @@ HTMLGenerator.prototype.generateTiddlersList = function(tiddlers) {
 	for (var i=0,len=tiddlers.length; i<len; i++) {
 		list.append(this.generateTiddlerItem(tiddlers[i]));
 	}
-	return list.asHTML();
+	return list;
 };
 
 HTMLGenerator.prototype.generateTiddlerItem = function(tiddler) {
@@ -65,8 +65,12 @@ HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 	var editClick = "app.editTiddler('" + tiddler.title + "\')";
 	var closeClick = "app.closeTiddler('" + tiddler.id + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
-	var editButton = new HTML('button', 'Edit', { onclick: editClick });
-	var closeButton = new HTML('button', 'X', { onclick: closeClick });
+	var editButton = new HTML('a', undefined, { onclick: editClick, title: 'Edit tiddler' });
+	var editIcon = new HTML('i', undefined, { class: 'icon-file-edit' });
+	editButton.append(editIcon);	
+	var closeButton = new HTML('a', undefined, { onclick: closeClick, title: 'Close tiddler' });
+	var closeIcon = new HTML('i', undefined, { class: 'icon-remove' });
+	closeButton.append(closeIcon);
 	toolbar.append(editButton);
 	toolbar.append(closeButton);
 	return toolbar;
@@ -77,9 +81,15 @@ HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	var cancelClick = "app.cancelEditTiddler('" + tiddler.title + "\')";
 	var deleteClick = "app.deleteTiddler('" + tiddler.title + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
-	var saveButton = new HTML('button', 'Save', { onclick: saveClick });
-	var cancelButton = new HTML('button', 'Cancel', { onclick: cancelClick });
-	var deleteButton = new HTML('button', 'Delete', { onclick: deleteClick });
+	var saveButton = new HTML('a', undefined, { onclick: saveClick, title: 'Save changes' });
+	var saveIcon = new HTML('i', undefined, { class: 'icon-ok' });
+	saveButton.append(saveIcon);		
+	var cancelButton = new HTML('a', undefined, { onclick: cancelClick });
+	var cancelIcon = new HTML('i', undefined, { class: 'icon-reverse-alt', title: 'Cancel changes' });
+	cancelButton.append(cancelIcon);		
+	var deleteButton = new HTML('a', undefined, { onclick: deleteClick, title: 'Delete tiddler' });
+	var deleteIcon = new HTML('i', undefined, { class: 'icon-trash' });
+	deleteButton.append(deleteIcon);			
 	toolbar.append(saveButton);
 	toolbar.append(cancelButton);
 	toolbar.append(deleteButton);

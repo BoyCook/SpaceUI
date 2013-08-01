@@ -16,6 +16,15 @@ nav {
 
 nav a {
 	text-decoration: none;
+	color: blue;
+}
+
+nav a:hover {
+	text-decoration: underline;
+}
+
+#filterBox {
+	
 }
 
 .tiddler {
@@ -59,15 +68,25 @@ nav a {
 }
 
 .toolbar {
-	right: 20px;
+	right: 15px;
 	position: absolute;
 }
 
-header .toolbar {
-	top: 15px;
+.main-toolbar {
+	top: 5px;
+	right: 50px;
+	position: absolute;
 }
 
 .make-top {
 	top: 0px;
+}
+
+i {
+	color: #0088cc;
+}
+
+i:hover {
+	font-size: 18px;
 }
 

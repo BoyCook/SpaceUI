@@ -8,11 +8,11 @@ function HTML(tag, value, attributes) {
 
 HTML.prototype.append = function(child) {
 	this.children.push(child);
-}
+};
 
 HTML.prototype.asHTML = function() {
 	return this.getStartTag() + this.getValue() + this.getEndTag();
-}
+};
    
 HTML.prototype.getStartTag = function() {
 	if (typeof this.attributes === "undefined") {
@@ -20,11 +20,11 @@ HTML.prototype.getStartTag = function() {
 	} else {
 		return "<" + this.tag + this.getAttributes() + ">";		
 	}
-}
+};
 
 HTML.prototype.getEndTag = function() {
     return "</" + this.tag + ">";
-}
+};
 
 HTML.prototype.getAttributes = function() {
 	var value = ' ';
@@ -34,16 +34,22 @@ HTML.prototype.getAttributes = function() {
 		}
 	}
 	return value;
-}
+};
 
 HTML.prototype.getValue = function() {
 	var value = '';
 	if (typeof this.value !== "undefined") {
 		value += this.value;
 	} else {
-		for (i in this.children) {
-			value += this.children[i].asHTML();
-		}
+		value += this.getChildren();
 	}
     return value;
-}
+};
+
+HTML.prototype.getChildren = function() {
+	var value = '';
+	for (i in this.children) {
+		value += this.children[i].asHTML();
+	}
+    return value;
+};

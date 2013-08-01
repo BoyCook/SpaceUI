@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/bags/spaceui_public/tiddlers/uilayout.css" type="text/css" media="screen">        
         <link rel="stylesheet" href="/bags/spaceui_public/tiddlers/spaceui.css">
+        <link rel="stylesheet" href="/bags/spacefollower_public/tiddlers/elusive-webfont.css">
         <script src="http://tiddlyspace.com/bags/common/tiddlers/backstage.js"></script>
         <script type="text/javascript" src="/bags/common/tiddlers/jquery.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/html.js"></script>
@@ -19,13 +20,18 @@
             <section>
                 <h1>{Your} space</h1>
             </section>
-            <section class="toolbar">
-                <input type="text" id="filterBox" placeholder="Type to filter..." />
-                <button onclick="app.closeAllTiddlers()">X All</button>
-                <button onclick="app.newTiddler()">New Tiddler</button>
+            <section class="main-toolbar">
+                <a onclick="app.closeAllTiddlers();" title="Close All"><i class='icon-remove'></i></a>
+                <a onclick="app.newTiddler();" title="New Tiddler"><i class='icon-file-new'></i></a>
             </section>
         </header>
         <section id="content"></section>        
-        <nav class="nav"></nav>        
+        <nav class="nav">
+            <ul>
+                <li>
+                    <input type="text" id="filterBox" placeholder="Type to filter..." />
+                </li>
+            </ul>
+        </nav>        
     </body>
 </html>
