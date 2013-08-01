@@ -176,6 +176,10 @@ SPA.prototype.deleteTiddler = function(title) {
     this.space.deleteTiddler(title, success, this.ajaxError);
 };
 
+SPA.prototype.viewMenu = function(tiddlers) {
+    $('nav').toggle();
+};
+
 SPA.prototype.renderTiddlerList = function(tiddlers) {
     if ($('nav ul li').length > 1) {
         $('nav ul li:not(:first-child)').remove();
