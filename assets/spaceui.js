@@ -33,11 +33,42 @@ function SPA(host, port) {
 }
 
 SPA.prototype.setup = function() {
-    $('title').text(this.spaceName);
-    $('header h1').text(this.spaceName);    
+    this.loadTitle();
 	this.getRecent(); 
-    //TODO - read this from DefaultTiddler tiddler
-    this.openTiddler('Space UI');
+    this.loadDefaults();
+};
+
+SPA.prototype.loadTitle = function() {
+    var context = this;
+    this.space.getTiddler('SiteTitle', function(titleTiddler) {
+        var title = titleTiddler.text;
+        context.space.getTiddler('SiteSubtitle', function(subTitleTiddler){
+            title += ' ' + subTitleTiddler.text;
+            $('title').text(title);
+            $('header h1').text(title);                
+        }, context.ajaxError);                    
+    }, context.ajaxError);        
+};
+
+SPA.prototype.loadDefaults = function() {
+    var context = this;
+    //The titles in the text will be wrapped in [[Square braces]] - this will remove them
+    var processItems = function(text) {
+        var items = text.split(']] [[');
+        //Clean left '[['
+        items[0] = items[0].substring(2);
+        //Clean right ']]'
+        items[items.length-1] = items[items.length-1].substring(0, items[items.length-1].indexOf(']]'));        
+        return items;
+    };
+
+    this.space.getTiddler('DefaultTiddlers', function(defaultTiddlers) {
+        var items = processItems(defaultTiddlers.text);
+        var len = items.length -1;
+        for (var i=len; i>=0; i--) {
+            context.openTiddler(items[i]);
+        }
+    }, this.ajaxError);        
 };
 
 SPA.prototype.getRecent = function() {
