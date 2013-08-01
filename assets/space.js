@@ -23,12 +23,20 @@ Space.prototype._getTiddler = function(title, success, error) {
     var context = this;
     var callBack = function(tiddler) {
         tiddler.id = context.getId(tiddler);
-        context.tiddlers[title] = tiddler;
+        context.setTiddler(tiddler);
         if (success) {
             success(tiddler);
         }
     }
 	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', callBack, error);
+};
+
+Space.prototype.removeTiddler = function(title) {
+    delete this.tiddlers[title];
+};
+
+Space.prototype.setTiddler = function(tiddler) {
+    this.tiddlers[tiddler.title] = tiddler;
 };
 
 Space.prototype.getRecent = function(success, error) {
@@ -49,18 +57,14 @@ Space.prototype.getAll = function(params, success, error) {
 Space.prototype.filter = function() {
 };
 
-Space.prototype.createTiddler = function(tiddler, success, error) {
+Space.prototype.saveTiddler = function(tiddler, success, error) {
     this.http.doPut(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + tiddler.title, tiddler, success, error)
-};
-
-Space.prototype.updateTiddler = function(tiddler) {
-    //TODO: service call to update
 };
 
 Space.prototype.deleteTiddler = function(title, success, error) {
     var context = this;
     var callBack = function() {
-        delete context.tiddlers[title];
+        context.removeTiddler(title);
         if (success) {
             success();
         }
