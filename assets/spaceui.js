@@ -43,7 +43,7 @@ SPA.prototype.loadTitle = function() {
     this.space.getTiddler('SiteTitle', function(titleTiddler) {
         var title = titleTiddler.text;
         context.space.getTiddler('SiteSubtitle', function(subTitleTiddler){
-            title += ' ' + subTitleTiddler.text;
+            title += ' - ' + subTitleTiddler.text;
             $('title').text(title);
             $('header h1').text(title);                
         }, context.ajaxError);                    
