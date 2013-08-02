@@ -163,6 +163,7 @@ SPA.prototype.saveTiddler = function(title) {
             $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + title });
             $('#' + tiddler.id).remove();
             context.space.removeTiddler(tiddler.title);
+            context.moveToTopOfList(tiddler);
             context.openTiddler(tiddler.title);
         }, this.ajaxError);
     }
@@ -198,6 +199,13 @@ SPA.prototype.removeFromList = function(tiddler) {
     this.space.removeFromList(tiddler);
     this.tiddlerFilter.data = this.space.tiddlerList;
     $("nav ul li a[href='#" + tiddler.id + "']").parent().remove()
+};
+
+SPA.prototype.moveToTopOfList = function(tiddler) {
+    var original = $("nav ul li a[href='#" + tiddler.id + "']").parent();
+    var item = original.clone();
+    original.remove();
+    $(item).insertAfter('nav ul li:first-child')
 };
 
 SPA.prototype.renderTiddlerList = function(tiddlers) {
