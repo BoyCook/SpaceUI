@@ -202,6 +202,8 @@ SPA.prototype.removeFromList = function(tiddler) {
 };
 
 SPA.prototype.moveToTopOfList = function(tiddler) {
+    this.space.moveToTopOfList(tiddler);
+    this.tiddlerFilter.data = this.space.tiddlerList;
     var original = $("nav ul li a[href='#" + tiddler.id + "']").parent();
     var item = original.clone();
     original.remove();

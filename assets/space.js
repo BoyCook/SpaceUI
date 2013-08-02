@@ -57,6 +57,11 @@ Space.prototype.removeFromList = function(tiddler) {
     }
 };
 
+Space.prototype.moveToTopOfList = function(tiddler) {
+    this.removeFromList(tiddler);
+    this.addToList(tiddler);
+};
+
 Space.prototype.getRecent = function(success, error) {
 	this.getAll('?sort=-modified;limit=50', success, error);
 };
