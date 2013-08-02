@@ -5,12 +5,14 @@ html, body {
 }
 
 body {
+    font-size: 100%;
     padding: 0px;
     margin: 0px;
     width: 100%;
 }
 
 nav {
+    font-size: 1em;
     margin-left: 74%;
     position: absolute;
     float: right;    
@@ -36,6 +38,10 @@ nav li {
     position: relative;
 }
 
+i {
+    font-size: 1.2em;
+}
+
 /* MEDIA QUERIES */
 /* for 980px or less */
 @media screen and (max-width: 980px) {
@@ -50,10 +56,7 @@ nav li {
 /* for 568px (iPhone) or less */
 @media screen and (max-width: 568px) {
     body {
-        font-size: 12px;
-    }
-    h1 {
-        font-size: 18px;
+        font-size: 80%;
     }
     nav {
         margin-left: 0;

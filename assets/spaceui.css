@@ -63,7 +63,7 @@ nav li a {
 	font-style: italic;
 	text-decoration: none;
 	color: gray;
-	font-size: 12px;	
+	font-size: 1em;	
 	padding-left: 5px;
 }
 
@@ -99,6 +99,6 @@ i {
 }
 
 i:hover {
-	font-size: 18px;
+	font-size: 1.4em;
 }
 
