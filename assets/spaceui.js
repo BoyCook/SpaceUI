@@ -149,6 +149,7 @@ SPA.prototype.saveTiddler = function(title) {
         tiddler.text = $('#' + id + ' .tiddler-text').val();
         tiddler.tags = $('#' + id + ' .tiddler-tags').val().split(' ');
         this.space.saveTiddler(tiddler, function() {
+            $.growl.notice({ title: 'Success',  message: 'Added tiddler ' + title });
             var item = context.html.generateTiddlerItem(tiddler);
             $('nav ul').prepend(item.asHTML());
             $('#tiddlerNew_Tiddler').remove();
@@ -159,7 +160,7 @@ SPA.prototype.saveTiddler = function(title) {
         tiddler.text = $('#' + tiddler.id + ' .tiddler-text').val();
         tiddler.tags = $('#' + tiddler.id + ' .tiddler-tags').val().split(' ');
         this.space.saveTiddler(tiddler, function() {
-            //TODO: update local tiddler state
+            $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + title });
             $('#' + tiddler.id).remove();
             context.space.removeTiddler(tiddler.title);
             context.openTiddler(tiddler.title);
@@ -170,6 +171,7 @@ SPA.prototype.saveTiddler = function(title) {
 SPA.prototype.deleteTiddler = function(title) {
     var tiddler = this.space.tiddlers[title];
     var success = function() {
+        $.growl.notice({ title: 'Success', message: 'Deleted tiddler ' + title });
         $('#' + tiddler.id).remove();
         $("nav ul li a[href='#" + tiddler.id + "']").parent().remove()
     };
@@ -200,6 +202,5 @@ SPA.prototype.ajaxError = function(xhr, error, exc) {
     var text = (xhr.responseText !== '' ? xhr.responseText : (xhr.statusText !== '' ? xhr.statusText : defaultText));
     var msg = 'ERROR (' + xhr.status + ') [' + text + ']';
     console.log(msg);
-    // $.growl.error({ message: "The kitten is attacking!" });
-    //TODO: proper error handling
+    $.growl.error({ message: msg });
 };
