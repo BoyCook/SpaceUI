@@ -91,6 +91,7 @@ SPA.prototype.openTiddler = function(title) {
         context.renderTiddler(data);
     };
 
+    //TODO: load based on type i.e. fix image loading
     //TODO: tidy this
     var tiddler = this.space.tiddlers[title];
     if (typeof tiddler === "undefined") {
@@ -150,9 +151,8 @@ SPA.prototype.saveTiddler = function(title) {
         tiddler.tags = $('#' + id + ' .tiddler-tags').val().split(' ');
         this.space.saveTiddler(tiddler, function() {
             $.growl.notice({ title: 'Success',  message: 'Added tiddler ' + title });
-            var item = context.html.generateTiddlerItem(tiddler);
-            $('nav ul').prepend(item.asHTML());
             $('#tiddlerNew_Tiddler').remove();
+            context.addToList(tiddler);
             context.openTiddler(tiddler.title);
         }, this.ajaxError);
     } else {
@@ -169,11 +169,12 @@ SPA.prototype.saveTiddler = function(title) {
 };
 
 SPA.prototype.deleteTiddler = function(title) {
+    var context = this;
     var tiddler = this.space.tiddlers[title];
     var success = function() {
         $.growl.notice({ title: 'Success', message: 'Deleted tiddler ' + title });
         $('#' + tiddler.id).remove();
-        $("nav ul li a[href='#" + tiddler.id + "']").parent().remove()
+        context.removeFromList(tiddler);
     };
     this.space.deleteTiddler(title, success, this.ajaxError);
 };
@@ -184,6 +185,19 @@ SPA.prototype.viewMenu = function(tiddlers) {
     } else {
         $('nav').addClass('visible');
     }
+};
+
+SPA.prototype.addToList = function(tiddler) {
+    this.space.addToList(tiddler);
+    this.tiddlerFilter.data = this.space.tiddlerList;
+    var item = this.html.generateTiddlerItem(tiddler);
+    $(item.asHTML()).insertAfter('nav ul li:first-child')
+};
+
+SPA.prototype.removeFromList = function(tiddler) {
+    this.space.removeFromList(tiddler);
+    this.tiddlerFilter.data = this.space.tiddlerList;
+    $("nav ul li a[href='#" + tiddler.id + "']").parent().remove()
 };
 
 SPA.prototype.renderTiddlerList = function(tiddlers) {

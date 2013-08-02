@@ -39,6 +39,24 @@ Space.prototype.setTiddler = function(tiddler) {
     this.tiddlers[tiddler.title] = tiddler;
 };
 
+Space.prototype.addToList = function(tiddler) {
+    if (this.tiddlerList.unshift) {
+        this.tiddlerList.unshift(tiddler);
+    } else {
+        this.tiddlerList.push(tiddler);
+    }
+};
+
+Space.prototype.removeFromList = function(tiddler) {
+    for (var i=0,len=this.tiddlerList.length; i<len; i++) {
+        var item = this.tiddlerList[i];
+        if (item.title == tiddler.title) {
+            this.tiddlerList.splice(i, 1);
+            return;
+        }
+    }
+};
+
 Space.prototype.getRecent = function(success, error) {
 	this.getAll('?sort=-modified;limit=50', success, error);
 };
@@ -52,9 +70,6 @@ Space.prototype.getAll = function(params, success, error) {
          }
     };
 	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers' + params, callBack, error);
-};
-
-Space.prototype.filter = function() {
 };
 
 Space.prototype.saveTiddler = function(tiddler, success, error) {
