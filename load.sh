@@ -5,7 +5,9 @@ tsapp push spaceui Elusive-Icons.svg
 tsapp push spaceui Elusive-Icons.ttf
 tsapp push spaceui Elusive-Icons.woff
 tsapp push spaceui elusive-webfont.css
+tsapp push spaceui jquery.growl.css
 tsapp push spaceui index.html
+tsapp push spaceui jquery.growl.js
 tsapp push spaceui html.js
 tsapp push spaceui htmlgenerator.js
 tsapp push spaceui http.js

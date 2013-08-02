@@ -200,5 +200,6 @@ SPA.prototype.ajaxError = function(xhr, error, exc) {
     var text = (xhr.responseText !== '' ? xhr.responseText : (xhr.statusText !== '' ? xhr.statusText : defaultText));
     var msg = 'ERROR (' + xhr.status + ') [' + text + ']';
     console.log(msg);
+    // $.growl.error({ message: "The kitten is attacking!" });
     //TODO: proper error handling
 };
