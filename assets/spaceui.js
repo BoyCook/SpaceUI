@@ -196,7 +196,9 @@ SPA.prototype.renderTiddler = function(tiddler) {
 };
 
 SPA.prototype.ajaxError = function(xhr, error, exc) {
-    console.log('ERROR: ' + error);
+    var defaultText = 'There was an unknown error - check your connectivity';
+    var text = (xhr.responseText !== '' ? xhr.responseText : (xhr.statusText !== '' ? xhr.statusText : defaultText));
+    var msg = 'ERROR (' + xhr.status + ') [' + text + ']';
+    console.log(msg);
     //TODO: proper error handling
-	// alert(error);
 };
