@@ -33,16 +33,17 @@ function SPA(host, port) {
 }
 
 SPA.prototype.setup = function() {
-    this.loadTitle();
-	this.getRecent(); 
-    this.loadDefaults();
+    //TODO add call back to getRecent and then do next
+    this.getRecent(); 
+    // this.loadTitle();
+    // this.loadDefaults();
 };
 
 SPA.prototype.loadTitle = function() {
     var context = this;
-    this.space.getTiddler('SiteTitle', function(titleTiddler) {
+    this.space.fetchTiddler('SiteTitle', function(titleTiddler) {
         var title = titleTiddler.text;
-        context.space.getTiddler('SiteSubtitle', function(subTitleTiddler){
+        context.space.fetchTiddler('SiteSubtitle', function(subTitleTiddler){
             title += ' - ' + subTitleTiddler.text;
             $('title').text(title);
             $('header h1').text(title);                
@@ -62,7 +63,7 @@ SPA.prototype.loadDefaults = function() {
         return items;
     };
 
-    this.space.getTiddler('DefaultTiddlers', function(defaultTiddlers) {
+    this.space.fetchTiddler('DefaultTiddlers', function(defaultTiddlers) {
         var items = processItems(defaultTiddlers.text);
         var len = items.length -1;
         for (var i=len; i>=0; i--) {
@@ -91,17 +92,54 @@ SPA.prototype.openTiddler = function(title) {
         context.renderTiddler(data);
     };
 
-    //TODO: load based on type i.e. fix image loading
-    //TODO: tidy this
-    var tiddler = this.space.tiddlers[title];
-    if (typeof tiddler === "undefined") {
-        this.space.getTiddler(title, success, this.ajaxError);        
-    } else {
-        if ($('#' + tiddler.id).length == 0) {
-            this.space.getTiddler(title, success, this.ajaxError);        
+    var summary = this.space.getSummaryTiddler(title);
+    var tiddler = this.space.getTiddler(title);
+
+    if (typeof summary !== "undefined") {
+        var tiddler = this.space.getTiddler(summary.title);
+        var fetch = this.isDoFetch(summary, tiddler);
+        if (fetch == true) {
+            this.space.fetchTiddler(title, success, this.ajaxError);        
+        } else {
+            if ($('#' + tiddler.id).length == 0) {
+                this.renderTiddler(tiddler); 
+            }
+            //else anchor click jumps to tiddler
         }
-        // window.history.pushState(null, null, '#' + tiddler.id)
+    } else {
+        $.growl.error({ message: "Cannot find tiddler '" + title + "' to open" });        
     }
+};
+
+SPA.prototype.isDoFetch = function(summary, tiddler) {
+    //Check if tiddler type requires fetch and isn't in cache
+    if (this.isFetch(summary) && typeof tiddler === "undefined") {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+SPA.prototype.isFetch = function(tiddler) {
+    var fetch = true;
+    switch (tiddler.type) {
+        case "application/x-woff":
+        case "application/octet-stream":
+        case "image/png":                                
+        case "image/jpg":
+        case "image/jpge":
+            fetch = false;
+            break;                  
+        case "application/javascript":
+        case "text/html":
+        case "text/css":
+        case "application/vnd.ms-fontobject":
+        case "image/svg+xml":
+        default:
+            fetch = true;
+            break;                  
+    }
+    return fetch;
 };
 
 SPA.prototype.closeAllTiddlers = function() {

@@ -8,10 +8,10 @@ function Space(baseURL, name) {
     this.http = new HTTP();
 }
 
-Space.prototype.getTiddler = function(title, success, error) {
+Space.prototype.fetchTiddler = function(title, success, error) {
 	var tiddler = this.tiddlers[title]; 
 	if (typeof tiddler === "undefined") {
-		this._getTiddler(title, success, error);
+		this._fetchTiddler(title, success, error);
 	} else {
         if (success) {
             success(tiddler);
@@ -19,7 +19,7 @@ Space.prototype.getTiddler = function(title, success, error) {
     }
 };
 
-Space.prototype._getTiddler = function(title, success, error) {
+Space.prototype._fetchTiddler = function(title, success, error) {
     var context = this;
     var callBack = function(tiddler) {
         tiddler.id = context.getId(tiddler);
@@ -31,12 +31,25 @@ Space.prototype._getTiddler = function(title, success, error) {
 	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', callBack, error);
 };
 
+Space.prototype.getTiddler = function(title) {
+    return this.tiddlers[title];
+};
+
 Space.prototype.removeTiddler = function(title) {
     delete this.tiddlers[title];
 };
 
 Space.prototype.setTiddler = function(tiddler) {
     this.tiddlers[tiddler.title] = tiddler;
+};
+
+Space.prototype.getSummaryTiddler = function(title) {
+    for (var i=0,len=this.tiddlerList.length; i<len; i++) {
+        var item = this.tiddlerList[i];
+        if (item.title == title) {
+            return item;
+        }
+    }    
 };
 
 Space.prototype.addToList = function(tiddler) {
