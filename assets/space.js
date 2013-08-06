@@ -82,10 +82,13 @@ Space.prototype.getRecent = function(success, error) {
 Space.prototype.getAll = function(params, success, error) {
     var context = this;
     var callBack = function(data) {
-         context.tiddlerList = data;
-         if (success) {
-             success(data);
-         }
+        for (var i=0,len=data.length; i<len; i++) {
+            data[i].id = context.getId(data[i]);
+        }
+        context.tiddlerList = data;
+        if (success) {
+            success(data);
+        }
     };
 	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers' + params, callBack, error);
 };
@@ -106,5 +109,5 @@ Space.prototype.deleteTiddler = function(title, success, error) {
 };
 
 Space.prototype.getId = function(tiddler) {
-    return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_");
+    return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_").replace(/\?/g,"_");
 };
