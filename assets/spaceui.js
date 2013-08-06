@@ -13,7 +13,6 @@ $(document).ready(function () {
 
 function SPA(host, port) {
     this.baseURL = "http://" + host + ':' + port;  
-
     if (host === 'localhost') {
         this.spaceName = 'spaceui';
     } else if (host.indexOf('.') > 0) {
@@ -33,10 +32,12 @@ function SPA(host, port) {
 }
 
 SPA.prototype.setup = function() {
-    //TODO add call back to getRecent and then do next
-    this.getRecent(); 
-    // this.loadTitle();
-    // this.loadDefaults();
+    var context = this;
+    var done = function(){
+        context.loadTitle();
+        context.loadDefaults();        
+    };
+    this.getRecent(done); 
 };
 
 SPA.prototype.loadTitle = function() {
@@ -72,11 +73,14 @@ SPA.prototype.loadDefaults = function() {
     }, this.ajaxError);        
 };
 
-SPA.prototype.getRecent = function() {
+SPA.prototype.getRecent = function(callBack) {
 	var context = this;	
 	var success = function(data) {
 		context.renderTiddlerList(data);
         context.tiddlerFilter = new Filter(data);
+        if (callBack) {
+            callBack();
+        }
 	};
     this.space.getRecent(success, this.ajaxError);
 };
