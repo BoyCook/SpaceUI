@@ -17,7 +17,7 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 		var code = new HTML('pre', text);
 		content.append(code);
 	} else if (tiddler.type === 'image/png' || tiddler.type === 'image/jpeg' || tiddler.type === 'image/jpg' ) {	
-		var image = new HTML('img', {src: tiddler.uri});
+		var image = new HTML('img', undefined, {src: tiddler.uri});
 		content.append(image);
 	} else {
 		content.value = text;

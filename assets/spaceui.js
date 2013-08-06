@@ -101,8 +101,8 @@ SPA.prototype.openTiddler = function(title) {
         if (fetch == true) {
             this.space.fetchTiddler(title, success, this.ajaxError);        
         } else {
-            if ($('#' + tiddler.id).length == 0) {
-                this.renderTiddler(tiddler); 
+            if ($('#' + this.space.getId(summary)).length == 0) {
+                this.renderTiddler(typeof tiddler !== "undefined" ? tiddler : summary); 
             }
             //else anchor click jumps to tiddler
         }
