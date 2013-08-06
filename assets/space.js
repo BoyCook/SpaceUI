@@ -44,7 +44,7 @@ Space.prototype.setTiddler = function(tiddler) {
 };
 
 Space.prototype.getSummaryTiddler = function(title) {
-    for (var i=0,len=this.tiddlerList.length; i<len; i++) {
+    for (var i=0,len=this.tiddlerList.length; i < len; i++) {
         var item = this.tiddlerList[i];
         if (item.title == title) {
             return item;
@@ -61,7 +61,7 @@ Space.prototype.addToList = function(tiddler) {
 };
 
 Space.prototype.removeFromList = function(tiddler) {
-    for (var i=0,len=this.tiddlerList.length; i<len; i++) {
+    for (var i=0,len=this.tiddlerList.length; i < len; i++) {
         var item = this.tiddlerList[i];
         if (item.title == tiddler.title) {
             this.tiddlerList.splice(i, 1);
@@ -82,7 +82,7 @@ Space.prototype.getRecent = function(success, error) {
 Space.prototype.getAll = function(params, success, error) {
     var context = this;
     var callBack = function(data) {
-        for (var i=0,len=data.length; i<len; i++) {
+        for (var i=0,len=data.length; i < len; i++) {
             data[i].id = context.getId(data[i]);
         }
         context.tiddlerList = data;

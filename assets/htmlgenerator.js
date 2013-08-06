@@ -50,7 +50,7 @@ HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 
 HTMLGenerator.prototype.generateTiddlersList = function(tiddlers) {
 	var list = new HTML('ul');
-	for (var i=0,len=tiddlers.length; i<len; i++) {
+	for (var i=0,len=tiddlers.length; i < len; i++) {
 		list.append(this.generateTiddlerItem(tiddlers[i]));
 	}
 	return list;
