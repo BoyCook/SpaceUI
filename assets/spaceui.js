@@ -42,13 +42,15 @@ SPA.prototype.setup = function() {
 
 SPA.prototype.loadTitle = function() {
     var context = this;
-    this.space.fetchTiddler('SiteTitle', function(titleTiddler) {
-        var title = titleTiddler.text;
-        context.space.fetchTiddler('SiteSubtitle', function(subTitleTiddler){
-            title += ' - ' + subTitleTiddler.text;
-            $('title').text(title);
-            $('header h1').text(title);                
-        }, context.ajaxError);                    
+    this.space.fetchTiddler({ title: 'SiteTitle', bag:  context.spaceName + '_public'}, 
+        function(titleTiddler) {
+            var title = titleTiddler.text;
+            context.space.fetchTiddler({ title: 'SiteSubtitle', bag:  context.spaceName + '_public'}, 
+                function(subTitleTiddler){
+                    title += ' - ' + subTitleTiddler.text;
+                    $('title').text(title);
+                    $('header h1').text(title);                
+            }, context.ajaxError);                    
     }, context.ajaxError);        
 };
 
@@ -63,13 +65,13 @@ SPA.prototype.loadDefaults = function() {
         items[items.length-1] = items[items.length-1].substring(0, items[items.length-1].indexOf(']]'));        
         return items;
     };
-
-    this.space.fetchTiddler('DefaultTiddlers', function(defaultTiddlers) {
-        var items = processItems(defaultTiddlers.text);
-        var len = items.length -1;
-        for (var i=len; i>=0; i--) {
-            context.openTiddler(items[i]);
-        }
+    this.space.fetchTiddler({ title: 'DefaultTiddlers', bag:  context.spaceName + '_public'}, 
+        function(defaultTiddlers) {
+            var items = processItems(defaultTiddlers.text);
+            var len = items.length -1;
+            for (var i=len; i>=0; i--) {
+                context.openTiddler(items[i]);
+            }
     }, this.ajaxError);        
 };
 
@@ -95,15 +97,13 @@ SPA.prototype.openTiddler = function(title) {
     var success = function(data) {
         context.renderTiddler(data);
     };
-
     var summary = this.space.getSummaryTiddler(title);
     var tiddler = this.space.getTiddler(title);
-
     if (typeof summary !== "undefined") {
         var tiddler = this.space.getTiddler(summary.title);
         var fetch = this.isDoFetch(summary, tiddler);
         if (fetch == true) {
-            this.space.fetchTiddler(title, success, this.ajaxError);        
+            this.space.fetchTiddler(summary, success, this.ajaxError);        
         } else {
             if ($('#' + this.space.getId(summary)).length == 0) {
                 this.renderTiddler(typeof tiddler !== "undefined" ? tiddler : summary); 
@@ -156,7 +156,6 @@ SPA.prototype.closeTiddler = function(id) {
 
 SPA.prototype.newTiddler = function() {
     var tiddler = this.space.tiddlers[this.newTiddlerJSON.title];
-
     if (typeof tiddler === "undefined") {
         var html = this.html.generateEditTiddler(this.newTiddlerJSON);
         $('#content').prepend(html);  
@@ -191,6 +190,8 @@ SPA.prototype.saveTiddler = function(title) {
         tiddler.title = $('#' + id + ' .tiddler-title').val();
         tiddler.text = $('#' + id + ' .tiddler-text').val();
         tiddler.tags = $('#' + id + ' .tiddler-tags').val().split(' ');
+        //TODO: get bag [public/private] from form
+        tiddler.bag = this.spaceName + '_public';
         this.space.saveTiddler(tiddler, function() {
             $.growl.notice({ title: 'Success',  message: 'Added tiddler ' + title });
             $('#tiddlerNew_Tiddler').remove();
@@ -201,6 +202,8 @@ SPA.prototype.saveTiddler = function(title) {
         tiddler.title = $('#' + tiddler.id + ' .tiddler-title').val();
         tiddler.text = $('#' + tiddler.id + ' .tiddler-text').val();
         tiddler.tags = $('#' + tiddler.id + ' .tiddler-tags').val().split(' ');
+        //TODO: get bag [public/private] from form
+        // tiddler.bag = this.spaceName + '_public';
         this.space.saveTiddler(tiddler, function() {
             $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + title });
             $('#' + tiddler.id).remove();
@@ -219,7 +222,7 @@ SPA.prototype.deleteTiddler = function(title) {
         $('#' + tiddler.id).remove();
         context.removeFromList(tiddler);
     };
-    this.space.deleteTiddler(title, success, this.ajaxError);
+    this.space.deleteTiddler(tiddler, success, this.ajaxError);
 };
 
 SPA.prototype.viewMenu = function(tiddlers) {

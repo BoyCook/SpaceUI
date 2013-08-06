@@ -8,10 +8,10 @@ function Space(baseURL, name) {
     this.http = new HTTP();
 }
 
-Space.prototype.fetchTiddler = function(title, success, error) {
-	var tiddler = this.tiddlers[title]; 
+Space.prototype.fetchTiddler = function(summary, success, error) {
+	var tiddler = this.getTiddler(summary.title); 
 	if (typeof tiddler === "undefined") {
-		this._fetchTiddler(title, success, error);
+		this._fetchTiddler(summary, success, error);
 	} else {
         if (success) {
             success(tiddler);
@@ -19,7 +19,7 @@ Space.prototype.fetchTiddler = function(title, success, error) {
     }
 };
 
-Space.prototype._fetchTiddler = function(title, success, error) {
+Space.prototype._fetchTiddler = function(summary, success, error) {
     var context = this;
     var callBack = function(tiddler) {
         tiddler.id = context.getId(tiddler);
@@ -28,7 +28,7 @@ Space.prototype._fetchTiddler = function(title, success, error) {
             success(tiddler);
         }
     }
-	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title + '?render=1', callBack, error);
+	this.http.doGet(this.baseURL + '/bags/' + summary.bag + '/tiddlers/' + summary.title + '?render=1', callBack, error);
 };
 
 Space.prototype.getTiddler = function(title) {
@@ -76,7 +76,7 @@ Space.prototype.moveToTopOfList = function(tiddler) {
 };
 
 Space.prototype.getRecent = function(success, error) {
-	this.getAll('?sort=-modified;limit=50', success, error);
+	this.getAll('?sort=-modified;limit=100', success, error);
 };
 
 Space.prototype.getAll = function(params, success, error) {
@@ -90,22 +90,22 @@ Space.prototype.getAll = function(params, success, error) {
             success(data);
         }
     };
-	this.http.doGet(this.baseURL + '/bags/' + this.bagName + '/tiddlers' + params, callBack, error);
+    this.http.doGet(this.baseURL + '/recipes/' + this.name + '_public/tiddlers' + params, callBack, error);
 };
 
 Space.prototype.saveTiddler = function(tiddler, success, error) {
-    this.http.doPut(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + tiddler.title, tiddler, success, error)
+    this.http.doPut(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, tiddler, success, error)
 };
 
-Space.prototype.deleteTiddler = function(title, success, error) {
+Space.prototype.deleteTiddler = function(tiddler, success, error) {
     var context = this;
     var callBack = function() {
-        context.removeTiddler(title);
+        context.removeTiddler(tiddler.title);
         if (success) {
             success();
         }
     }
-    this.http.doDelete(this.baseURL + '/bags/' + this.bagName + '/tiddlers/' + title, callBack, error)
+    this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, callBack, error)
 };
 
 Space.prototype.getId = function(tiddler) {
