@@ -11,26 +11,35 @@ HTML.prototype.append = function(child) {
 };
 
 HTML.prototype.asHTML = function() {
-	return this.getStartTag() + this.getValue() + this.getEndTag();
+	var isSingle = this.isSingleNode();
+	if (isSingle) {
+		return this.getSingleTag();
+	} else {
+		return this.getStartTag() + this.getValue() + this.getEndTag();
+	}
+};
+
+HTML.prototype.getSingleTag = function() {
+	return "<" + this.tag + this.getAttributes() + "/>";		
 };
    
 HTML.prototype.getStartTag = function() {
-	if (typeof this.attributes === "undefined") {
-		return "<" + this.tag + ">";
-	} else {
-		return "<" + this.tag + this.getAttributes() + ">";		
-	}
+	return "<" + this.tag + this.getAttributes() + ">";		
 };
 
 HTML.prototype.getEndTag = function() {
     return "</" + this.tag + ">";
 };
 
+HTML.prototype.isSingleNode = function() {
+	return (this.children.length == 0 && typeof this.value === "undefined");
+};
+
 HTML.prototype.getAttributes = function() {
-	var value = ' ';
+	var value = '';
 	for (var key in this.attributes) {
 		if (this.attributes.hasOwnProperty(key)) {
-			value += key + "=\"" + this.attributes[key] + "\" ";
+			value += ' ' + key + "=\"" + this.attributes[key] + "\"";
 		}
 	}
 	return value;
