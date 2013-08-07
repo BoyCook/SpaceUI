@@ -34,3 +34,4 @@ function load_explicit() {
 }
 
 # load_dir assets
+load_explicit
