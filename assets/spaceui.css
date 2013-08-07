@@ -67,12 +67,17 @@ nav li a {
 	padding-left: 5px;
 }
 
-.tiddler-edit-mode textarea, .tiddler-edit-mode input {
+.tiddler-edit-mode textarea, .tiddler-edit-mode input[type="text"] {
 	width: 80%;
 }
 
 .tiddler-edit-mode textarea {
 	height: 200px;
+}
+
+.tiddler-edit-visibility {
+	display: block;
+	/*text-align: right;*/
 }
 
 .toolbar {

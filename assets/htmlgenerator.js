@@ -33,7 +33,17 @@ HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 	var container = new HTML('section', undefined, { id: tiddler.id, class: 'tiddler tiddler-edit-mode' });
 	var header = new HTML('section');
 	var headerText = new HTML('input', undefined, { type: 'text', value: tiddler.title, class: 'tiddler-title' });
+	var visibility = new HTML('section', undefined, { class: 'tiddler-edit-visibility' });
+	var privateRad = new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'private' });	
+	var labelPrivate = new HTML('label', 'private');	
+	var publicRad = new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'public', checked: 'checked' });
+	var labelPublic = new HTML('label', 'public');	
 	header.append(headerText);
+	visibility.append(privateRad);
+	visibility.append(labelPrivate);
+	visibility.append(publicRad);
+	visibility.append(labelPublic);
+	
 	var content = new HTML('section');
 	var contentText = new HTML('textarea', tiddler.text, { class: 'tiddler-text'});
 	content.append(contentText);	
@@ -43,6 +53,7 @@ HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 
 	container.append(this.generateEditToolbar(tiddler));
 	container.append(header);
+	container.append(visibility);
 	container.append(content);
 	container.append(footer);
 	return container.asHTML();
