@@ -107,10 +107,12 @@ HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 
 HTMLGenerator.prototype.generateTypeOptions = function() {
 	var list = new HTML('select');
-	list.append(new HTML('option', 'text/plain', {value: 'text/plain'}));
-	list.append(new HTML('option', 'text/javascript', {value: 'text/javascript'}));
-	list.append(new HTML('option', 'text/css', {value: 'text/css'}));
-	list.append(new HTML('option', 'text/html', {value: 'text/html'}));
-	list.append(new HTML('option', 'application/json', {value: 'application/json'}));
+	list.append(new HTML('option', 'Default', {value: ''}));
+	list.append(new HTML('option', 'Markdown', {value: 'text/x-markdown'}));
+	list.append(new HTML('option', 'Plain Text', {value: 'text/plain'}));
+	list.append(new HTML('option', 'HTML', {value: 'text/html'}));
+	list.append(new HTML('option', 'CSS', {value: 'text/css'}));
+	list.append(new HTML('option', 'JavaScript', {value: 'text/javascript'}));
+	list.append(new HTML('option', 'JSON', {value: 'application/json'}));
 	return list;
 };
