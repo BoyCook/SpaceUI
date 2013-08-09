@@ -32,28 +32,23 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 	var container = new HTML('section', undefined, { id: tiddler.id, class: 'tiddler tiddler-edit-mode' });
 	var header = new HTML('section');
-	var headerText = new HTML('input', undefined, { type: 'text', value: tiddler.title, class: 'tiddler-title' });
-	var visibility = new HTML('section', undefined, { class: 'tiddler-edit-visibility' });
-	var privateRad = new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'private' });	
-	var labelPrivate = new HTML('label', 'private');	
-	var publicRad = new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'public', checked: 'checked' });
-	var labelPublic = new HTML('label', 'public');	
-	header.append(headerText);
-	visibility.append(privateRad);
-	visibility.append(labelPrivate);
-	visibility.append(publicRad);
-	visibility.append(labelPublic);
+	header.append(new HTML('input', undefined, { type: 'text', value: tiddler.title, class: 'tiddler-title' }));
+	
+	var config = new HTML('section', undefined, { class: 'tiddler-edit-config' });
+	config.append(new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'private' }));
+	config.append( new HTML('label', 'private'));
+	config.append(new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'public', checked: 'checked' }));
+	config.append(new HTML('label', 'public'));
+	config.append(this.generateTypeOptions());
 	
 	var content = new HTML('section');
-	var contentText = new HTML('textarea', tiddler.text, { class: 'tiddler-text'});
-	content.append(contentText);	
+	content.append(new HTML('textarea', tiddler.text, { class: 'tiddler-text'}));	
 	var footer = new HTML('section');
-	var footerText = new HTML('input', undefined, { type: 'text', value: tiddler.tags, class: 'tiddler-tags' });
-	footer.append(footerText);
+	footer.append(new HTML('input', undefined, { type: 'text', value: tiddler.tags, class: 'tiddler-tags' }));
 
 	container.append(this.generateEditToolbar(tiddler));
 	container.append(header);
-	container.append(visibility);
+	container.append(config);
 	container.append(content);
 	container.append(footer);
 	return container.asHTML();
@@ -108,4 +103,14 @@ HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	toolbar.append(cancelButton);
 	toolbar.append(deleteButton);
 	return toolbar;
+};
+
+HTMLGenerator.prototype.generateTypeOptions = function() {
+	var list = new HTML('select');
+	list.append(new HTML('option', 'text/plain', {value: 'text/plain'}));
+	list.append(new HTML('option', 'text/javascript', {value: 'text/javascript'}));
+	list.append(new HTML('option', 'text/css', {value: 'text/css'}));
+	list.append(new HTML('option', 'text/html', {value: 'text/html'}));
+	list.append(new HTML('option', 'application/json', {value: 'application/json'}));
+	return list;
 };

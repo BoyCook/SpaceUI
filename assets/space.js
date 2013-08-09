@@ -75,6 +75,11 @@ Space.prototype.moveToTopOfList = function(tiddler) {
     this.addToList(tiddler);
 };
 
+Space.prototype.getReplies = function(title, success, error) {
+    // { "X-ControlView": "false" }
+    this.http.doGet(this.baseURL + '/search?q=title:"' + title + '"', success, error);    
+};
+
 Space.prototype.getRecent = function(success, error) {
 	this.getAll('?sort=-modified;limit=100', success, error);
 };
