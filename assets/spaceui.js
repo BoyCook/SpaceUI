@@ -54,21 +54,23 @@ SPA.prototype.loadTitle = function() {
     }, context.ajaxError);        
 };
 
+SPA.prototype.stripChars = function(text, left, right) {
+    var chars = right + ' ' + left;
+    var items = text.split(chars);
+    //Clean left 'chars'
+    items[0] = items[0].substring(left.length);
+    //Clean right 'chars'
+    items[items.length-1] = items[items.length-1].substring(0, items[items.length-1].indexOf(right));        
+    return items;
+};
+
 SPA.prototype.loadDefaults = function() {
     var context = this;
-    //The titles in the text will be wrapped in [[Square braces]] - this will remove them
-    var processItems = function(text) {
-        var items = text.split(']] [[');
-        //Clean left '[['
-        items[0] = items[0].substring(2);
-        //Clean right ']]'
-        items[items.length-1] = items[items.length-1].substring(0, items[items.length-1].indexOf(']]'));        
-        return items;
-    };
     this.space.fetchTiddler({ title: 'DefaultTiddlers', bag:  context.spaceName + '_public'}, 
         function(defaultTiddlers) {
-            var items = processItems(defaultTiddlers.text);
+            var items = context.stripChars(defaultTiddlers.text, '[[', ']]');
             var len = items.length -1;
+            //TODO: open each tiddler in the correct order
             for (var i=len; i>=0; i--) {
                 context.openTiddler(items[i]);
             }
