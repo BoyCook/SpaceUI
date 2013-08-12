@@ -100,7 +100,7 @@ nav li a {
 }
 
 .hidden {
-	display: block;
+	display: none;
 }
 
 i {
