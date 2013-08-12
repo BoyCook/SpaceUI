@@ -79,11 +79,12 @@ HTMLGenerator.prototype.generateTiddlerItem = function(tiddler) {
 };
 
 HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
+	var fullScreenClick = "app.viewFullScreen('" + tiddler.id + "\')";
 	var editClick = "app.editTiddler('" + tiddler.title + "\')";
 	var closeClick = "app.closeTiddler('" + tiddler.id + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
-	var fullScreen = new HTML('a', undefined, { onclick: "alert('')" });
-	fullScreen.append(new HTML('i', undefined, { class: 'icon-fullscreen', title: 'Full Screen' }));		
+	var fullScreen = new HTML('a', undefined, { onclick: fullScreenClick, title: 'Full Screen' });
+	fullScreen.append(new HTML('i', undefined, { class: 'icon-fullscreen'}));		
 	var edit = new HTML('a', undefined, { onclick: editClick, title: 'Edit tiddler' });
 	edit.append(new HTML('i', undefined, { class: 'icon-file-edit' }));	
 	var close = new HTML('a', undefined, { onclick: closeClick, title: 'Close tiddler' });
@@ -97,14 +98,15 @@ HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	var saveClick = "app.saveTiddler('" + tiddler.title + "\')";
 	var cancelClick = "app.cancelEditTiddler('" + tiddler.title + "\')";
+	var fullScreenClick = "app.editFullScreen('" + tiddler.id + "\')";
 	var deleteClick = "app.deleteTiddler('" + tiddler.title + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
 	var save = new HTML('a', undefined, { onclick: saveClick, title: 'Save changes' });
 	save.append(new HTML('i', undefined, { class: 'icon-ok' }));		
 	var cancel = new HTML('a', undefined, { onclick: cancelClick });
 	cancel.append(new HTML('i', undefined, { class: 'icon-reverse-alt', title: 'Cancel changes' }));		
-	var fullScreen = new HTML('a', undefined, { onclick: "alert('')" });
-	fullScreen.append(new HTML('i', undefined, { class: 'icon-fullscreen', title: 'Full Screen' }));		
+	var fullScreen = new HTML('a', undefined, { onclick: fullScreenClick, title: 'Full Screen' });
+	fullScreen.append(new HTML('i', undefined, { class: 'icon-fullscreen' }));		
 	var del = new HTML('a', undefined, { onclick: deleteClick, title: 'Delete tiddler' });
 	del.append(new HTML('i', undefined, { class: 'icon-trash' }));			
 	toolbar.append(save);

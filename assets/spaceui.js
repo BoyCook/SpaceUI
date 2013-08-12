@@ -94,6 +94,18 @@ SPA.prototype.filter = function(text) {
     this.renderTiddlerList(filtered);
 };
 
+SPA.prototype.viewFullScreen = function(id) {
+    this.toggleViewScreen(id);
+};
+
+SPA.prototype.editFullScreen = function(id) {
+    this.toggleViewScreen(id);
+};
+
+SPA.prototype.toggleViewScreen = function(id) {
+    $('nav, header, #content .tiddler:not(#' + id + ')').toggle();
+};
+
 SPA.prototype.openTiddler = function(title) {
     var context = this; 
     var success = function(data) {
