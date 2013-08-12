@@ -108,9 +108,15 @@ SPA.prototype.toggleViewScreen = function(id) {
     if ($('nav').hasClass('hidden')) {
         $('nav, header, #content .tiddler:not(#' + id + ')').removeClass('hidden');
         $('#content').removeClass('full-width');
+        var toolbar = $('#' + id + ' .main-toolbar');
+        toolbar.removeClass('main-toolbar');        
+        toolbar.addClass('toolbar');
     } else {
         $('nav, header, #content .tiddler:not(#' + id + ')').addClass('hidden');
         $('#content').addClass('full-width');
+        var toolbar = $('#' + id + ' .toolbar');
+        toolbar.removeClass('toolbar');
+        toolbar.addClass('main-toolbar');
     }
 };
 
