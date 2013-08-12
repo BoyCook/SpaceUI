@@ -204,7 +204,7 @@ SPA.prototype.saveTiddler = function(title) {
         tiddler.title = $('#' + tiddler.id + ' .tiddler-title').val();
         tiddler.text = $('#' + tiddler.id + ' .tiddler-text').val();
         tiddler.tags = $('#' + tiddler.id + ' .tiddler-tags').val().split(' ');
-        tiddler.contentType = $('#' + id + ' .tiddler-type').val();
+        tiddler.contentType = $('#' + tiddler.id + ' .tiddler-type').val();
         //TODO: can a tiddler switch between public/private (or is it delete/copy)
         // tiddler.bag = this.spaceName + '_' + $('#' + id + ' input[name=privacy]:checked').val();
         this.space.saveTiddler(tiddler, function() {
@@ -225,6 +225,7 @@ SPA.prototype.deleteTiddler = function(title) {
         $('#' + tiddler.id).remove();
         context.removeFromList(tiddler);
     };
+    tiddler.contentType = 'application/json';
     this.space.deleteTiddler(tiddler, success, this.ajaxError);
 };
 

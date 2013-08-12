@@ -113,7 +113,7 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
         }
     }
     this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, 
-        tiddler.type, 'json', callBack, error)
+        tiddler.contentType, 'json', callBack, error)
 };
 
 Space.prototype.getId = function(tiddler) {
