@@ -103,13 +103,15 @@ SPA.prototype.editFullScreen = function(id) {
 };
 
 SPA.prototype.toggleViewScreen = function(id) {
-    //Hide/show all other content
+    // - Hide/show all other content
+    // - Make current tiddler size of full screen
     if ($('nav').hasClass('hidden')) {
         $('nav, header, #content .tiddler:not(#' + id + ')').removeClass('hidden');
+        $('#content').removeClass('full-width');
     } else {
         $('nav, header, #content .tiddler:not(#' + id + ')').addClass('hidden');
+        $('#content').addClass('full-width');
     }
-    //Make current tiddler size of full screen
 };
 
 SPA.prototype.openTiddler = function(title) {

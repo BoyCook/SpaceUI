@@ -34,8 +34,16 @@ nav li {
     float: left;
     /*min-height: 400px;*/
     margin-right: 20%;
-    width: 75%;
+    width: 75%; 
     position: relative;
+}
+
+.full-width {
+    width: 100% !important;
+}
+
+.no-width {
+    width: 0%;
 }
 
 i {
