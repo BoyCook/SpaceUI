@@ -99,7 +99,9 @@ Space.prototype.getAll = function(params, success, error) {
 };
 
 Space.prototype.saveTiddler = function(tiddler, success, error) {
-    this.http.doPut(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, tiddler, success, error)
+    // xml, json, script, or html
+    this.http.doPut(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, 
+        tiddler.contentType, 'json', tiddler, success, error)
 };
 
 Space.prototype.deleteTiddler = function(tiddler, success, error) {
@@ -110,7 +112,8 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
             success();
         }
     }
-    this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, callBack, error)
+    this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, 
+        tiddler.type, 'json', callBack, error)
 };
 
 Space.prototype.getId = function(tiddler) {

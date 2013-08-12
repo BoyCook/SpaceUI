@@ -1,5 +1,13 @@
 
 function HTMLGenerator() {
+	this.contentTypes = {
+		'application/json': 'Default',
+		'text/x-markdoxwn': 'Markdown',
+		'text/plain': 'Plain Text',
+		'text/html': 'HTML',
+		'text/css': 'CSS',
+		'text/javascript': 'JavaScript'
+	};
 }
 
 HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
@@ -39,12 +47,12 @@ HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 	config.append( new HTML('label', 'private'));
 	config.append(new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'public', checked: 'checked' }));
 	config.append(new HTML('label', 'public'));
-	config.append(this.generateTypeOptions());
+	config.append(this.generateTypeOptions(tiddler.type ? tiddler.type : 'application/json'));
 	
 	var content = new HTML('section');
 	content.append(new HTML('textarea', tiddler.text, { class: 'tiddler-text'}));	
 	var footer = new HTML('section');
-	footer.append(new HTML('input', undefined, { type: 'text', value: tiddler.tags, class: 'tiddler-tags' }));
+	footer.append(new HTML('input', undefined, { type: 'text', value: tiddler.tags.toString().replace(/\,/g, ' '), class: 'tiddler-tags' }));
 
 	container.append(this.generateEditToolbar(tiddler));
 	container.append(header);
@@ -105,14 +113,22 @@ HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	return toolbar;
 };
 
-HTMLGenerator.prototype.generateTypeOptions = function() {
-	var list = new HTML('select');
-	list.append(new HTML('option', 'Default', {value: ''}));
-	list.append(new HTML('option', 'Markdown', {value: 'text/x-markdown'}));
-	list.append(new HTML('option', 'Plain Text', {value: 'text/plain'}));
-	list.append(new HTML('option', 'HTML', {value: 'text/html'}));
-	list.append(new HTML('option', 'CSS', {value: 'text/css'}));
-	list.append(new HTML('option', 'JavaScript', {value: 'text/javascript'}));
-	list.append(new HTML('option', 'JSON', {value: 'application/json'}));
+HTMLGenerator.prototype.generateTypeOptions = function(selected) {
+	var list = new HTML('select', undefined, { class: 'tiddler-type' });
+	var values = {
+		'Default': { value: 'application/json' },
+		'Markdown': { value: 'text/x-markdown' },
+		'Plain Text': { value: 'text/plain' },
+		'HTML': { value: 'text/html' },
+		'CSS': { value: 'text/css' },
+		'JavaScript': { value: 'text/javascript' }
+	};
+	var type = this.contentTypes[selected];
+	if (values.hasOwnProperty(type)) {
+		values[type].selected = 'true';
+	}
+	for (var key in values) {
+		list.append(new HTML('option', key, values[key]));
+	}
 	return list;
 };

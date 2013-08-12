@@ -192,8 +192,8 @@ SPA.prototype.saveTiddler = function(title) {
         tiddler.title = $('#' + id + ' .tiddler-title').val();
         tiddler.text = $('#' + id + ' .tiddler-text').val();
         tiddler.tags = $('#' + id + ' .tiddler-tags').val().split(' ');
-        //TODO: get bag [public/private] from form
-        tiddler.bag = this.spaceName + '_public';
+        tiddler.contentType = $('#' + id + ' .tiddler-type').val();
+        tiddler.bag = this.spaceName + '_' + $('#' + id + ' input[name=privacy]:checked').val();
         this.space.saveTiddler(tiddler, function() {
             $.growl.notice({ title: 'Success',  message: 'Added tiddler ' + title });
             $('#tiddlerNew_Tiddler').remove();
@@ -204,8 +204,9 @@ SPA.prototype.saveTiddler = function(title) {
         tiddler.title = $('#' + tiddler.id + ' .tiddler-title').val();
         tiddler.text = $('#' + tiddler.id + ' .tiddler-text').val();
         tiddler.tags = $('#' + tiddler.id + ' .tiddler-tags').val().split(' ');
-        //TODO: get bag [public/private] from form
-        // tiddler.bag = this.spaceName + '_public';
+        tiddler.contentType = $('#' + id + ' .tiddler-type').val();
+        //TODO: can a tiddler switch between public/private (or is it delete/copy)
+        // tiddler.bag = this.spaceName + '_' + $('#' + id + ' input[name=privacy]:checked').val();
         this.space.saveTiddler(tiddler, function() {
             $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + title });
             $('#' + tiddler.id).remove();
