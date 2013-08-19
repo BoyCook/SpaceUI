@@ -1,10 +1,11 @@
-# About
-Space UI is a lightweight UI for TiddlySpace. It can be found at: http://spaceui.tiddlyspace.com
+## About
+Space UI is a lightweight responsive UI for TiddlySpace
 
 ## Example
+http://spaceui.tiddlyspace.com
 
-http://spaceui.tiddlyspace.com/index
+## How to use	
+Simple
 
 ## Dependencies
-
 http://ksylvest.github.io/jquery-growl
