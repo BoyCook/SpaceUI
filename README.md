@@ -8,5 +8,3 @@ http://spaceui.tiddlyspace.com/index
 ## Dependencies
 
 http://ksylvest.github.io/jquery-growl
-
-## TODO
