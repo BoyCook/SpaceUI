@@ -64,11 +64,20 @@ SPA.prototype.stripChars = function(text, left, right) {
     return items;
 };
 
+SPA.prototype.stripNewLines = function(text) {
+    return text.replace(/(\r\n|\n|\r)/gm, '');
+};
+
+SPA.prototype.stripDoubleWhiteSpaces = function(text) {
+    return text.replace(/\s+/g, ' ');
+};
+
 SPA.prototype.loadDefaults = function() {
     var context = this;
     this.space.fetchTiddler({ title: 'DefaultTiddlers', bag:  context.spaceName + '_public'}, 
         function(defaultTiddlers) {
-            var items = context.stripChars(defaultTiddlers.text, '[[', ']]');
+            var text = context.stripDoubleWhiteSpaces(context.stripNewLines(defaultTiddlers.text));
+            var items = context.stripChars(text, '[[', ']]');
             var len = items.length -1;
             //TODO: open each tiddler in the correct order
             for (var i=len; i>=0; i--) {
