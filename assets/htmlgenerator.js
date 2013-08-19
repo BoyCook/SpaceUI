@@ -139,6 +139,7 @@ HTMLGenerator.prototype.generateTypeOptions = function(selected) {
 
 HTMLGenerator.prototype.isCode = function(tiddler) {
 	if (tiddler.type === 'application/json' || 
+		tiddler.type === 'application/javascript' || 
 		tiddler.type === 'text/javascript' || 
 		tiddler.type === 'text/css'  || 
 		tiddler.type === 'text/html' ) {

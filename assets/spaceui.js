@@ -23,12 +23,6 @@ function SPA(host, port) {
     this.tiddlerFilter = undefined;
 	this.html = new HTMLGenerator();
     this.space = new Space(this.baseURL, this.spaceName);
-    this.newTiddlerJSON = {
-        id: 'tiddlerNew_Tiddler',
-        title: 'New Tiddler',
-        text: "Type the text for 'New Tiddler'",
-        tags: ''
-    };
 }
 
 SPA.prototype.setup = function() {
@@ -149,7 +143,8 @@ SPA.prototype.openTiddler = function(title) {
             //else anchor click jumps to tiddler
         }
     } else {
-        $.growl.error({ message: "Cannot find tiddler '" + title + "' to open" });        
+        this.newTiddler(title);
+        // $.growl.error({ message: "Cannot find tiddler '" + title + "' to open" });        
     }
 };
 
@@ -192,14 +187,27 @@ SPA.prototype.closeTiddler = function(id) {
     $('#' + id).remove();
 };
 
-SPA.prototype.newTiddler = function() {
-    var tiddler = this.space.tiddlers[this.newTiddlerJSON.title];
+SPA.prototype.getTiddlerJSON = function(title) {
+    return {
+        id: this.space.getId({title: title}),
+        title: title,
+        text: "Type the text for '" + title + "'",
+        tags: ''
+    };    
+}
+
+SPA.prototype.newTiddler = function(title) {
+    var summary = this.getTiddlerJSON(title);
+    var tiddler = this.space.tiddlers[summary.title];
     if (typeof tiddler === "undefined") {
-        var html = this.html.generateEditTiddler(this.newTiddlerJSON);
-        $('#content').prepend(html);  
+        //If box isn't already open
+        if ($('#' + summary.id).length == 0) {
+            var html = this.html.generateEditTiddler(summary);
+            $('#content').prepend(html);  
+        }
     } else {
         // If 'New Tiddler' exists then open it and becomes update operation
-        this.editTiddler(this.newTiddlerJSON.title);
+        this.editTiddler(summary.title);
     }
 };
 
@@ -232,7 +240,7 @@ SPA.prototype.saveTiddler = function(title) {
         tiddler.bag = this.spaceName + '_' + $('#' + id + ' input[name=privacy]:checked').val();
         this.space.saveTiddler(tiddler, function() {
             $.growl.notice({ title: 'Success',  message: 'Added tiddler ' + title });
-            $('#tiddlerNew_Tiddler').remove();
+            $('#' + id).remove();
             context.addToList(tiddler);
             context.openTiddler(tiddler.title);
         }, this.ajaxError);
