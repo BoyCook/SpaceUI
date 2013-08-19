@@ -81,7 +81,7 @@ Space.prototype.getReplies = function(title, success, error) {
 };
 
 Space.prototype.getRecent = function(success, error) {
-	this.getAll('?sort=-modified;limit=100', success, error);
+	this.getAll('?sort=-modified', success, error);
 };
 
 Space.prototype.getAll = function(params, success, error) {
