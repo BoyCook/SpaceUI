@@ -285,7 +285,7 @@ SPA.prototype.addToList = function(tiddler) {
     this.space.addToList(tiddler);
     this.tiddlerFilter.data = this.space.tiddlerList;
     var item = this.html.generateTiddlerItem(tiddler);
-    $(item.asHTML()).insertAfter('nav ul li:first-child')
+    $('nav .tiddler-list').append(item.asHTML());
 };
 
 SPA.prototype.removeFromList = function(tiddler) {
@@ -300,14 +300,13 @@ SPA.prototype.moveToTopOfList = function(tiddler) {
     var original = $("nav ul li a[href='#" + tiddler.id + "']").parent();
     var item = original.clone();
     original.remove();
-    $(item).insertAfter('nav ul li:first-child')
+    $('nav .tiddler-list').prepend(item);
 };
 
 SPA.prototype.renderTiddlerList = function(tiddlers) {
-    if ($('nav ul li').length > 1) {
-        $('nav ul li:not(:first-child)').remove();
-    } 
-    $('.nav ul').append(this.html.generateTiddlersList(tiddlers).getChildren());   
+    //TODO: make this faster
+    $('nav .tiddler-list li').remove();
+    $('nav .tiddler-list').append(this.html.generateTiddlersList(tiddlers).getChildren());   
 };
 
 SPA.prototype.renderTiddler = function(tiddler) {

@@ -2,6 +2,7 @@
 function Filter(data, operation) {
 	this.data = data;
 	this.operation = operation;
+	// this.data.splice(0, 1)
 }
 
 Filter.prototype.filter = function(key, value) {

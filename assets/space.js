@@ -5,6 +5,7 @@ function Space(baseURL, name) {
 	this.bagName = this.name + '_public';
 	this.tiddlers = {};
     this.tiddlerList = [];
+    this.tags = []; //TODO: populate from tiddlerList
     this.http = new HTTP();
 }
 
