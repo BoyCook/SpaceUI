@@ -55,7 +55,7 @@ SPA.prototype.loadTitle = function() {
 };
 
 SPA.prototype.stripChars = function(text, left, right) {
-    var chars = right + ' ' + left;
+    var chars = right + left;
     var items = text.split(chars);
     //Clean left 'chars'
     items[0] = items[0].substring(left.length);
@@ -69,7 +69,8 @@ SPA.prototype.stripNewLines = function(text) {
 };
 
 SPA.prototype.stripDoubleWhiteSpaces = function(text) {
-    return text.replace(/\s+/g, ' ');
+    return text.replace(/\]\]\s+/g, ']]');
+    // return text.replace(/\s+/g, ' ');
 };
 
 SPA.prototype.loadDefaults = function() {
