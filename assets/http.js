@@ -1,21 +1,23 @@
 
 function HTTP() {
+    this.contentType = 'application/json';
+    this.dataType = 'json';
 }
 
 HTTP.prototype.doGet = function(url, success, error) {
-    this.doAjax(url, 'GET', 'application/json', 'json', undefined, success, error);
+    this.doAjax(url, 'GET', this.contentType, this.dataType, undefined, success, error);
 };
 
-HTTP.prototype.doPut = function(url, contentType, dataType, data, success, error) {
-    this.doAjax(url, 'PUT', contentType, dataType, data, success, error);
+HTTP.prototype.doPut = function(url, data, success, error) {
+    this.doAjax(url, 'PUT', this.contentType, this.dataType, data, success, error);
 };
 
-HTTP.prototype.doPost = function(url, contentType, dataType, data, success, error) {
-    this.doAjax(url, 'POST', contentType, dataType, data, success, error);
+HTTP.prototype.doPost = function(url, data, success, error) {
+    this.doAjax(url, 'POST', this.contentType, this.dataType, data, success, error);
 };
 
-HTTP.prototype.doDelete = function(url, contentType, dataType, success, error) {
-    this.doAjax(url, 'DELETE', contentType, dataType, undefined, success, error);
+HTTP.prototype.doDelete = function(url, success, error) {
+    this.doAjax(url, 'DELETE', this.contentType, this.dataType, undefined, success, error);
 };
 
 HTTP.prototype.doAjax = function(url, method, contentType, dataType, data, success, error) {

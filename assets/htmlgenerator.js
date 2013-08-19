@@ -1,8 +1,7 @@
 
 function HTMLGenerator() {
 	this.contentTypes = {
-		'application/json': 'Default',
-		'text/x-markdoxwn': 'Markdown',
+		'text/x-markdown': 'Markdown',
 		'text/plain': 'Plain Text',
 		'text/html': 'HTML',
 		'text/css': 'CSS',
@@ -21,10 +20,10 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 	var text = (tiddler.render ? tiddler.render : tiddler.text);
 	var content = new HTML('article');
 
-	if (tiddler.type === 'application/javascript' || tiddler.type === 'application/json' || tiddler.type === 'text/css' ) {
+	if (this.isCode(tiddler)) {
 		var code = new HTML('pre', text);
 		content.append(code);
-	} else if (tiddler.type === 'image/png' || tiddler.type === 'image/jpeg' || tiddler.type === 'image/jpg' ) {	
+	} else if (this.isImage(tiddler)) {	
 		var image = new HTML('img', undefined, {src: tiddler.uri});
 		content.append(image);
 	} else {
@@ -119,7 +118,7 @@ HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 HTMLGenerator.prototype.generateTypeOptions = function(selected) {
 	var list = new HTML('select', undefined, { class: 'tiddler-type' });
 	var values = {
-		'Default': { value: 'application/json' },
+		'Default': { value: '' },
 		'Markdown': { value: 'text/x-markdown' },
 		'Plain Text': { value: 'text/plain' },
 		'HTML': { value: 'text/html' },
@@ -129,9 +128,32 @@ HTMLGenerator.prototype.generateTypeOptions = function(selected) {
 	var type = this.contentTypes[selected];
 	if (values.hasOwnProperty(type)) {
 		values[type].selected = 'true';
+	} else {
+		values['Default'].selected = 'true';
 	}
 	for (var key in values) {
 		list.append(new HTML('option', key, values[key]));
 	}
 	return list;
+};
+
+HTMLGenerator.prototype.isCode = function(tiddler) {
+	if (tiddler.type === 'application/json' || 
+		tiddler.type === 'text/javascript' || 
+		tiddler.type === 'text/css'  || 
+		tiddler.type === 'text/html' ) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
+HTMLGenerator.prototype.isImage = function(tiddler) {
+	if (tiddler.type === 'image/png' || 
+		tiddler.type === 'image/jpeg' || 
+		tiddler.type === 'image/jpg' ) {	
+		return true;
+	} else {
+		return false;
+	}
 };
