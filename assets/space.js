@@ -4,7 +4,10 @@ function Space(baseURL, name) {
 	this.name = name;
 	this.bagName = this.name + '_public';
 	this.tiddlers = {};
-    this.tiddlerList = [];
+    this.tiddlerLists = {
+        all: [],
+        modified: [],
+    };
     this.tags = []; //TODO: populate from tiddlerList
     this.http = new HTTP();
 }
@@ -45,27 +48,38 @@ Space.prototype.setTiddler = function(tiddler) {
 };
 
 Space.prototype.getSummaryTiddler = function(title) {
-    for (var i=0,len=this.tiddlerList.length; i < len; i++) {
-        var item = this.tiddlerList[i];
+    for (var i=0,len=this.tiddlerLists.all.length; i < len; i++) {
+        var item = this.tiddlerLists.all[i];
         if (item.title == title) {
             return item;
         }
     }    
 };
 
+Space.prototype.getTiddlerLists = function(tiddlers) {
+    return this.tiddlerLists;
+};
+
+Space.prototype.setTiddlerLists = function(tiddlers) {
+    var sort = new Sort(tiddlers);
+    this.tiddlerLists.all = sort.sort('title');
+    this.tiddlerLists.modified = sort.sort('-modified');
+};
+
 Space.prototype.addToList = function(tiddler) {
-    if (this.tiddlerList.unshift) {
-        this.tiddlerList.unshift(tiddler);
+    //Move to top of list???
+    if (this.tiddlerLists.all.unshift) {
+        this.tiddlerLists.all.unshift(tiddler);
     } else {
-        this.tiddlerList.push(tiddler);
+        this.tiddlerLists.all.push(tiddler);
     }
 };
 
 Space.prototype.removeFromList = function(tiddler) {
-    for (var i=0,len=this.tiddlerList.length; i < len; i++) {
-        var item = this.tiddlerList[i];
+    for (var i=0,len=this.tiddlerLists.all.length; i < len; i++) {
+        var item = this.tiddlerLists.all[i];
         if (item.title == tiddler.title) {
-            this.tiddlerList.splice(i, 1);
+            this.tiddlerLists.all.splice(i, 1);
             return;
         }
     }
@@ -91,7 +105,7 @@ Space.prototype.getAll = function(params, success, error) {
         for (var i=0,len=data.length; i < len; i++) {
             data[i].id = context.getId(data[i]);
         }
-        context.tiddlerList = data;
+        context.setTiddlerLists(data);
         if (success) {
             success(data);
         }

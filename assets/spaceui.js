@@ -9,6 +9,9 @@ $(document).ready(function () {
             app.filter($('#filterBox').val());
         }
     });    
+    $('input:radio[name=searchType]').change(function(){
+        app.switchList($('input:radio[name=searchType]:checked').val());
+    })
 });
 
 function SPA(host, port) {
@@ -32,6 +35,7 @@ SPA.prototype.setup = function() {
         context.loadDefaults();        
     };
     this.getRecent(done); 
+    this.switchList($('input:radio[name=searchType]:checked').val());
 };
 
 SPA.prototype.loadTitle = function() {
@@ -84,7 +88,8 @@ SPA.prototype.loadDefaults = function() {
 SPA.prototype.getRecent = function(callBack) {
 	var context = this;	
 	var success = function(data) {
-		context.renderTiddlerList(data);
+		// context.renderTiddlerList('nav .tiddler-list-recent', data);
+        context.renderTiddlerLists();
         context.tiddlerFilter = new Filter(data);
         if (callBack) {
             callBack();
@@ -94,8 +99,9 @@ SPA.prototype.getRecent = function(callBack) {
 };
 
 SPA.prototype.filter = function(text) {
+    //TODO: filter current list
     var filtered = this.tiddlerFilter.filter('title', text);
-    this.renderTiddlerList(filtered);
+    this.renderTiddlerList('nav .tiddler-list-recent', filtered);
 };
 
 SPA.prototype.viewFullScreen = function(id) {
@@ -281,32 +287,42 @@ SPA.prototype.viewMenu = function(tiddlers) {
     }
 };
 
+SPA.prototype.switchList = function(name) {
+    $('.tiddler-list').hide();
+    $('.tiddler-list-' + name).show();
+};
+
 SPA.prototype.addToList = function(tiddler) {
     this.space.addToList(tiddler);
-    this.tiddlerFilter.data = this.space.tiddlerList;
+    this.tiddlerFilter.data = this.space.getTiddlerLists().all;
     var item = this.html.generateTiddlerItem(tiddler);
     $('nav .tiddler-list').append(item.asHTML());
 };
 
 SPA.prototype.removeFromList = function(tiddler) {
     this.space.removeFromList(tiddler);
-    this.tiddlerFilter.data = this.space.tiddlerList;
+    this.tiddlerFilter.data = this.space.getTiddlerLists().all;
     $("nav ul li a[href='#" + tiddler.id + "']").parent().remove()
 };
 
 SPA.prototype.moveToTopOfList = function(tiddler) {
     this.space.moveToTopOfList(tiddler);
-    this.tiddlerFilter.data = this.space.tiddlerList;
+    this.tiddlerFilter.data = this.space.getTiddlerLists().all;
     var original = $("nav ul li a[href='#" + tiddler.id + "']").parent();
     var item = original.clone();
     original.remove();
     $('nav .tiddler-list').prepend(item);
 };
 
-SPA.prototype.renderTiddlerList = function(tiddlers) {
+SPA.prototype.renderTiddlerLists = function() {
+    this.renderTiddlerList('nav .tiddler-list-recent', this.space.getTiddlerLists().modified);
+    this.renderTiddlerList('nav .tiddler-list-all', this.space.getTiddlerLists().all);
+};
+
+SPA.prototype.renderTiddlerList = function(selector, tiddlers) {
     //TODO: make this faster
-    $('nav .tiddler-list li').remove();
-    $('nav .tiddler-list').append(this.html.generateTiddlersList(tiddlers).getChildren());   
+    $(selector + ' li').remove();
+    $(selector).append(this.html.generateTiddlersList(tiddlers).getChildren());   
 };
 
 SPA.prototype.renderTiddler = function(tiddler) {

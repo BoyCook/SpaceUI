@@ -14,6 +14,7 @@
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/htmlgenerator.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/http.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/filter.js"></script>
+        <script type="text/javascript" src="/bags/spaceui_public/tiddlers/sort.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/space.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/spaceui.js"></script>
     </head>
@@ -39,7 +40,7 @@
                 </li>
                 <li>
                     <input type="radio" name="searchType" value="all" />
-                    <label>All</label>
+                    <label>Alphabetical</label>
                 </li>
                 <li>
                     <input type="radio" name="searchType" value="public" />
@@ -54,8 +55,10 @@
                     <label>Tags</label>
                 </li>                    
             </ul>
-            <ul class="tiddler-list">                                        
-            </ul>
+            <ul class="tiddler-list tiddler-list-recent"></ul>
+            <ul class="tiddler-list tiddler-list-all"></ul>
+            <ul class="tiddler-list tiddler-list-public"></ul>
+            <ul class="tiddler-list tiddler-list-private"></ul>
         </nav>        
         <section id="content"></section>        
     </body>
