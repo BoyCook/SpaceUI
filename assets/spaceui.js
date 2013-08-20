@@ -288,7 +288,7 @@ SPA.prototype.getAllList = function(callBack) {
     var context = this; 
     var success = function(data) {
         context.setFilteredLists();
-        context.renderTiddlerLists();
+        context.renderNavigationLists();
         if (callBack) {
             callBack();
         }
@@ -299,7 +299,7 @@ SPA.prototype.getAllList = function(callBack) {
 SPA.prototype.filter = function(text) {
     var list = $('input:radio[name=searchType]:checked').val();
     var filtered = this.filteredLists[list].filter('title', text);
-    this.renderTiddlerList('nav .navigation-list-' + list, filtered);
+    this.renderNavigationList(list, filtered);
 };
 
 SPA.prototype.switchList = function(name) {
@@ -329,22 +329,22 @@ SPA.prototype.moveToTopOfList = function(tiddler) {
     $('nav .navigation-list').prepend(item);
 };
 
-SPA.prototype.renderTiddlerLists = function() {
-    this.renderTiddlerList('nav .navigation-list-modified', this.space.getLists().modified);
-    this.renderTiddlerList('nav .navigation-list-all', this.space.getLists().all);
-    this.renderTagsList(this.space.getLists().tags);
+SPA.prototype.renderNavigationLists = function() {
+    this.renderNavigationList('modified', this.space.getLists().modified);
+    this.renderNavigationList('all', this.space.getLists().all);
+    this.renderNavigationList('tags', this.space.getLists().tags);
 };
 
-SPA.prototype.renderTiddlerList = function(selector, tiddlers) {
-    //TODO: make this faster
+SPA.prototype.renderNavigationList = function(list, data) {
+    //TODO: make this faster - do <ul/> replace
+    var selector = 'nav .navigation-list-' + list;
+    var generators = {
+        tags: this.html.generateTagsList,
+        all: this.html.generateTiddlersList,
+        modified: this.html.generateTiddlersList
+    };
     $(selector + ' li').remove();
-    $(selector).append(this.html.generateTiddlersList(tiddlers).getChildren());   
-};
-
-SPA.prototype.renderTagsList = function(tags) {
-    //TODO: make this faster
-    $('nav .navigation-list-tags li').remove();
-    $('nav .navigation-list-tags').append(this.html.generateTagsList(tags).getChildren());   
+    $(selector).append(generators[list].call(this.html, data).getChildren());   
 };
 
 SPA.prototype.renderTiddler = function(tiddler) {
