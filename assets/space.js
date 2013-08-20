@@ -60,13 +60,13 @@ Space.prototype.getLists = function(tiddlers) {
     return this.lists;
 };
 
-Space.prototype.setTiddlerLists = function(tiddlers) {
+Space.prototype._setTiddlerLists = function(tiddlers) {
     var sort = new Sort(tiddlers);
     this.lists.all = sort.sort('title');
     this.lists.modified = sort.sort('-modified');
 };
 
-Space.prototype.calculateTags = function(tiddlers) {
+Space.prototype._calculateTags = function(tiddlers) {
     //TODO: make this better
     var tags = [];
     for (var i=0,len=tiddlers.length; i < len; i++) {
@@ -90,14 +90,26 @@ Space.prototype.calculateTags = function(tiddlers) {
     this.lists.tags = tags;
 };
 
-Space.prototype.populateTiddlerIDs = function(tiddlers) {
+Space.prototype._checkItems = function(list, items) {
+    for (var i=0,len=items.length; i < len; i++) {
+        var item = items[i];
+        if (item.indexOf(',') > -1) {
+            this.__checkItems(list, item.split(','));
+        } else if (list.indexOf(item) == -1) {
+            list.push(item);
+        }                    
+    }
+};
+
+Space.prototype._populateTiddlerIDs = function(tiddlers) {
     for (var i=0,len=tiddlers.length; i < len; i++) {
         tiddlers[i].id = this.getId(tiddlers[i]);
     }
 };
 
 Space.prototype.addToList = function(tiddler) {
-    //Move to top of list???
+    //TODO: specify list
+    //Move to bottom of list???
     if (this.lists.all.unshift) {
         this.lists.all.unshift(tiddler);
     } else {
@@ -106,6 +118,7 @@ Space.prototype.addToList = function(tiddler) {
 };
 
 Space.prototype.removeFromList = function(tiddler) {
+    //TODO: specify list
     for (var i=0,len=this.lists.all.length; i < len; i++) {
         var item = this.lists.all[i];
         if (item.title == tiddler.title) {
@@ -116,6 +129,7 @@ Space.prototype.removeFromList = function(tiddler) {
 };
 
 Space.prototype.moveToTopOfList = function(tiddler) {
+    //TODO: specify list
     this.removeFromList(tiddler);
     this.addToList(tiddler);
 };
@@ -132,9 +146,9 @@ Space.prototype.getRecentList = function(success, error) {
 Space.prototype.getAllList = function(params, success, error) {
     var context = this;
     var callBack = function(data) {
-        context.populateTiddlerIDs(data);
-        context.calculateTags(data);
-        context.setTiddlerLists(data);
+        context._populateTiddlerIDs(data);
+        context._calculateTags(data);
+        context._setTiddlerLists(data);
         if (success) {
             success(data);
         }
