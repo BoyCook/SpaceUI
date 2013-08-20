@@ -34,12 +34,12 @@ nav li a {
     background-color: #fff;
 }
 
-nav .navigation-list {
+nav .navigation-menu {
 	padding-bottom: 0px;
 	margin-bottom: 0px;
 }
 
-nav .tiddler-list {
+nav .navigation-list {
 	padding-top: 0px;
 	margin-top: 0px;
 }

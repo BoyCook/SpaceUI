@@ -77,6 +77,22 @@ HTMLGenerator.prototype.generateTiddlerItem = function(tiddler) {
 	return item;
 };
 
+HTMLGenerator.prototype.generateTagsList = function(tags) {
+	var list = new HTML('ul');
+	for (var i=0,len=tags.length; i < len; i++) {
+		list.append(this.generateTagItem(tags[i]));
+	}
+	return list;
+};
+
+HTMLGenerator.prototype.generateTagItem = function(tag) {
+	var onclick = "app.openTag('" + tag + "\')";
+	var a = new HTML('a', tag, { href: '#' + 'tag' + tag, onclick: onclick });
+	var item = new HTML('li');
+	item.append(a);	
+	return item;
+};
+
 HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 	var fullScreenClick = "app.viewFullScreen('" + tiddler.id + "\')";
 	var editClick = "app.editTiddler('" + tiddler.title + "\')";

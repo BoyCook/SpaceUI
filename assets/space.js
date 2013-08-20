@@ -4,11 +4,11 @@ function Space(baseURL, name) {
 	this.name = name;
 	this.bagName = this.name + '_public';
 	this.tiddlers = {};
-    this.tiddlerLists = {
+    this.lists = {
         all: [],
         modified: [],
+        tags: []
     };
-    this.tags = []; //TODO: populate from tiddlerList
     this.http = new HTTP();
 }
 
@@ -48,38 +48,58 @@ Space.prototype.setTiddler = function(tiddler) {
 };
 
 Space.prototype.getSummaryTiddler = function(title) {
-    for (var i=0,len=this.tiddlerLists.all.length; i < len; i++) {
-        var item = this.tiddlerLists.all[i];
+    for (var i=0,len=this.lists.all.length; i < len; i++) {
+        var item = this.lists.all[i];
         if (item.title == title) {
             return item;
         }
     }    
 };
 
-Space.prototype.getTiddlerLists = function(tiddlers) {
-    return this.tiddlerLists;
+Space.prototype.getLists = function(tiddlers) {
+    return this.lists;
 };
 
 Space.prototype.setTiddlerLists = function(tiddlers) {
     var sort = new Sort(tiddlers);
-    this.tiddlerLists.all = sort.sort('title');
-    this.tiddlerLists.modified = sort.sort('-modified');
+    this.lists.all = sort.sort('title');
+    this.lists.modified = sort.sort('-modified');
+};
+
+Space.prototype.calculateTags = function(tiddlers) {
+    var tags = [];
+    for (var i=0,len=tiddlers.length; i < len; i++) {
+        var tiddler = tiddlers[i];
+        for (var x=0,tagLen=tiddler.tags.length; x < tagLen; x++) {
+            var tag = tiddler.tags[x];
+            if (tags.indexOf(tag) == -1) {
+                tags.push(tag);
+            }
+        }
+    }
+    this.lists.tags = tags;
+};
+
+Space.prototype.populateTiddlerIDs = function(tiddlers) {
+    for (var i=0,len=tiddlers.length; i < len; i++) {
+        tiddlers[i].id = this.getId(tiddlers[i]);
+    }
 };
 
 Space.prototype.addToList = function(tiddler) {
     //Move to top of list???
-    if (this.tiddlerLists.all.unshift) {
-        this.tiddlerLists.all.unshift(tiddler);
+    if (this.lists.all.unshift) {
+        this.lists.all.unshift(tiddler);
     } else {
-        this.tiddlerLists.all.push(tiddler);
+        this.lists.all.push(tiddler);
     }
 };
 
 Space.prototype.removeFromList = function(tiddler) {
-    for (var i=0,len=this.tiddlerLists.all.length; i < len; i++) {
-        var item = this.tiddlerLists.all[i];
+    for (var i=0,len=this.lists.all.length; i < len; i++) {
+        var item = this.lists.all[i];
         if (item.title == tiddler.title) {
-            this.tiddlerLists.all.splice(i, 1);
+            this.lists.all.splice(i, 1);
             return;
         }
     }
@@ -102,9 +122,8 @@ Space.prototype.getRecentList = function(success, error) {
 Space.prototype.getAllList = function(params, success, error) {
     var context = this;
     var callBack = function(data) {
-        for (var i=0,len=data.length; i < len; i++) {
-            data[i].id = context.getId(data[i]);
-        }
+        context.populateTiddlerIDs(data);
+        context.calculateTags(data);
         context.setTiddlerLists(data);
         if (success) {
             success(data);
