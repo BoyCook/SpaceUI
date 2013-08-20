@@ -11,8 +11,12 @@ $(document).ready(function () {
     });    
     $('input:radio[name=searchType]').change(function() {
         var list = $('input:radio[name=searchType]:checked').val();
-        $('#filterBox').val(app.filteredLists[list].text);
-        app.switchList(list);
+        if (list === 'public' || list === 'private') {
+            $.growl.warning({ title: 'Coming soon...',  message: "List [" + list + "] isn't implemented yet" });
+        } else {
+            $('#filterBox').val(app.filteredLists[list].text);
+            app.switchList(list);            
+        }
     })
 });
 
@@ -275,6 +279,10 @@ SPA.prototype.viewMenu = function(tiddlers) {
     } else {
         $('nav').addClass('visible');
     }
+};
+
+SPA.prototype.openTag = function(tag) {
+    $.growl.warning({ title: 'Coming soon...',  message: "Opening tags isn't implemented yet" });
 };
 
 SPA.prototype.setFilteredLists = function() {

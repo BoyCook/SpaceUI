@@ -67,6 +67,7 @@ Space.prototype.setTiddlerLists = function(tiddlers) {
 };
 
 Space.prototype.calculateTags = function(tiddlers) {
+    //TODO: make this better
     var tags = [];
     for (var i=0,len=tiddlers.length; i < len; i++) {
         var tiddler = tiddlers[i];
