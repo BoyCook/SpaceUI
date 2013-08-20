@@ -34,6 +34,15 @@ nav li a {
     background-color: #fff;
 }
 
+nav .navigation-list {
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+}
+
+nav .tiddler-list {
+	padding-top: 0px;
+	margin-top: 0px;
+}
 
 .tiddler {
 	position: relative;
