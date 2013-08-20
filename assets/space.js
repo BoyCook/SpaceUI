@@ -95,11 +95,11 @@ Space.prototype.getReplies = function(title, success, error) {
     this.http.doGet(this.baseURL + '/search?q=title:"' + title + '"', success, error);    
 };
 
-Space.prototype.getRecent = function(success, error) {
-	this.getAll('?sort=-modified', success, error);
+Space.prototype.getRecentList = function(success, error) {
+	this.getAllList('?sort=-modified', success, error);
 };
 
-Space.prototype.getAll = function(params, success, error) {
+Space.prototype.getAllList = function(params, success, error) {
     var context = this;
     var callBack = function(data) {
         for (var i=0,len=data.length; i < len; i++) {
