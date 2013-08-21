@@ -26,6 +26,7 @@ function load_explicit() {
 	tsapp push spaceui html.js
 	tsapp push spaceui htmlgenerator.js
 	tsapp push spaceui http.js
+	tsapp push spaceui sort.js
 	tsapp push spaceui filter.js
 	tsapp push spaceui space.js
 	tsapp push spaceui spaceui.js
