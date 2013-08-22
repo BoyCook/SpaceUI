@@ -88,4 +88,7 @@ i {
         border-right: 0px;    
         width: 100%;
     }    
+    i {
+        font-size: 150%;
+    }    
 }
