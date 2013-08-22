@@ -12,6 +12,10 @@ function Space(baseURL, name) {
     this.http = new HTTP();
 }
 
+Space.prototype._init = function() {
+
+};
+
 Space.prototype.fetchTiddler = function(summary, success, error) {
 	var tiddler = this.getTiddler(summary.title); 
 	if (typeof tiddler === "undefined") {
@@ -140,10 +144,10 @@ Space.prototype.getReplies = function(title, success, error) {
 };
 
 Space.prototype.getRecentList = function(success, error) {
-	this.getAllList('?sort=-modified', success, error);
+	this.getAllLists('?sort=-modified', success, error);
 };
 
-Space.prototype.getAllList = function(params, success, error) {
+Space.prototype.getAllLists = function(params, success, error) {
     var context = this;
     var callBack = function(data) {
         context._populateTiddlerIDs(data);
