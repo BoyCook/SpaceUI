@@ -4,7 +4,10 @@ function TiddlyWeb(baseURL) {
 	this.bags = undefined;
 	this.recipes = undefined;
 	this.http = new HTTP();
-	this.cache = {};
+	this.cache = {
+		bags: {},
+		recipes: {}
+	};
 
 	/*
 		/bags
@@ -33,6 +36,14 @@ function TiddlyWeb(baseURL) {
 TiddlyWeb.prototype._init = function() {
 	this.loadBags();
 	this.loadRecipes();
+};
+
+TiddlyWeb.prototype.addBag = function(bag) {
+	this.cache.bags[bag.name] = bag;
+};
+
+TiddlyWeb.prototype.addRecipe = function(recipes) {
+	this.cache.recipes[recipes.name] = recipes;
 };
 
 TiddlyWeb.prototype.getBags = function() {
