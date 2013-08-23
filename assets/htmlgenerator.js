@@ -105,9 +105,9 @@ HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 	edit.append(new HTML('i', undefined, { class: 'icon-file-edit' }));	
 	var close = new HTML('a', undefined, { onclick: closeClick, title: 'Close tiddler' });
 	close.append(new HTML('i', undefined, { class: 'icon-remove' }));
-	toolbar.append(fullScreen);
 	toolbar.append(edit);
 	toolbar.append(close);
+	toolbar.append(fullScreen);
 	return toolbar;
 };
 
@@ -127,8 +127,8 @@ HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	del.append(new HTML('i', undefined, { class: 'icon-trash' }));			
 	toolbar.append(save);
 	toolbar.append(cancel);
-	toolbar.append(fullScreen);
 	toolbar.append(del);
+	toolbar.append(fullScreen);
 	return toolbar;
 };
 

@@ -18,6 +18,7 @@ $(document).ready(function () {
             app.switchList(list);            
         }
     })
+    // document.getElementsByTagName('html').requestFullScreen()
 });
 
 function SPA(host, port) {

@@ -4,19 +4,30 @@ function TiddlyWeb(baseURL) {
 	this.bags = undefined;
 	this.recipes = undefined;
 	this.http = new HTTP();
-	//TODO - also check refresh index
-	//TODO - better undefined check 
-	// /bags/tiddlers
-	// /bags/tiddlers/revision
-	// /recipes/tiddlers
-	// /recipes/tiddlers/revision	
+	this.cache = {};
 
 	/*
-		get* gets from local cache
-		load*
+		/bags
+		/bags/tiddlers
+		/bags/tiddlers/tiddler
+		/bags/tiddlers/tiddler/revisions
+		/bags/tiddlers/tiddler/revisions/revision
 
+		/recipes
+		/recipes/tiddlers
+		/recipes/tiddlers/tiddler
+		/recipes/tiddlers/tiddler/revisions
+		/recipes/tiddlers/tiddler/revisions/revision		
+
+		getBags()
+		getBag(name)
+		getRecipes()
+		getRecipe(name)		
+		getTiddlers()
+		getTiddler({ name: '', context: '' })
+		getRevisions({ name: '', context: '' })
+		getRevision({ name: '', context: '', revision: '' })
 	*/
-
 }
 
 TiddlyWeb.prototype._init = function() {
@@ -37,7 +48,6 @@ TiddlyWeb.prototype.loadBags = function(success, error) {
 };
 
 TiddlyWeb.prototype._loadBags = function(params, success, error) {
-	//TODO: manage cache
 	this.http.doGet(this.baseURL + '/bags' + params, success, error);
 };
 
@@ -55,7 +65,6 @@ TiddlyWeb.prototype.loadBag = function(name, success, error) {
 };
 
 TiddlyWeb.prototype._loadBag = function(name, params, success, error) {
-	//TODO: manage cache
 	this.http.doGet(this.baseURL + '/bags/' + name + params, success, error);
 };
 
@@ -76,7 +85,6 @@ TiddlyWeb.prototype.loadRecipes = function(success, error) {
 };
 
 TiddlyWeb.prototype._loadRecipes = function(params, success, error) {
-	//TODO: manage cache
 	this.http.doGet(this.baseURL + '/recipes' + params, success, error);
 };
 
@@ -94,7 +102,6 @@ TiddlyWeb.prototype.loadRecipe = function(name, success, error) {
 };
 
 TiddlyWeb.prototype._loadRecipe = function(name, params, success, error) {
-	//TODO: manage cache
 	this.http.doGet(this.baseURL + '/recipes/' + name + params, success, error);
 };
 
