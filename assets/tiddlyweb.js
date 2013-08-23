@@ -10,6 +10,13 @@ function TiddlyWeb(baseURL) {
 	// /bags/tiddlers/revision
 	// /recipes/tiddlers
 	// /recipes/tiddlers/revision	
+
+	/*
+		get* gets from local cache
+		load*
+
+	*/
+
 }
 
 TiddlyWeb.prototype._init = function() {
@@ -30,6 +37,7 @@ TiddlyWeb.prototype.loadBags = function(success, error) {
 };
 
 TiddlyWeb.prototype._loadBags = function(params, success, error) {
+	//TODO: manage cache
 	this.http.doGet(this.baseURL + '/bags' + params, success, error);
 };
 
@@ -47,7 +55,12 @@ TiddlyWeb.prototype.loadBag = function(name, success, error) {
 };
 
 TiddlyWeb.prototype._loadBag = function(name, params, success, error) {
+	//TODO: manage cache
 	this.http.doGet(this.baseURL + '/bags/' + name + params, success, error);
+};
+
+TiddlyWeb.prototype._loadBagTiddlers = function(name, params, success, error) {
+	this.http.doGet(this.baseURL + '/bags/' + name + '/tiddlers' +  params, success, error);
 };
 
 TiddlyWeb.prototype.getRecipes = function() {
@@ -63,6 +76,7 @@ TiddlyWeb.prototype.loadRecipes = function(success, error) {
 };
 
 TiddlyWeb.prototype._loadRecipes = function(params, success, error) {
+	//TODO: manage cache
 	this.http.doGet(this.baseURL + '/recipes' + params, success, error);
 };
 
@@ -80,6 +94,7 @@ TiddlyWeb.prototype.loadRecipe = function(name, success, error) {
 };
 
 TiddlyWeb.prototype._loadRecipe = function(name, params, success, error) {
+	//TODO: manage cache
 	this.http.doGet(this.baseURL + '/recipes/' + name + params, success, error);
 };
 
@@ -110,3 +125,6 @@ Bag.prototype.getTiddler = function(title) {
 	}
 	return undefined;
 };
+
+var tw = new TiddlyWeb('domain');
+tw.getBags();
