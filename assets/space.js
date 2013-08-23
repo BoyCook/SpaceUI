@@ -144,10 +144,10 @@ Space.prototype.getReplies = function(title, success, error) {
 };
 
 Space.prototype.getRecentList = function(success, error) {
-	this.getAllLists('?sort=-modified', success, error);
+	this.getAllList('?sort=-modified', success, error);
 };
 
-Space.prototype.getAllLists = function(params, success, error) {
+Space.prototype.getAllList = function(params, success, error) {
     var context = this;
     var callBack = function(data) {
         context._populateTiddlerIDs(data);
@@ -161,7 +161,7 @@ Space.prototype.getAllLists = function(params, success, error) {
 };
 
 Space.prototype.getRecipe = function(name, params, success, error) {
-    this.http.doGet(this.baseURL + '/recipes/' + name + '/tiddlers' + params, callBack, error);
+    this.http.doGet(this.baseURL + '/recipes/' + name + '/tiddlers' + params, success, error);
 };
 
 Space.prototype.saveTiddler = function(tiddler, success, error) {

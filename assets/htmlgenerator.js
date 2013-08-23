@@ -1,6 +1,7 @@
 
 function HTMLGenerator() {
 	this.contentTypes = {
+		'text/x-tiddlywiki': 'TiddlyWiki Text',
 		'text/x-markdown': 'Markdown',
 		'text/plain': 'Plain Text',
 		'text/html': 'HTML',
@@ -134,18 +135,18 @@ HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 HTMLGenerator.prototype.generateTypeOptions = function(selected) {
 	var list = new HTML('select', undefined, { class: 'tiddler-type' });
 	var values = {
-		'Default': { value: '' },
 		'Markdown': { value: 'text/x-markdown' },
 		'Plain Text': { value: 'text/plain' },
 		'HTML': { value: 'text/html' },
 		'CSS': { value: 'text/css' },
-		'JavaScript': { value: 'text/javascript' }
+		'JavaScript': { value: 'text/javascript' },
+		'TiddlyWiki Text': { value: 'text/x-tiddlywiki' },
 	};
 	var type = this.contentTypes[selected];
 	if (values.hasOwnProperty(type)) {
 		values[type].selected = 'true';
 	} else {
-		values['Default'].selected = 'true';
+		values['TiddlyWiki Text'].selected = 'true';
 	}
 	for (var key in values) {
 		list.append(new HTML('option', key, values[key]));
