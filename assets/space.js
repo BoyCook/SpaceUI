@@ -157,7 +157,11 @@ Space.prototype.getAllLists = function(params, success, error) {
             success(data);
         }
     };
-    this.http.doGet(this.baseURL + '/recipes/' + this.name + '_public/tiddlers' + params, callBack, error);
+    this.getRecipe(this.name + '_public', params, callBack, error);
+};
+
+Space.prototype.getRecipe = function(name, params, success, error) {
+    this.http.doGet(this.baseURL + '/recipes/' + name + '/tiddlers' + params, callBack, error);
 };
 
 Space.prototype.saveTiddler = function(tiddler, success, error) {
