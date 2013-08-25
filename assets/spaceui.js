@@ -17,8 +17,10 @@ $(document).ready(function () {
             $('#filterBox').val(app.filteredLists[list].text);
             app.switchList(list);            
         }
-    })
-    // document.getElementsByTagName('html').requestFullScreen()
+    });
+    $('#full-screnn').click(function(){
+        // document.getElementsByTagName('html').requestFullScreen()
+    });
 });
 
 function SPA(host, port) {
