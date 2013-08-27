@@ -18,7 +18,7 @@ $(document).ready(function () {
             app.switchList(list);            
         }
     });
-    $('#full-screnn').click(function(){
+    $('#full-screen').click(function(){
         // document.getElementsByTagName('html').requestFullScreen()
     });
 });
