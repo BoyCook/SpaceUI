@@ -10,6 +10,7 @@ var Router = Backbone.Router.extend({
         "tiddler/:title/delete":     "delete", 
         "tiddler/:title/maximize":   "maximize", 
         "tiddler/:title/minimize":   "minimze", 
+        "tag/:name/open":            "openTag", 
         "menu":                      "menu",  
         "closeall":                  "closeall",  
         "newtiddler":                "newtidder", 
@@ -44,6 +45,9 @@ var Router = Backbone.Router.extend({
     newtidder: function() {
         app.newTiddler('New Tiddler');
     }, 
+    openTag: function(name) {
+        app.openTag(name);
+    },     
     maximize: function(title) {
         app.toggleViewScreen(title);
     },

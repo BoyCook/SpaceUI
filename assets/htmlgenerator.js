@@ -71,7 +71,7 @@ HTMLGenerator.prototype.generateTiddlersList = function(tiddlers) {
 };
 
 HTMLGenerator.prototype.generateTiddlerItem = function(tiddler) {
-	var a = new HTML('a', tiddler.title, { href: '#' + "tiddler/" + tiddler.title + "/open" });
+	var a = new HTML('a', tiddler.title, { href: "#tiddler/" + tiddler.title + "/open" });
 	var item = new HTML('li');
 	item.append(a);	
 	return item;
@@ -86,8 +86,7 @@ HTMLGenerator.prototype.generateTagsList = function(tags) {
 };
 
 HTMLGenerator.prototype.generateTagItem = function(tag) {
-	var onclick = "app.openTag('" + tag + "\')";
-	var a = new HTML('a', tag, { href: '#' + 'tag' + tag, onclick: onclick });
+	var a = new HTML('a', tag, { href: "#tag/" + tag + "/open" });
 	var item = new HTML('li');
 	item.append(a);	
 	return item;
@@ -99,9 +98,9 @@ HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 	maximize.append(new HTML('i', undefined, { class: 'icon-resize-full'}));		
 	var minimize = new HTML('a', undefined, { href: "#minimize/" + tiddler.id, title: 'Minimize', class: 'hidden' });
 	minimize.append(new HTML('i', undefined, { class: 'icon-resize-small'}));		
-	var edit = new HTML('a', undefined, { href: '#' + "tiddler/" + tiddler.title + "/edit", title: 'Edit tiddler' });
+	var edit = new HTML('a', undefined, { href: "#tiddler/" + tiddler.title + "/edit", title: 'Edit tiddler' });
 	edit.append(new HTML('i', undefined, { class: 'icon-file-edit' }));	
-	var close = new HTML('a', undefined, { href: '#' + "tiddler/" + tiddler.title + "/close", title: 'Close tiddler' });
+	var close = new HTML('a', undefined, { href: "#tiddler/" + tiddler.title + "/close", title: 'Close tiddler' });
 	close.append(new HTML('i', undefined, { class: 'icon-remove' }));
 	toolbar.append(edit);
 	toolbar.append(close);
@@ -112,15 +111,15 @@ HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 
 HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
-	var save = new HTML('a', undefined, { href: '#' + "tiddler/" + tiddler.title + "/save", title: 'Save changes' });
+	var save = new HTML('a', undefined, { href: "#tiddler/" + tiddler.title + "/save", title: 'Save changes' });
 	save.append(new HTML('i', undefined, { class: 'icon-ok' }));		
-	var cancel = new HTML('a', undefined, { href: '#' + "tiddler/" + tiddler.title + "/canceledit" });
+	var cancel = new HTML('a', undefined, { href: "#tiddler/" + tiddler.title + "/canceledit" });
 	cancel.append(new HTML('i', undefined, { class: 'icon-reverse-alt', title: 'Cancel changes' }));		
 	var maximize = new HTML('a', undefined, { href: "#maximize/" + tiddler.id, title: 'Maximize' });
 	maximize.append(new HTML('i', undefined, { class: 'icon-resize-full' }));		
 	var minimize = new HTML('a', undefined, { href: "#minimize/" + tiddler.id, title: 'Minimize', class: 'hidden' });
 	minimize.append(new HTML('i', undefined, { class: 'icon-resize-small'}));		
-	var del = new HTML('a', undefined, { href: '#' + "tiddler/" + tiddler.title + "/delete", title: 'Delete tiddler' });
+	var del = new HTML('a', undefined, { href: "#tiddler/" + tiddler.title + "/delete", title: 'Delete tiddler' });
 	del.append(new HTML('i', undefined, { class: 'icon-trash' }));			
 	toolbar.append(save);
 	toolbar.append(cancel);
