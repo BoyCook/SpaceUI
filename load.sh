@@ -25,6 +25,8 @@ function load_explicit() {
 	tsapp push_hard spaceui backbone.js
 	tsapp push_hard spaceui backbone-min.js
 	tsapp push_hard spaceui backbone-min.map
+	tsapp push_hard spaceui underscore-min.js
+	tsapp push_hard spaceui underscore-min.map	
 	tsapp push_hard spaceui index.html
 	tsapp push_hard spaceui html.js
 	tsapp push_hard spaceui htmlgenerator.js
