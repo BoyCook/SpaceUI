@@ -44,9 +44,9 @@ HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 	
 	var config = new HTML('section', undefined, { class: 'tiddler-edit-config' });
 	config.append(new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'private' }));
-	config.append( new HTML('label', 'private'));
+	config.append( new HTML('i', undefined, { class: 'icon-lock', title: 'Private' }));
 	config.append(new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'public', checked: 'checked' }));
-	config.append(new HTML('label', 'public'));
+	config.append(new HTML('i', undefined, { class: 'icon-unlock', title: 'Public' }));
 	config.append(this.generateTypeOptions(tiddler.type ? tiddler.type : 'application/json'));
 	
 	var content = new HTML('section');
