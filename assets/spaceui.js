@@ -99,6 +99,7 @@ function SPA(host, port) {
     // this.tiddlerFilter = undefined;
 	this.html = new HTMLGenerator();
     this.space = new Space(this.baseURL, this.spaceName);
+    this.maximized = false;
 }
 
 SPA.prototype.setup = function() {
@@ -168,7 +169,8 @@ SPA.prototype.toggleFullScreen = function() {
 SPA.prototype.toggleViewScreen = function(id) {
     // TODO - use getState function
     // Minimze
-    if ($('nav').hasClass('hidden')) {
+    if (this.maximized) {
+        this.maximized = false;
         $('nav, header, #content .tiddler:not(#' + id + ')').removeClass('hidden');
         $('#content').removeClass('full-width');
         var toolbar = $('#' + id + ' .main-toolbar');
@@ -177,6 +179,7 @@ SPA.prototype.toggleViewScreen = function(id) {
         $('#' + id + ' .toolbar .icon-resize-small').parent().addClass('hidden');
         $('#' + id + ' .toolbar .icon-resize-full').parent().removeClass('hidden');        
     } else { // Maximize
+        this.maximized = true;
         $('nav, header, #content .tiddler:not(#' + id + ')').addClass('hidden');
         $('#content').addClass('full-width');
         $('#' + id + ' .toolbar .icon-resize-small').parent().removeClass('hidden');
@@ -247,7 +250,10 @@ SPA.prototype.closeAllTiddlers = function() {
 };
 
 SPA.prototype.closeTiddler = function(title) {
-    $('#' + this.space.getId({ title: title })).remove();
+    if (this.maximized) {
+        this.toggleViewScreen();   
+    }
+    $('#' + this.space.getId({ title: title })).remove();    
 };
 
 SPA.prototype.getTiddlerJSON = function(title) {
