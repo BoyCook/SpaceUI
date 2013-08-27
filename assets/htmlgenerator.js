@@ -95,40 +95,45 @@ HTMLGenerator.prototype.generateTagItem = function(tag) {
 };
 
 HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
-	var fullScreenClick = "app.viewFullScreen('" + tiddler.id + "\')";
 	var editClick = "app.editTiddler('" + tiddler.title + "\')";
 	var closeClick = "app.closeTiddler('" + tiddler.id + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
-	var fullScreen = new HTML('a', undefined, { onclick: fullScreenClick, title: 'Full Screen' });
-	fullScreen.append(new HTML('i', undefined, { class: 'icon-fullscreen'}));		
+	var maximize = new HTML('a', undefined, { href: "#maximize/" + tiddler.id, title: 'Maximize' });
+	maximize.append(new HTML('i', undefined, { class: 'icon-resize-full'}));		
+	var minimize = new HTML('a', undefined, { href: "#minimize/" + tiddler.id, title: 'Minimize', class: 'hidden' });
+	minimize.append(new HTML('i', undefined, { class: 'icon-resize-small'}));		
 	var edit = new HTML('a', undefined, { onclick: editClick, title: 'Edit tiddler' });
 	edit.append(new HTML('i', undefined, { class: 'icon-file-edit' }));	
 	var close = new HTML('a', undefined, { onclick: closeClick, title: 'Close tiddler' });
 	close.append(new HTML('i', undefined, { class: 'icon-remove' }));
 	toolbar.append(edit);
 	toolbar.append(close);
-	toolbar.append(fullScreen);
+	toolbar.append(maximize);
+	toolbar.append(minimize);
 	return toolbar;
 };
 
 HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 	var saveClick = "app.saveTiddler('" + tiddler.title + "\')";
 	var cancelClick = "app.cancelEditTiddler('" + tiddler.title + "\')";
-	var fullScreenClick = "app.editFullScreen('" + tiddler.id + "\')";
+	// var fullScreenClick = "app.editFullScreen('" + tiddler.id + "\')";
 	var deleteClick = "app.deleteTiddler('" + tiddler.title + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
 	var save = new HTML('a', undefined, { onclick: saveClick, title: 'Save changes' });
 	save.append(new HTML('i', undefined, { class: 'icon-ok' }));		
 	var cancel = new HTML('a', undefined, { onclick: cancelClick });
 	cancel.append(new HTML('i', undefined, { class: 'icon-reverse-alt', title: 'Cancel changes' }));		
-	var fullScreen = new HTML('a', undefined, { onclick: fullScreenClick, title: 'Full Screen' });
-	fullScreen.append(new HTML('i', undefined, { class: 'icon-fullscreen' }));		
+	var maximize = new HTML('a', undefined, { href: "#maximize/" + tiddler.id, title: 'Maximize' });
+	maximize.append(new HTML('i', undefined, { class: 'icon-resize-full' }));		
+	var minimize = new HTML('a', undefined, { href: "#minimize/" + tiddler.id, title: 'Minimize', class: 'hidden' });
+	minimize.append(new HTML('i', undefined, { class: 'icon-resize-small'}));		
 	var del = new HTML('a', undefined, { onclick: deleteClick, title: 'Delete tiddler' });
 	del.append(new HTML('i', undefined, { class: 'icon-trash' }));			
 	toolbar.append(save);
 	toolbar.append(cancel);
 	toolbar.append(del);
-	toolbar.append(fullScreen);
+	toolbar.append(maximize);
+	toolbar.append(minimize);
 	return toolbar;
 };
 

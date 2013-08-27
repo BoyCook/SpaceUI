@@ -48,6 +48,14 @@ nav .navigation-list {
 	margin-top: 0px;
 }
 
+.navigation-menu .icon-search {
+	font-size: 50%;
+}
+
+.navigation-menu input[type=text] {
+	/* Try to overlay textbox and search icon */
+}
+
 .tiddler {
 	position: relative;
 	padding-left: 25px;
@@ -104,7 +112,7 @@ nav .navigation-list {
 	position: absolute;
 }
 
-.main-toolbar a {
+.main-toolbar a, .toolbar a {
 	text-decoration: none;	
 }
 

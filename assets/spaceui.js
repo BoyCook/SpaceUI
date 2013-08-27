@@ -2,9 +2,11 @@ var app = undefined;
 var Router = Backbone.Router.extend({
     initialized: true,
     routes: {
-        "close/:tiddler":   "close",  
+        "close/:tiddler":    "close",  
         "newtiddler":        "newtidder", 
-        "fullscreen":       "fullscreen"  
+        "maximize/:tiddler": "maximize",
+        "minimize/:tiddler": "minimze",
+        "fullscreen":        "fullscreen"
     },
     close: function(id) {
         if (id === "all") {
@@ -16,9 +18,17 @@ var Router = Backbone.Router.extend({
     newtidder: function() {
         app.newTiddler('New Tiddler');
     }, 
+    maximize: function(id) {
+        app.toggleViewScreen(id);
+    },
+    minimze: function(id) {
+        app.toggleViewScreen(id);
+    },    
     fullscreen: function() {
         console.log('Full Screen');
-        // document.getElementsByTagName('html').requestFullScreen()
+        // document.getElementById('page').requestFullScreen()
+        // document.getElementById('page').webkitRequestFullScreen()
+        // document.getElementById('page').webkitRequestFullscreen()
     }
 });
 
@@ -121,26 +131,22 @@ SPA.prototype.loadDefaults = function() {
     }, this.ajaxError);        
 };
 
-SPA.prototype.viewFullScreen = function(id) {
-    this.toggleViewScreen(id);
-};
-
-SPA.prototype.editFullScreen = function(id) {
-    this.toggleViewScreen(id);
-};
-
 SPA.prototype.toggleViewScreen = function(id) {
-    // - Hide/show all other content
-    // - Make current tiddler size of full screen
+    // TODO - use getState function
+    // Minimze
     if ($('nav').hasClass('hidden')) {
         $('nav, header, #content .tiddler:not(#' + id + ')').removeClass('hidden');
         $('#content').removeClass('full-width');
         var toolbar = $('#' + id + ' .main-toolbar');
         toolbar.removeClass('main-toolbar');        
         toolbar.addClass('toolbar');
-    } else {
+        $('#' + id + ' .toolbar .icon-resize-small').parent().addClass('hidden');
+        $('#' + id + ' .toolbar .icon-resize-full').parent().removeClass('hidden');        
+    } else { // Maximize
         $('nav, header, #content .tiddler:not(#' + id + ')').addClass('hidden');
         $('#content').addClass('full-width');
+        $('#' + id + ' .toolbar .icon-resize-small').parent().removeClass('hidden');
+        $('#' + id + ' .toolbar .icon-resize-full').parent().addClass('hidden');
         var toolbar = $('#' + id + ' .toolbar');
         toolbar.removeClass('toolbar');
         toolbar.addClass('main-toolbar');
