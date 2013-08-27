@@ -14,7 +14,8 @@ function load_dir() {
 	cd ../
 }
 
-function load_explicit() {
+# These should never change
+function load_statics_explicit() {
 	tsapp push_hard spaceui Elusive-Icons.eot
 	tsapp push_hard spaceui Elusive-Icons.svg
 	tsapp push_hard spaceui Elusive-Icons.ttf
@@ -27,17 +28,21 @@ function load_explicit() {
 	tsapp push_hard spaceui backbone-min.map
 	tsapp push_hard spaceui underscore-min.js
 	tsapp push_hard spaceui underscore-min.map	
-	tsapp push_hard spaceui index.html
-	tsapp push_hard spaceui html.js
-	tsapp push_hard spaceui htmlgenerator.js
-	tsapp push_hard spaceui http.js
-	tsapp push_hard spaceui sort.js
-	tsapp push_hard spaceui filter.js
-	tsapp push_hard spaceui space.js
-	tsapp push_hard spaceui spaceui.js
-	tsapp push_hard spaceui spaceui.css
-	tsapp push_hard spaceui uilayout.css	
+}
+
+function load_explicit() {
+	tsapp push spaceui index.html
+	tsapp push spaceui html.js
+	tsapp push spaceui htmlgenerator.js
+	tsapp push spaceui http.js
+	tsapp push spaceui sort.js
+	tsapp push spaceui filter.js
+	tsapp push spaceui space.js
+	tsapp push spaceui spaceui.js
+	tsapp push spaceui spaceui.css
+	tsapp push spaceui uilayout.css	
 }
 
 # load_dir assets
+# load_statics_explicit
 load_explicit
