@@ -8,33 +8,33 @@ function load_dir() {
 	do
 		if [ -f "$FILE" ]
 		then
-			tsapp push spaceui $FILE
+			tsapp push_hard spaceui $FILE
 		fi	
 	done
 	cd ../
 }
 
 function load_explicit() {
-	tsapp push spaceui Elusive-Icons.eot
-	tsapp push spaceui Elusive-Icons.svg
-	tsapp push spaceui Elusive-Icons.ttf
-	tsapp push spaceui Elusive-Icons.woff
-	tsapp push spaceui elusive-webfont.css
-	tsapp push spaceui jquery.growl.css
-	tsapp push spaceui jquery.growl.js
-	tsapp push spaceui backbone.js
-	tsapp push spaceui backbone-min.js
-	tsapp push spaceui backbone-min.map
-	tsapp push spaceui index.html
-	tsapp push spaceui html.js
-	tsapp push spaceui htmlgenerator.js
-	tsapp push spaceui http.js
-	tsapp push spaceui sort.js
-	tsapp push spaceui filter.js
-	tsapp push spaceui space.js
-	tsapp push spaceui spaceui.js
-	tsapp push spaceui spaceui.css
-	tsapp push spaceui uilayout.css	
+	tsapp push_hard spaceui Elusive-Icons.eot
+	tsapp push_hard spaceui Elusive-Icons.svg
+	tsapp push_hard spaceui Elusive-Icons.ttf
+	tsapp push_hard spaceui Elusive-Icons.woff
+	tsapp push_hard spaceui elusive-webfont.css
+	tsapp push_hard spaceui jquery.growl.css
+	tsapp push_hard spaceui jquery.growl.js
+	tsapp push_hard spaceui backbone.js
+	tsapp push_hard spaceui backbone-min.js
+	tsapp push_hard spaceui backbone-min.map
+	tsapp push_hard spaceui index.html
+	tsapp push_hard spaceui html.js
+	tsapp push_hard spaceui htmlgenerator.js
+	tsapp push_hard spaceui http.js
+	tsapp push_hard spaceui sort.js
+	tsapp push_hard spaceui filter.js
+	tsapp push_hard spaceui space.js
+	tsapp push_hard spaceui spaceui.js
+	tsapp push_hard spaceui spaceui.css
+	tsapp push_hard spaceui uilayout.css	
 }
 
 # load_dir assets
