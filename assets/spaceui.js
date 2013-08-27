@@ -25,10 +25,7 @@ var Router = Backbone.Router.extend({
         app.toggleViewScreen(id);
     },    
     fullscreen: function() {
-        console.log('Full Screen');
-        // document.getElementById('page').requestFullScreen()
-        // document.getElementById('page').webkitRequestFullScreen()
-        // document.getElementById('page').webkitRequestFullscreen()
+        app.toggleFullScreen();
     }
 });
 
@@ -129,6 +126,13 @@ SPA.prototype.loadDefaults = function() {
                 context.openTiddler(items[i]);
             }
     }, this.ajaxError);        
+};
+
+SPA.prototype.toggleFullScreen = function() {
+    $.growl.warning({ title: 'Coming soon...',  message: "Fullscreen mode isn't implemented yet" });
+    // document.getElementById('page').requestFullScreen()
+    // document.getElementById('page').webkitRequestFullScreen()
+    // document.getElementById('page').webkitRequestFullscreen()    
 };
 
 SPA.prototype.toggleViewScreen = function(id) {
