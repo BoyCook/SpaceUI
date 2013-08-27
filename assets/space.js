@@ -13,7 +13,7 @@ function Space(baseURL, name) {
 }
 
 Space.prototype._init = function() {
-
+    //TODO: init local state
 };
 
 Space.prototype.fetchTiddler = function(summary, success, error) {
