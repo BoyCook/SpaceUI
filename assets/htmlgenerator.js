@@ -71,8 +71,7 @@ HTMLGenerator.prototype.generateTiddlersList = function(tiddlers) {
 };
 
 HTMLGenerator.prototype.generateTiddlerItem = function(tiddler) {
-	var onclick = "app.openTiddler('" + tiddler.title + "\')";
-	var a = new HTML('a', tiddler.title, { href: '#' + tiddler.id, onclick: onclick });
+	var a = new HTML('a', tiddler.title, { href: '#' + "tiddler/" + tiddler.title + "/open" });
 	var item = new HTML('li');
 	item.append(a);	
 	return item;
@@ -95,16 +94,14 @@ HTMLGenerator.prototype.generateTagItem = function(tag) {
 };
 
 HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
-	var editClick = "app.editTiddler('" + tiddler.title + "\')";
-	var closeClick = "app.closeTiddler('" + tiddler.id + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
 	var maximize = new HTML('a', undefined, { href: "#maximize/" + tiddler.id, title: 'Maximize' });
 	maximize.append(new HTML('i', undefined, { class: 'icon-resize-full'}));		
 	var minimize = new HTML('a', undefined, { href: "#minimize/" + tiddler.id, title: 'Minimize', class: 'hidden' });
 	minimize.append(new HTML('i', undefined, { class: 'icon-resize-small'}));		
-	var edit = new HTML('a', undefined, { onclick: editClick, title: 'Edit tiddler' });
+	var edit = new HTML('a', undefined, { href: '#' + "tiddler/" + tiddler.title + "/edit", title: 'Edit tiddler' });
 	edit.append(new HTML('i', undefined, { class: 'icon-file-edit' }));	
-	var close = new HTML('a', undefined, { onclick: closeClick, title: 'Close tiddler' });
+	var close = new HTML('a', undefined, { href: '#' + "tiddler/" + tiddler.title + "/close", title: 'Close tiddler' });
 	close.append(new HTML('i', undefined, { class: 'icon-remove' }));
 	toolbar.append(edit);
 	toolbar.append(close);
@@ -114,20 +111,16 @@ HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
 };
 
 HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
-	var saveClick = "app.saveTiddler('" + tiddler.title + "\')";
-	var cancelClick = "app.cancelEditTiddler('" + tiddler.title + "\')";
-	// var fullScreenClick = "app.editFullScreen('" + tiddler.id + "\')";
-	var deleteClick = "app.deleteTiddler('" + tiddler.title + "\')";
 	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
-	var save = new HTML('a', undefined, { onclick: saveClick, title: 'Save changes' });
+	var save = new HTML('a', undefined, { href: '#' + "tiddler/" + tiddler.title + "/save", title: 'Save changes' });
 	save.append(new HTML('i', undefined, { class: 'icon-ok' }));		
-	var cancel = new HTML('a', undefined, { onclick: cancelClick });
+	var cancel = new HTML('a', undefined, { href: '#' + "tiddler/" + tiddler.title + "/canceledit" });
 	cancel.append(new HTML('i', undefined, { class: 'icon-reverse-alt', title: 'Cancel changes' }));		
 	var maximize = new HTML('a', undefined, { href: "#maximize/" + tiddler.id, title: 'Maximize' });
 	maximize.append(new HTML('i', undefined, { class: 'icon-resize-full' }));		
 	var minimize = new HTML('a', undefined, { href: "#minimize/" + tiddler.id, title: 'Minimize', class: 'hidden' });
 	minimize.append(new HTML('i', undefined, { class: 'icon-resize-small'}));		
-	var del = new HTML('a', undefined, { onclick: deleteClick, title: 'Delete tiddler' });
+	var del = new HTML('a', undefined, { href: '#' + "tiddler/" + tiddler.title + "/delete", title: 'Delete tiddler' });
 	del.append(new HTML('i', undefined, { class: 'icon-trash' }));			
 	toolbar.append(save);
 	toolbar.append(cancel);
