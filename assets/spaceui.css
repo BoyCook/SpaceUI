@@ -104,6 +104,10 @@ nav .navigation-list {
 	position: absolute;
 }
 
+.main-toolbar a {
+	text-decoration: none;	
+}
+
 .make-top {
 	top: 0px;
 }

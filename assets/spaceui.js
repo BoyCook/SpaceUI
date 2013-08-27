@@ -1,9 +1,32 @@
 var app = undefined;
+var Router = Backbone.Router.extend({
+    initialized: true,
+    routes: {
+        "close/:tiddler":   "close",  
+        "newtiddler":        "newtidder", 
+        "fullscreen":       "fullscreen"  
+    },
+    close: function(id) {
+        if (id === "all") {
+            app.closeAllTiddlers();
+        } else {
+            app.closeTiddler(title);
+        }
+    },
+    newtidder: function() {
+        app.newTiddler('New Tiddler');
+    }, 
+    fullscreen: function() {
+        console.log('Full Screen');
+        // document.getElementsByTagName('html').requestFullScreen()
+    }
+});
 
 $(document).ready(function () {
     app = new SPA(window.location.hostname, window.location.port);
     app.setup();
-
+    new Router();
+    Backbone.history.start();
     $('#filterBox').keyup(function (e) {
         if (!(e.keyCode >= 37 && e.keyCode <= 40)) {
             app.filter($('#filterBox').val());
@@ -17,10 +40,7 @@ $(document).ready(function () {
             $('#filterBox').val(app.filteredLists[list].text);
             app.switchList(list);            
         }
-    });
-    $('#full-screen').click(function(){
-        // document.getElementsByTagName('html').requestFullScreen()
-    });
+    });   
 });
 
 function SPA(host, port) {
