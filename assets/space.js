@@ -7,13 +7,15 @@ function Space(baseURL, name) {
     this.lists = {
         all: [],
         modified: [],
+        "private": [],
         tags: []
     };
     this.http = new HTTP();
 }
 
-Space.prototype._init = function() {
+Space.prototype.init = function() {
     //TODO: init local state
+    // this.getPrivateTiddlers();
 };
 
 Space.prototype.fetchTiddler = function(summary, success, error) {
@@ -147,6 +149,17 @@ Space.prototype.getRecentList = function(success, error) {
 	this.getAllList('?sort=-modified', success, error);
 };
 
+Space.prototype.getPrivateTiddlers = function(success, error) {
+    var context = this;
+    var callBack = function(data) {
+        context.lists.private = data;
+        if (success) {
+            success(data);
+        }
+    };
+    this.http.doGet(this.baseURL + '/bags/' + this.name + '_private/tiddlers', callBack, error);
+};
+
 Space.prototype.getAllList = function(params, success, error) {
     var context = this;
     var callBack = function(data) {
@@ -165,7 +178,6 @@ Space.prototype.getRecipe = function(name, params, success, error) {
 };
 
 Space.prototype.saveTiddler = function(tiddler, success, error) {
-    // xml, json, script, or html
     delete tiddler.render;
     this.http.doPut(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, tiddler, success, error);
 };

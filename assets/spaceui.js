@@ -71,12 +71,8 @@ $(document).ready(function () {
     });    
     $('input:radio[name=searchType]').change(function() {
         var list = $('input:radio[name=searchType]:checked').val();
-        if (list === 'public' || list === 'private') {
-            $.growl.warning({ title: 'Coming soon...',  message: "List [" + list + "] isn't implemented yet" });
-        } else {
-            $('#filterBox').val(app.filteredLists[list].text);
-            app.switchList(list);            
-        }
+        $('#filterBox').val(app.filteredLists[list].text);
+        app.switchList(list);            
     });   
 });
 
@@ -92,7 +88,6 @@ function SPA(host, port) {
     this.filteredLists = {
         all: undefined,
         modified: undefined,
-        public: undefined,
         private: undefined,
         tags: undefined
     };
@@ -109,6 +104,7 @@ SPA.prototype.setup = function() {
         context.loadDefaults();        
     };
     this.getAllList(done); 
+    this.getPrivateTiddlers();
     this.switchList($('input:radio[name=searchType]:checked').val());
 };
 
@@ -368,8 +364,11 @@ SPA.prototype.setFilteredLists = function() {
     this.filteredLists.tags = new Filter(this.space.getLists().tags);
 };
 
+SPA.prototype.setPrivateFilterList = function() {
+    this.filteredLists.private = new Filter(this.space.getLists().private);
+};
+
 SPA.prototype.getAllList = function(callBack) {
-    // http://boycook.tiddlyspace.com/bags/boycook_private/tiddlers
     var context = this; 
     var success = function(data) {
         context.setFilteredLists();
@@ -379,6 +378,19 @@ SPA.prototype.getAllList = function(callBack) {
         }
     };
     this.space.getAllList('', success, this.ajaxError);
+};
+
+SPA.prototype.getPrivateTiddlers = function(callBack) {
+    // http://boycook.tiddlyspace.com/bags/boycook_private/tiddlers
+    var context = this; 
+    var success = function(data) {
+        context.setPrivateFilterList();
+        context.renderNavigationList('private', context.space.getLists()['private']);
+        if (callBack) {
+            callBack();
+        }
+    };
+    this.space.getPrivateTiddlers(success, this.ajaxError);
 };
 
 SPA.prototype.filter = function(text) {
@@ -426,7 +438,8 @@ SPA.prototype.renderNavigationList = function(list, data) {
     var generators = {
         tags: this.html.generateTagsList,
         all: this.html.generateTiddlersList,
-        modified: this.html.generateTiddlersList
+        modified: this.html.generateTiddlersList,
+        "private": this.html.generateTiddlersList
     };
     $(selector + ' li').remove();
     $(selector).append(generators[list].call(this.html, data).getChildren());   
