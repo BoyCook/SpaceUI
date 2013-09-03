@@ -120,6 +120,10 @@ nav .navigation-list {
 	top: 0px;
 }
 
+.no-border {
+	border-bottom: 0;
+}
+
 .visible {
 	display: inline;
 }

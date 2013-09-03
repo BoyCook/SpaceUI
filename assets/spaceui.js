@@ -167,27 +167,35 @@ SPA.prototype.toggleFullScreen = function() {
 };
 
 SPA.prototype.toggleViewScreen = function(id) {
-    // TODO - use getState function
-    // Minimze
     if (this.maximized) {
         this.maximized = false;
-        $('nav, header, #content .tiddler:not(#' + id + ')').removeClass('hidden');
-        $('#content').removeClass('full-width');
-        var toolbar = $('#' + id + ' .main-toolbar');
-        toolbar.removeClass('main-toolbar');        
-        toolbar.addClass('toolbar');
-        $('#' + id + ' .toolbar .icon-resize-small').parent().addClass('hidden');
-        $('#' + id + ' .toolbar .icon-resize-full').parent().removeClass('hidden');        
+        this.minimize(id);
     } else { // Maximize
         this.maximized = true;
-        $('nav, header, #content .tiddler:not(#' + id + ')').addClass('hidden');
-        $('#content').addClass('full-width');
-        $('#' + id + ' .toolbar .icon-resize-small').parent().removeClass('hidden');
-        $('#' + id + ' .toolbar .icon-resize-full').parent().addClass('hidden');
-        var toolbar = $('#' + id + ' .toolbar');
-        toolbar.removeClass('toolbar');
-        toolbar.addClass('main-toolbar');
+        this.maximize(id);
     }
+};
+
+SPA.prototype.maximize = function(id) {
+    $('nav, header, #content .tiddler:not(#' + id + ')').addClass('hidden');
+    $('#content').addClass('full-width');
+    $('#' + id + ' .toolbar .icon-resize-small').parent().removeClass('hidden');
+    $('#' + id + ' .toolbar .icon-resize-full').parent().addClass('hidden');
+    $('#' + id).addClass('no-border');
+    var toolbar = $('#' + id + ' .toolbar');
+    toolbar.removeClass('toolbar');
+    toolbar.addClass('main-toolbar');
+};
+
+SPA.prototype.minimize = function(id) {
+    $('nav, header, #content .tiddler:not(#' + id + ')').removeClass('hidden');
+    $('#content').removeClass('full-width');
+    $('#' + id).removeClass('no-border');
+    var toolbar = $('#' + id + ' .main-toolbar');
+    toolbar.removeClass('main-toolbar');        
+    toolbar.addClass('toolbar');
+    $('#' + id + ' .toolbar .icon-resize-small').parent().addClass('hidden');
+    $('#' + id + ' .toolbar .icon-resize-full').parent().removeClass('hidden');        
 };
 
 SPA.prototype.openTiddler = function(title) {
