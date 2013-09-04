@@ -32,6 +32,7 @@ function load_statics_explicit() {
 
 function load_explicit() {
 	tsapp push spaceui index.html
+	tsapp push spaceui dateago.js
 	tsapp push spaceui html.js
 	tsapp push spaceui htmlgenerator.js
 	tsapp push spaceui http.js

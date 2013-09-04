@@ -14,7 +14,7 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 	var container = new HTML('section', undefined, { id: tiddler.id, class: 'tiddler' });
 	var header = new HTML('section');
 	var h3 = new HTML('h3', tiddler.title , { class: 'tiddler-title' });
-	var p = new HTML('p', tiddler.modified , { class: 'tiddler-modified' });
+	var p = new HTML('p', tiddler.displaydate , { class: 'tiddler-modified' });
 	header.append(h3);
 	header.append(p);
 

@@ -197,6 +197,7 @@ SPA.prototype.minimize = function(id) {
 SPA.prototype.openTiddler = function(title) {
     var context = this; 
     var success = function(data) {
+        data.displaydate = new DateAgo(new Date(), context.parseDate(data.modified)).get();
         context.renderTiddler(data);
     };
     var summary = this.space.getSummaryTiddler(title);
@@ -216,6 +217,16 @@ SPA.prototype.openTiddler = function(title) {
         this.newTiddler(title);
         // $.growl.error({ message: "Cannot find tiddler '" + title + "' to open" });        
     }
+};
+
+SPA.prototype.parseDate = function(date) {
+    // "YYYY-MM-dd HH:mm:ss"
+    return new Date(date.substring(0, 4) + '-' + 
+                    date.substring(4, 6) + '-' + 
+                    date.substring(6, 8) + ' ' + 
+                    date.substring(8, 10) + ':' + 
+                    date.substring(10, 12) + ':' + 
+                    date.substring(12, 14));
 };
 
 SPA.prototype.isDoFetch = function(summary, tiddler) {
