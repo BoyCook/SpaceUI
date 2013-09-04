@@ -89,7 +89,8 @@ function SPA(host, port) {
         all: new Filter([]),
         modified: new Filter([]),
         private: new Filter([]),
-        tags: new Filter([])
+        tags: new Filter([]),
+        loaded: new Filter([])
     };
     // this.tiddlerFilter = undefined;
 	this.html = new HTMLGenerator();
@@ -198,6 +199,8 @@ SPA.prototype.openTiddler = function(title) {
     var context = this; 
     var success = function(data) {
         data.displaydate = new DateAgo(new Date(), context.parseDate(data.modified)).get();
+        context.filteredLists.loaded.data.push(data);
+        context.renderNavigationList('loaded', context.filteredLists.loaded.data);
         context.renderTiddler(data);
     };
     var summary = this.space.getSummaryTiddler(title);
@@ -446,14 +449,17 @@ SPA.prototype.renderNavigationLists = function() {
 SPA.prototype.renderNavigationList = function(list, data) {
     //TODO: make this faster - do <ul/> replace
     var selector = 'nav .navigation-list-' + list;
-    var generators = {
-        tags: this.html.generateTagsList,
-        all: this.html.generateTiddlersList,
-        modified: this.html.generateTiddlersList,
-        "private": this.html.generateTiddlersList
-    };
+    var generator = this._getListTemplate(list);
     $(selector + ' li').remove();
-    $(selector).append(generators[list].call(this.html, data).getChildren());   
+    $(selector).append(generator.call(this.html, data).getChildren());   
+};
+
+SPA.prototype._getListTemplate = function(name) {
+    var generators = {
+        tags: this.html.generateTagsList
+    };
+    var generator = generators[name];
+    return typeof generator === "undefined" ? this.html.generateTiddlersList : generator;
 };
 
 SPA.prototype.renderTiddler = function(tiddler) {
