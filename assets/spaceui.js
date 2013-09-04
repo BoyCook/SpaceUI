@@ -86,10 +86,10 @@ function SPA(host, port) {
         this.spaceName = host;
     }
     this.filteredLists = {
-        all: undefined,
-        modified: undefined,
-        private: undefined,
-        tags: undefined
+        all: new Filter([]),
+        modified: new Filter([]),
+        private: new Filter([]),
+        tags: new Filter([])
     };
     // this.tiddlerFilter = undefined;
 	this.html = new HTMLGenerator();
