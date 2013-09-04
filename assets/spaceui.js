@@ -271,7 +271,7 @@ SPA.prototype.getTiddlerJSON = function(title) {
 
 SPA.prototype.newTiddler = function(title) {
     var summary = this.getTiddlerJSON(title);
-    var tiddler = this.space.tiddlers[summary.title];
+    var tiddler = this.space.getTiddler(summary.title);
     if (typeof tiddler === "undefined") {
         //If box isn't already open
         if ($('#' + summary.id).length == 0) {
@@ -285,13 +285,13 @@ SPA.prototype.newTiddler = function(title) {
 };
 
 SPA.prototype.editTiddler = function(title) {
-    var tiddler = this.space.tiddlers[title];
+    var tiddler = this.space.getTiddler(title);
     var html = this.html.generateEditTiddler(tiddler);
     $('#' + tiddler.id).replaceWith(html);   
 };
 
 SPA.prototype.cancelEditTiddler = function(title) {
-    var tiddler = this.space.tiddlers[title];
+    var tiddler = this.space.getTiddler(title);
     if (typeof tiddler === "undefined") {
         $('#' + this.space.getId({title: title})).remove();   
     } else {
@@ -302,7 +302,7 @@ SPA.prototype.cancelEditTiddler = function(title) {
 
 SPA.prototype.saveTiddler = function(title) {
     var context = this; 
-    var tiddler = this.space.tiddlers[title];
+    var tiddler = this.space.getTiddler(title);
     if (typeof tiddler === "undefined") {
         var id = this.space.getId({title: title});
         tiddler = {};
@@ -336,7 +336,7 @@ SPA.prototype.saveTiddler = function(title) {
 
 SPA.prototype.deleteTiddler = function(title) {
     var context = this;
-    var tiddler = this.space.tiddlers[title];
+    var tiddler = this.space.getTiddler(title);
     var success = function() {
         $.growl.notice({ title: 'Success', message: 'Deleted tiddler ' + title });
         $('#' + tiddler.id).remove();

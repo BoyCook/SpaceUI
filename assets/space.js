@@ -203,5 +203,14 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
 };
 
 Space.prototype.getId = function(tiddler) {
-    return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_").replace(/\?/g,"_");
+    return 'tiddler' + tiddler.title
+    .replace(/ /g,"_")
+    .replace(/\./g,"_")
+    .replace(/\?/g,"_")
+    .replace(/\[/g,"_")
+    .replace(/\]/g,"_")
+    .replace(/\{/g,"_")
+    .replace(/\}/g,"_")
+    .replace(/\(/g,"_")
+    .replace(/\)/g,"_");
 };
