@@ -54,12 +54,21 @@ Space.prototype.setTiddler = function(tiddler) {
 };
 
 Space.prototype.getSummaryTiddler = function(title) {
-    for (var i=0,len=this.lists.all.length; i < len; i++) {
-        var item = this.lists.all[i];
+    var summary = this._getTiddlerByTitle(title, this.lists.all);
+    if (typeof summary === "undefined") {
+        summary = this._getTiddlerByTitle(title, this.lists.private);
+    }
+    return summary;
+};
+
+Space.prototype._getTiddlerByTitle = function(title, tiddlers) {
+    for (var i=0,len=tiddlers.length; i < len; i++) {
+        var item = tiddlers[i];
         if (item.title == title) {
             return item;
         }
     }    
+    return undefined;
 };
 
 Space.prototype.getLists = function(tiddlers) {
