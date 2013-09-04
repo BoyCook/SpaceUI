@@ -1,14 +1,12 @@
 
-function Filter(data, operation, key) {
+function Filter(data, isString) {
 	this.data = data;
-	this.operation = operation;
-	// this.data.splice(0, 1)
 	this.text = '';
 	var context = this;
-	if (typeof this.data[0] === "object") {
-		this.filter = this.filterObject;
-	} else {
+	if (isString) {
 		this.filter = this.filterString;		
+	} else {
+		this.filter = this.filterObject;		
 	}
 }
 

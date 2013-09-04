@@ -1,5 +1,5 @@
 
-function Space(baseURL, name) {
+function Space(baseURL, name, parent) {
 	this.baseURL = baseURL;
 	this.name = name;
 	this.bagName = this.name + '_public';
@@ -11,6 +11,7 @@ function Space(baseURL, name) {
         tags: []
     };
     this.http = new HTTP();
+    this.parent = parent;
 }
 
 Space.prototype.init = function() {
@@ -35,7 +36,7 @@ Space.prototype._fetchTiddler = function(summary, success, error) {
         tiddler.id = context.getId(tiddler);
         context.setTiddler(tiddler);
         if (success) {
-            success(tiddler);
+            success.call(context.parent, tiddler);
         }
     }
 	this.http.doGet(this.baseURL + '/bags/' + summary.bag + '/tiddlers/' + summary.title + '?render=1', callBack, error);

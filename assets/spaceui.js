@@ -94,14 +94,14 @@ function SPA(host, port) {
     };
     // this.tiddlerFilter = undefined;
 	this.html = new HTMLGenerator();
-    this.space = new Space(this.baseURL, this.spaceName);
+    this.space = new Space(this.baseURL, this.spaceName, this);
     this.maximized = false;
 }
 
 SPA.prototype.setup = function() {
     var context = this;
     var done = function(){
-        context.loadTitle();
+        context._loadSiteTitle();
         context.loadDefaults();        
     };
     this.getAllList(done); 
@@ -109,7 +109,7 @@ SPA.prototype.setup = function() {
     this.switchList($('input:radio[name=searchType]:checked').val());
 };
 
-SPA.prototype.loadTitle = function() {
+SPA.prototype._loadSiteTitle = function() {
     var context = this;
     this.space.fetchTiddler({ title: 'SiteTitle', bag:  context.spaceName + '_public'}, 
         function(titleTiddler) {
@@ -197,19 +197,13 @@ SPA.prototype.minimize = function(id) {
 
 SPA.prototype.openTiddler = function(title) {
     var context = this; 
-    var success = function(data) {
-        data.displaydate = new DateAgo(new Date(), context.parseDate(data.modified)).get();
-        context.filteredLists.loaded.data.push(data);
-        context.renderNavigationList('loaded', context.filteredLists.loaded.data);
-        context.renderTiddler(data);
-    };
     var summary = this.space.getSummaryTiddler(title);
     var tiddler = this.space.getTiddler(title);
     if (typeof summary !== "undefined") {
         var tiddler = this.space.getTiddler(summary.title);
         var fetch = this.isDoFetch(summary, tiddler);
         if (fetch == true) {
-            this.space.fetchTiddler(summary, success, this.ajaxError);        
+            this.space.fetchTiddler(summary, this._tiddlerLoaded, this.ajaxError);        
         } else {
             if ($('#' + this.space.getId(summary)).length == 0) {
                 this.renderTiddler(typeof tiddler !== "undefined" ? tiddler : summary); 
@@ -222,7 +216,22 @@ SPA.prototype.openTiddler = function(title) {
     }
 };
 
-SPA.prototype.parseDate = function(date) {
+SPA.prototype._tiddlerLoaded = function(tiddler) {
+    this._setTiddlerDate(tiddler);
+    this._setLoadedCache(tiddler);
+    this.renderTiddler(tiddler);
+};
+
+SPA.prototype._setLoadedCache = function(tiddler) {
+    this.filteredLists.loaded.data.push(tiddler);
+    this.renderNavigationList('loaded', this.filteredLists.loaded.data);
+};
+
+SPA.prototype._setTiddlerDate = function(tiddler) {
+    tiddler.displaydate = new DateAgo(new Date(), this._parseDate(tiddler.modified)).get();    
+};
+
+SPA.prototype._parseDate = function(date) {
     // "YYYY-MM-dd HH:mm:ss"
     return new Date(date.substring(0, 4) + '-' + 
                     date.substring(4, 6) + '-' + 
@@ -375,7 +384,7 @@ SPA.prototype.openTag = function(tag) {
 SPA.prototype.setFilteredLists = function() {
     this.filteredLists.all = new Filter(this.space.getLists().all);
     this.filteredLists.modified = new Filter(this.space.getLists().modified);
-    this.filteredLists.tags = new Filter(this.space.getLists().tags);
+    this.filteredLists.tags = new Filter(this.space.getLists().tags, true);
 };
 
 SPA.prototype.setPrivateFilterList = function() {
