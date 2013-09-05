@@ -8,58 +8,40 @@ function HTMLGenerator() {
 		'text/css': 'CSS',
 		'text/javascript': 'JavaScript'
 	};
+	this.templates = {
+		view: Handlebars.compile($("#tiddler-view-template").html()),
+		edit: Handlebars.compile($("#tiddler-edit-template").html())
+	};
 }
 
 HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
-	var container = new HTML('section', undefined, { id: tiddler.id, class: 'tiddler' });
-	var header = new HTML('section');
-	var h3 = new HTML('h3', tiddler.title , { class: 'tiddler-title' });
-	var p = new HTML('p', tiddler.displaydate , { class: 'tiddler-modified' });
-	header.append(h3);
-	header.append(p);
-
-	var text = (tiddler.render ? tiddler.render : tiddler.text);
-	var content = new HTML('article');
-
-	if (this.isCode(tiddler)) {
-		var code = new HTML('pre', text);
-		content.append(code);
-	} else if (this.isImage(tiddler)) {	
-		var image = new HTML('img', undefined, {src: tiddler.uri});
-		content.append(image);
-	} else {
-		content.value = text;
-	}
-
-	container.append(this.generateViewToolbar(tiddler));
-	container.append(header);
-	container.append(content);
-	return container.asHTML();
+	return this.templates.view(tiddler);
 };
 
 HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
-	var container = new HTML('section', undefined, { id: tiddler.id, class: 'tiddler tiddler-edit-mode' });
-	var header = new HTML('section');
-	header.append(new HTML('input', undefined, { type: 'text', value: tiddler.title, class: 'tiddler-title' }));
+	return this.templates.edit(tiddler);
+	// var container = new HTML('section', undefined, { id: tiddler.id, class: 'tiddler tiddler-edit-mode' });
+	// var header = new HTML('section');
+	// header.append(new HTML('input', undefined, { type: 'text', value: tiddler.title, class: 'tiddler-title' }));
 	
-	var config = new HTML('section', undefined, { class: 'tiddler-edit-config' });
-	config.append(new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'private' }));
-	config.append( new HTML('i', undefined, { class: 'icon-lock', title: 'Private' }));
-	config.append(new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'public', checked: 'checked' }));
-	config.append(new HTML('i', undefined, { class: 'icon-unlock', title: 'Public' }));
-	config.append(this.generateTypeOptions(tiddler.type ? tiddler.type : 'application/json'));
+	// var config = new HTML('section', undefined, { class: 'tiddler-edit-config' });
+	// config.append(new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'private' }));
+	// config.append( new HTML('i', undefined, { class: 'icon-lock', title: 'Private' }));
+	// config.append(new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'public', checked: 'checked' }));
+	// config.append(new HTML('i', undefined, { class: 'icon-unlock', title: 'Public' }));
+	// config.append(this.generateTypeOptions(tiddler.type ? tiddler.type : 'application/json'));
 	
-	var content = new HTML('section');
-	content.append(new HTML('textarea', tiddler.text, { class: 'tiddler-text'}));	
-	var footer = new HTML('section');
-	footer.append(new HTML('input', undefined, { type: 'text', value: tiddler.tags.toString().replace(/\,/g, ' '), class: 'tiddler-tags' }));
+	// var content = new HTML('section');
+	// content.append(new HTML('textarea', tiddler.text, { class: 'tiddler-text'}));	
+	// var footer = new HTML('section');
+	// footer.append(new HTML('input', undefined, { type: 'text', value: tiddler.tags.toString().replace(/\,/g, ' '), class: 'tiddler-tags' }));
 
-	container.append(this.generateEditToolbar(tiddler));
-	container.append(header);
-	container.append(config);
-	container.append(content);
-	container.append(footer);
-	return container.asHTML();
+	// container.append(this.generateEditToolbar(tiddler));
+	// container.append(header);
+	// container.append(config);
+	// container.append(content);
+	// container.append(footer);
+	// return container.asHTML();
 };
 
 HTMLGenerator.prototype.generateTiddlersList = function(tiddlers) {

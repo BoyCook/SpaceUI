@@ -59,11 +59,53 @@
             <ul class="navigation-list navigation-list-loaded"></ul>
         </nav>        
         <section id="content"></section>        
+
+        <script id="tiddler-view-template" type="text/x-handlebars-template">
+            <section data-title="{{this.title}}" class="tiddler">
+                <section class="toolbar">
+                    <a href="#tiddler/{{this.title}}/edit" title="Edit tiddler"><i class="icon-file-edit"></i></a>
+                    <a href="#tiddler/{{this.title}}/close" title="Close tiddler"><i class="icon-remove"></i></a>
+                    <a href="#maximize/{{this.title}}" title="Maximize"><i class="icon-resize-full"></i></a>
+                    <a href="#minimize/{{this.title}}" title="Minimize" class="hidden"><i class="icon-resize-small"></i></a>
+                </section>
+                <section>
+                    <h3 class="tiddler-title">{{this.title}}</h3><p class="tiddler-modified">{{this.displaydate}}</p>
+                </section>
+                <article>{{{this.render}}}</article>
+            </section>          
+        </script>
+        <script id="tiddler-edit-template" type="text/x-handlebars-template">
+            <section data-title="{{this.title}}" class="tiddler tiddler-edit-mode">
+                <section class="toolbar">
+                    <a href="#tiddler/{{this.title}}/save" title="Save changes"><i class="icon-ok"></i></a>
+                    <a href="#tiddler/{{this.title}}/canceledit"><i class="icon-reverse-alt" title="Cancel changes"></i></a>
+                    <a href="#tiddler/{{this.title}}/delete" title="Delete tiddler"><i class="icon-trash"></i></a>
+                    <a href="#maximize/{{this.title}}" title="Maximize"><i class="icon-resize-full"></i></a>
+                    <a href="#minimize/{{this.title}}" title="Minimize" class="hidden"><i class="icon-resize-small"></i></a>
+                </section>
+                <section><input type="text" value="Space UI" class="tiddler-title"></section>
+                <section class="tiddler-edit-config">
+                    <input type="radio" name="privacy" value="private"><i class="icon-lock" title="Private"></i>
+                    <input type="radio" name="privacy" value="public" checked="checked"><i class="icon-unlock" title="Public"></i>
+                    <select class="tiddler-type">
+                        <option value="text/x-markdown">Markdown</option>
+                        <option value="text/plain">Plain Text</option>
+                        <option value="text/html">HTML</option>
+                        <option value="text/css">CSS</option>
+                        <option value="text/javascript">JavaScript</option>
+                        <option value="text/x-tiddlywiki">TiddlyWiki Text</option>
+                    </select>
+                </section>
+                <section><textarea class="tiddler-text">{{this.text}}</textarea></section>
+                <section><input type="text" value="{{this.tags}}" class="tiddler-tags"></section></section>          
+        </script>        
+
         <script src="http://tiddlyspace.com/bags/common/tiddlers/backstage.js"></script>        
         <script type="text/javascript" src="/bags/common/tiddlers/jquery.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/underscore-min.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/backbone-min.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/jquery.growl.js"></script>
+        <script type="text/javascript" src="/bags/spaceui_public/tiddlers/handlebars.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/dateago.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/html.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/htmlgenerator.js"></script>

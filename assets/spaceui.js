@@ -189,36 +189,38 @@ SPA.prototype.toggleFullScreen = function() {
     // document.getElementById('page').webkitRequestFullscreen()    
 };
 
-SPA.prototype.toggleViewScreen = function(id) {
+SPA.prototype.toggleViewScreen = function(title) {
     if (this.maximized) {
         this.maximized = false;
-        this.minimize(id);
+        this.minimize(title);
     } else { // Maximize
         this.maximized = true;
-        this.maximize(id);
+        this.maximize(title);
     }
 };
 
-SPA.prototype.maximize = function(id) {
-    $('nav, header, #content .tiddler:not(#' + id + ')').addClass('hidden');
+SPA.prototype.maximize = function(title) {
+    var selector = "section[data-title='" + title + "']";
+    $('nav, header, #content .tiddler:not(' + selector + ')').addClass('hidden');
     $('#content').addClass('full-width');
-    $('#' + id + ' .toolbar .icon-resize-small').parent().removeClass('hidden');
-    $('#' + id + ' .toolbar .icon-resize-full').parent().addClass('hidden');
-    $('#' + id).addClass('no-border');
-    var toolbar = $('#' + id + ' .toolbar');
+    $(selector + ' .toolbar .icon-resize-small').parent().removeClass('hidden');
+    $(selector + ' .toolbar .icon-resize-full').parent().addClass('hidden');
+    $(selector).addClass('no-border');
+    var toolbar = $(selector + ' .toolbar');
     toolbar.removeClass('toolbar');
     toolbar.addClass('main-toolbar');
 };
 
-SPA.prototype.minimize = function(id) {
-    $('nav, header, #content .tiddler:not(#' + id + ')').removeClass('hidden');
+SPA.prototype.minimize = function(title) {
+    var selector = "section[data-title='" + title + "']";
+    $('nav, header, #content .tiddler:not(' + selector + ')').removeClass('hidden');
     $('#content').removeClass('full-width');
-    $('#' + id).removeClass('no-border');
-    var toolbar = $('#' + id + ' .main-toolbar');
+    $(selector).removeClass('no-border');
+    var toolbar = $(selector + ' .main-toolbar');
     toolbar.removeClass('main-toolbar');        
     toolbar.addClass('toolbar');
-    $('#' + id + ' .toolbar .icon-resize-small').parent().addClass('hidden');
-    $('#' + id + ' .toolbar .icon-resize-full').parent().removeClass('hidden');        
+    $(selector + ' .toolbar .icon-resize-small').parent().addClass('hidden');
+    $(selector + ' .toolbar .icon-resize-full').parent().removeClass('hidden');        
 };
 
 SPA.prototype.openTiddler = function(title) {
@@ -306,7 +308,7 @@ SPA.prototype.closeTiddler = function(title) {
     if (this.maximized) {
         this.toggleViewScreen();   
     }
-    $('#' + this.space.getId({ title: title })).remove();    
+    $("section[data-title='" + title + "']").remove();
 };
 
 SPA.prototype.getTiddlerJSON = function(title) {
@@ -336,7 +338,7 @@ SPA.prototype.newTiddler = function(title) {
 SPA.prototype.editTiddler = function(title) {
     var tiddler = this.space.getTiddler(title);
     var html = this.html.generateEditTiddler(tiddler);
-    $('#' + tiddler.id).replaceWith(html);   
+    $("section[data-title='" + title + "']").replaceWith(html);
 };
 
 SPA.prototype.cancelEditTiddler = function(title) {
@@ -345,11 +347,12 @@ SPA.prototype.cancelEditTiddler = function(title) {
         $('#' + this.space.getId({title: title})).remove();   
     } else {
         var html = this.html.generateViewTiddler(tiddler);
-        $('#' + tiddler.id).replaceWith(html);           
+        $("section[data-title='" + title + "']").replaceWith(html);
     }
 };
 
 SPA.prototype.saveTiddler = function(title) {
+    var selector = "section[data-title='" + title + "']";
     var context = this; 
     var tiddler = this.space.getTiddler(title);
     if (typeof tiddler === "undefined") {
@@ -375,7 +378,7 @@ SPA.prototype.saveTiddler = function(title) {
         // tiddler.bag = this.spaceName + '_' + $('#' + id + ' input[name=privacy]:checked').val();
         this.space.saveTiddler(tiddler, function() {
             $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + title });
-            $('#' + tiddler.id).remove();
+            $("section[data-title='" + title + "']").remove();
             context.space.removeTiddler(tiddler.title);
             context.moveToTopOfList(tiddler);
             context.openTiddler(tiddler.title);
@@ -388,7 +391,7 @@ SPA.prototype.deleteTiddler = function(title) {
     var tiddler = this.space.getTiddler(title);
     var success = function() {
         $.growl.notice({ title: 'Success', message: 'Deleted tiddler ' + title });
-        $('#' + tiddler.id).remove();
+        $("section[data-title='" + title + "']").remove();
         context.removeFromList(tiddler);
     };
     tiddler.type = 'application/json';
