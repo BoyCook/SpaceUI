@@ -19,7 +19,7 @@ var Router = Backbone.Router.extend({
         "fullscreen":                "fullscreen"
     },
     menu: function(title) {
-        app.viewMenu(); 
+        app.toggleMenu(); 
     },        
     closeall: function() {
         app.closeAllTiddlers();
@@ -60,10 +60,12 @@ var Router = Backbone.Router.extend({
 });
 
 $(document).ready(function () {
+    var loaded = function() {
+        new Router();
+        Backbone.history.start();
+    };
     app = new SPA(window.location.hostname, window.location.port);
-    app.setup();
-    new Router();
-    Backbone.history.start();
+    app.setup(loaded);
     $('#filterBox').keyup(function (e) {
         if (!(e.keyCode >= 37 && e.keyCode <= 40)) {
             app.filter($('#filterBox').val());
@@ -102,11 +104,14 @@ function SPA(host, port) {
     this.maximized = false;
 }
 
-SPA.prototype.setup = function() {
+SPA.prototype.setup = function(callBack) {
     var context = this;
     var done = function(){
         context.loadTitle();
         context.loadDefaults();        
+        if (callBack) {
+            callBack();
+        }
     };
     this.getAllList(done); 
     this.switchList($('input:radio[name=searchType]:checked').val());
@@ -342,12 +347,20 @@ SPA.prototype.deleteTiddler = function(title) {
     this.space.deleteTiddler(tiddler, success, this.ajaxError);
 };
 
-SPA.prototype.viewMenu = function(tiddlers) {
+SPA.prototype.toggleMenu = function(tiddlers) {
     if ($('nav').hasClass('visible')) {
-        $('nav').removeClass('visible');
+        this.closeMenu();
     } else {
-        $('nav').addClass('visible');
+        this.openMenu();        
     }
+};
+
+SPA.prototype.openMenu = function(tiddlers) {
+    $('nav').addClass('visible');
+};
+
+SPA.prototype.closeMenu = function(tiddlers) {
+    $('nav').removeClass('visible');
 };
 
 SPA.prototype.openTag = function(tag) {
