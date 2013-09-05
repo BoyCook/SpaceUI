@@ -104,10 +104,7 @@ SPA.prototype.setup = function(callBack) {
     var context = this;
     var done = function(){
         context._loadSiteTitle();
-        context._loadDefaults(callBack);        
-        // if (callBack) {
-        //     callBack();
-        // }
+        context._loadDefaults(callBack);
     };
     this.getAllList(done); 
     this.getPrivateTiddlers();
@@ -145,11 +142,8 @@ SPA.prototype._loadDefaults = function(callBack) {
                 context._tiddlerLoaded(tiddler);
                 loader.cnt++;
                 //It's done
-                if (loader.cnt == loader.titles.length) {
-                    //TODO: move up - do we even need this?
-                    if (loader.callBack) {
-                        loader.callBack();
-                    }
+                if (loader.cnt == loader.titles.length && loader.callBack) {
+                    loader.callBack();
                 } else {
                     //Do next
                     loader.execute(loader.cnt);
