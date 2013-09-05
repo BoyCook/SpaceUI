@@ -28,6 +28,7 @@ function load_statics_explicit() {
 	tsapp push_hard spaceui backbone-min.map
 	tsapp push_hard spaceui underscore-min.js
 	tsapp push_hard spaceui underscore-min.map	
+	tsapp push_hard spaceui handlebars.js
 }
 
 function load_explicit() {
