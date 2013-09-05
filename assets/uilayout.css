@@ -82,7 +82,10 @@ i {
     }
     nav li {
         display: inline;
-    }           
+    }
+    nav label {
+        display: none;
+    }               
     #menu-button {
         display: inline;
     }    
