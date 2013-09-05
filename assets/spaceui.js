@@ -104,10 +104,10 @@ SPA.prototype.setup = function(callBack) {
     var context = this;
     var done = function(){
         context._loadSiteTitle();
-        context._loadDefaults();        
-        if (callBack) {
-            callBack();
-        }
+        context._loadDefaults(callBack);        
+        // if (callBack) {
+        //     callBack();
+        // }
     };
     this.getAllList(done); 
     this.getPrivateTiddlers();
@@ -128,18 +128,44 @@ SPA.prototype._loadSiteTitle = function() {
     }, context.ajaxError);        
 };
 
-SPA.prototype._loadDefaults = function() {
+SPA.prototype._loadDefaults = function(callBack) {
     var context = this;
+    var Loader = function (titles, callBack) {
+        this.titles = titles.reverse();
+        this.callBack = callBack;
+        this.cnt = 0;
+        this.execute = function(index) {
+            var loader = this;
+            index = typeof index === "undefined" ? this.cnt : index;
+            if (index == loader.titles.length) {
+                return;
+            }
+          
+            var next = function(tiddler) {
+                context._tiddlerLoaded(tiddler);
+                loader.cnt++;
+                //It's done
+                if (loader.cnt == loader.titles.length) {
+                    //TODO: move up - do we even need this?
+                    if (loader.callBack) {
+                        loader.callBack();
+                    }
+                } else {
+                    //Do next
+                    loader.execute(loader.cnt);
+                }
+            };
+            var summary = context.space.getSummaryTiddler(loader.titles[index]);
+            context.space.fetchTiddler(summary, next, context.ajaxError);        
+        };
+    };   
+
     this.space.fetchTiddler({ title: 'DefaultTiddlers', bag:  context.spaceName + '_public'}, 
         function(defaultTiddlers) {
             var text = context._stripDoubleWhiteSpaces(context._stripNewLines(defaultTiddlers.text));
             var items = context._stripChars(text, '[[', ']]');
             var len = items.length -1;
-            //TODO: open each tiddler in the correct order
-            for (var i=len; i>=0; i--) {
-                context.openTiddler(items[i]);
-                // context.space.fetchTiddler(summary, this._tiddlerLoaded, this.ajaxError);        
-            }
+            new Loader(items, callBack).execute();
     }, this.ajaxError);        
 };
 
