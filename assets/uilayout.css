@@ -66,6 +66,9 @@ i {
     body {
         font-size: 80%;
     }
+    header {
+        padding-top: 20px;
+    }
     nav {
         margin-left: 0;
         position: relative;

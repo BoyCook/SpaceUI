@@ -1,5 +1,5 @@
 
-function Space(baseURL, name) {
+function Space(baseURL, name, parent) {
 	this.baseURL = baseURL;
 	this.name = name;
 	this.bagName = this.name + '_public';
@@ -7,13 +7,16 @@ function Space(baseURL, name) {
     this.lists = {
         all: [],
         modified: [],
+        "private": [],
         tags: []
     };
     this.http = new HTTP();
+    this.parent = parent;
 }
 
-Space.prototype._init = function() {
+Space.prototype.init = function() {
     //TODO: init local state
+    // this.getPrivateTiddlers();
 };
 
 Space.prototype.fetchTiddler = function(summary, success, error) {
@@ -33,7 +36,7 @@ Space.prototype._fetchTiddler = function(summary, success, error) {
         tiddler.id = context.getId(tiddler);
         context.setTiddler(tiddler);
         if (success) {
-            success(tiddler);
+            success.call(context.parent, tiddler);
         }
     }
 	this.http.doGet(this.baseURL + '/bags/' + summary.bag + '/tiddlers/' + summary.title + '?render=1', callBack, error);
@@ -52,12 +55,21 @@ Space.prototype.setTiddler = function(tiddler) {
 };
 
 Space.prototype.getSummaryTiddler = function(title) {
-    for (var i=0,len=this.lists.all.length; i < len; i++) {
-        var item = this.lists.all[i];
+    var summary = this._getTiddlerByTitle(title, this.lists.all);
+    if (typeof summary === "undefined") {
+        summary = this._getTiddlerByTitle(title, this.lists.private);
+    }
+    return summary;
+};
+
+Space.prototype._getTiddlerByTitle = function(title, tiddlers) {
+    for (var i=0,len=tiddlers.length; i < len; i++) {
+        var item = tiddlers[i];
         if (item.title == title) {
             return item;
         }
     }    
+    return undefined;
 };
 
 Space.prototype.getLists = function(tiddlers) {
@@ -147,6 +159,17 @@ Space.prototype.getRecentList = function(success, error) {
 	this.getAllList('?sort=-modified', success, error);
 };
 
+Space.prototype.getPrivateTiddlers = function(success, error) {
+    var context = this;
+    var callBack = function(data) {
+        context.lists.private = data;
+        if (success) {
+            success(data);
+        }
+    };
+    this.http.doGet(this.baseURL + '/bags/' + this.name + '_private/tiddlers', callBack, error);
+};
+
 Space.prototype.getAllList = function(params, success, error) {
     var context = this;
     var callBack = function(data) {
@@ -165,7 +188,6 @@ Space.prototype.getRecipe = function(name, params, success, error) {
 };
 
 Space.prototype.saveTiddler = function(tiddler, success, error) {
-    // xml, json, script, or html
     delete tiddler.render;
     this.http.doPut(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, tiddler, success, error);
 };
@@ -182,5 +204,14 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
 };
 
 Space.prototype.getId = function(tiddler) {
-    return 'tiddler' + tiddler.title.replace(/ /g,"_").replace(/\./g,"_").replace(/\?/g,"_");
+    return 'tiddler' + tiddler.title
+    .replace(/ /g,"_")
+    .replace(/\./g,"_")
+    .replace(/\?/g,"_")
+    .replace(/\[/g,"_")
+    .replace(/\]/g,"_")
+    .replace(/\{/g,"_")
+    .replace(/\}/g,"_")
+    .replace(/\(/g,"_")
+    .replace(/\)/g,"_");
 };
