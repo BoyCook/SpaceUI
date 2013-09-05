@@ -130,6 +130,7 @@ HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
 };
 
 HTMLGenerator.prototype.generateTypeOptions = function(selected) {
+	// TODO: make this more eloquent
 	var list = new HTML('select', undefined, { class: 'tiddler-type' });
 	var values = {
 		'Markdown': { value: 'text/x-markdown' },
@@ -143,7 +144,7 @@ HTMLGenerator.prototype.generateTypeOptions = function(selected) {
 	if (values.hasOwnProperty(type)) {
 		values[type].selected = 'true';
 	} else {
-		values['TiddlyWiki Text'].selected = 'true';
+		values['Markdown'].selected = 'true';
 	}
 	for (var key in values) {
 		list.append(new HTML('option', key, values[key]));
