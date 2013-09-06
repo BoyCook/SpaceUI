@@ -251,7 +251,7 @@ SPA.prototype._tiddlerLoaded = function(tiddler) {
 
 SPA.prototype._setLoadedCache = function(tiddler) {
     this.filteredLists.loaded.data.push(tiddler);
-    this.renderNavigationList('loaded', this.filteredLists.loaded.data);
+    this.renderNavigationList('loaded', this.html.generateTiddlersList, this.filteredLists.loaded.data);
 };
 
 SPA.prototype._setTiddlerDate = function(tiddler) {
@@ -352,30 +352,55 @@ SPA.prototype.cancelEditTiddler = function(title) {
 };
 
 SPA.prototype.saveTiddler = function(title) {
-    var selector = "section[data-title='" + title + "']";
-    var context = this; 
     var tiddler = this.space.getTiddler(title);
     if (typeof tiddler === "undefined") {
-        tiddler = {};
-        this._readTiddlerForm(selector, tiddler);
-        tiddler.bag = this.spaceName + '_' + $(selector + ' input[name=privacy]:checked').val();
-        this.space.saveTiddler(tiddler, function() {
-            $.growl.notice({ title: 'Success',  message: 'Added tiddler ' + title });
-            $(selector).remove();
-            context.addToList(tiddler);
-            context.openTiddler(tiddler.title);
-        }, this.ajaxError);
+        this.addTiddler({title: title});
     } else {
-        this._readTiddlerForm(selector, tiddler);
-        //TODO: can a tiddler switch between public/private (or is it delete/copy)
-        this.space.saveTiddler(tiddler, function() {
-            $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + title });
-            $("section[data-title='" + title + "']").remove();
-            context.space.removeTiddler(tiddler.title);
-            context.moveToTopOfList(tiddler);
-            context.openTiddler(tiddler.title);
-        }, this.ajaxError);
+        this.updateTiddler(tiddler);
     }
+};
+
+SPA.prototype.addTiddler = function(tiddler) {
+    var context = this; 
+    var selector = this._getSelector(tiddler.title);
+    this._readTiddlerForm(selector, tiddler);
+    tiddler.bag = this.spaceName + '_' + $(selector + ' input[name=privacy]:checked').val();
+    this.space.saveTiddler(tiddler, this.addedTiddler, this.ajaxError);
+};
+
+SPA.prototype.updateTiddler = function(tiddler) {
+    var context = this; 
+    var selector = this._getSelector(tiddler.title);
+    this._readTiddlerForm(selector, tiddler);
+    //TODO: can a tiddler switch between public/private (or is it delete/copy)
+    this.space.saveTiddler(tiddler, this.updatedTiddler, this.ajaxError);
+};
+
+SPA.prototype.deleteTiddler = function(title) {
+    var tiddler = this.space.getTiddler(title);
+    tiddler.type = 'application/json';
+    this.space.deleteTiddler(tiddler, this.removedTiddler, this.ajaxError);
+};
+
+SPA.prototype.addedTiddler = function(tiddler) {
+    $.growl.notice({ title: 'Success',  message: 'Added tiddler ' + title });
+    $(selector).remove();
+    context.addToLists(tiddler);
+    context.openTiddler(tiddler.title);    
+};
+
+SPA.prototype.updatedTiddler = function(tiddler) {
+    $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + title });
+    $("section[data-title='" + title + "']").remove();
+    context.space.removeTiddler(tiddler.title);
+    context.moveToTopOfList(tiddler);
+    context.openTiddler(tiddler.title);
+};
+
+SPA.prototype.removedTiddler = function(tiddler) {
+    $.growl.notice({ title: 'Success', message: 'Deleted tiddler ' + title });
+    $("section[data-title='" + title + "']").remove();
+    context.removeFromList(tiddler);
 };
 
 SPA.prototype._readTiddlerForm = function(selector, tiddler) {
@@ -383,38 +408,6 @@ SPA.prototype._readTiddlerForm = function(selector, tiddler) {
     tiddler.text = $(selector + ' .tiddler-text').val();
     tiddler.tags = $(selector + ' .tiddler-tags').val().split(' ');
     tiddler.type = $(selector + ' .tiddler-type').val();
-};
-
-SPA.prototype.deleteTiddler = function(title) {
-    var context = this;
-    var tiddler = this.space.getTiddler(title);
-    var success = function() {
-        $.growl.notice({ title: 'Success', message: 'Deleted tiddler ' + title });
-        $("section[data-title='" + title + "']").remove();
-        context.removeFromList(tiddler);
-    };
-    tiddler.type = 'application/json';
-    this.space.deleteTiddler(tiddler, success, this.ajaxError);
-};
-
-SPA.prototype.toggleMenu = function(tiddlers) {
-    if ($('nav').hasClass('visible')) {
-        this.closeMenu();
-    } else {
-        this.openMenu();        
-    }
-};
-
-SPA.prototype.openMenu = function(tiddlers) {
-    $('nav').addClass('visible');
-};
-
-SPA.prototype.closeMenu = function(tiddlers) {
-    $('nav').removeClass('visible');
-};
-
-SPA.prototype.openTag = function(tag) {
-    $.growl.warning({ title: 'Coming soon...',  message: "Opening tags isn't implemented yet" });
 };
 
 SPA.prototype.setFilteredLists = function() {
@@ -444,7 +437,7 @@ SPA.prototype.getPrivateTiddlers = function(callBack) {
     var context = this; 
     var success = function(data) {
         context.setPrivateFilterList();
-        context.renderNavigationList('private', context.space.getLists()['private']);
+        context.renderNavigationList('private', context.html.generateTiddlersList, context.space.getLists()['private']);    
         if (callBack) {
             callBack();
         }
@@ -455,7 +448,7 @@ SPA.prototype.getPrivateTiddlers = function(callBack) {
 SPA.prototype.filter = function(text) {
     var list = $('input:radio[name=searchType]:checked').val();
     var filtered = this.filteredLists[list].filter('title', text);
-    this.renderNavigationList(list, filtered);
+    // this.renderNavigationList(list, filtered);
 };
 
 SPA.prototype.switchList = function(name) {
@@ -463,7 +456,8 @@ SPA.prototype.switchList = function(name) {
     $('.navigation-list-' + name).show();
 };
 
-SPA.prototype.addToList = function(tiddler) {
+SPA.prototype.addToLists = function(tiddler) {
+    //TODO - add to different lists
     this.space.addToList(tiddler);
     this.tiddlerFilter.data = this.space.getLists().all;
     var item = this.html.generateTiddlerItem(tiddler);
@@ -486,17 +480,14 @@ SPA.prototype.moveToTopOfList = function(tiddler) {
 };
 
 SPA.prototype.renderNavigationLists = function() {
-    this.renderNavigationList('modified', this.space.getLists().modified);
-    this.renderNavigationList('all', this.space.getLists().all);
-    this.renderNavigationList('tags', this.space.getLists().tags);
+    this.renderNavigationList('modified', this.html.generateTiddlersList, this.space.getLists().modified);
+    this.renderNavigationList('all', this.html.generateTiddlersList, this.space.getLists().all);
+    this.renderNavigationList('tags', this.html.generateTagsList, this.space.getLists().tags);    
 };
 
-SPA.prototype.renderNavigationList = function(list, data) {
-    //TODO: make this faster - do <ul/> replace
-    var selector = 'nav .navigation-list-' + list;
-    var generator = this._getListTemplate(list);
-    $(selector + ' li').remove();
-    $(selector).append(generator.call(this.html, data).getChildren());   
+SPA.prototype.renderNavigationList = function(name, renderer, data) {
+    var selector = 'nav .navigation-list-' + name;
+    $(selector).replaceWith(renderer.call(this.html, { name: name, items: data }));
 };
 
 SPA.prototype._getListTemplate = function(name) {
@@ -505,6 +496,26 @@ SPA.prototype._getListTemplate = function(name) {
     };
     var generator = generators[name];
     return typeof generator === "undefined" ? this.html.generateTiddlersList : generator;
+};
+
+SPA.prototype.toggleMenu = function(tiddlers) {
+    if ($('nav').hasClass('visible')) {
+        this.closeMenu();
+    } else {
+        this.openMenu();        
+    }
+};
+
+SPA.prototype.openMenu = function(tiddlers) {
+    $('nav').addClass('visible');
+};
+
+SPA.prototype.closeMenu = function(tiddlers) {
+    $('nav').removeClass('visible');
+};
+
+SPA.prototype.openTag = function(tag) {
+    $.growl.warning({ title: 'Coming soon...',  message: "Opening tags isn't implemented yet" });
 };
 
 SPA.prototype._getSelector = function(title) {

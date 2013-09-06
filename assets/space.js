@@ -197,7 +197,7 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
     var callBack = function() {
         context.removeTiddler(tiddler.title);
         if (success) {
-            success();
+            success(tiddler);
         }
     }
     this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, callBack, error);

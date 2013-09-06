@@ -99,6 +99,20 @@
                 <section><textarea class="tiddler-text">{{this.text}}</textarea></section>
                 <section><input type="text" value="{{ tiddlertags this.tags }}" class="tiddler-tags"></section></section>          
         </script>        
+        <script id="tiddler-list-template" type="text/x-handlebars-template">
+            <ul class="navigation-list navigation-list-{{name}}">
+            {{#each items}}
+                <li><a href="#tiddler/{{this.title}}/open">{{this.title}}</a></li>
+            {{/each}}
+            </ul>
+        </script>
+        <script id="tag-list-template" type="text/x-handlebars-template">
+            <ul class="navigation-list navigation-list-{{name}}">
+            {{#each items}}
+                <li><a href="#tag/{{this}}/open">{{this}}</a></li>
+            {{/each}}
+            </ul>
+        </script>        
 
         <script src="http://tiddlyspace.com/bags/common/tiddlers/backstage.js"></script>        
         <script type="text/javascript" src="/bags/common/tiddlers/jquery.js"></script>
