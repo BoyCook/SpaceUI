@@ -83,10 +83,10 @@
                     <a href="#maximize/{{this.title}}" title="Maximize"><i class="icon-resize-full"></i></a>
                     <a href="#minimize/{{this.title}}" title="Minimize" class="hidden"><i class="icon-resize-small"></i></a>
                 </section>
-                <section><input type="text" value="Space UI" class="tiddler-title"></section>
+                <section><input type="text" value="{{this.title}}" class="tiddler-title"></section>
                 <section class="tiddler-edit-config">
                     <input type="radio" name="privacy" value="private"><i class="icon-lock" title="Private"></i>
-                    <input type="radio" name="privacy" value="public" checked="checked"><i class="icon-unlock" title="Public"></i>
+                    <input type="radio" name="privacy" value="public"><i class="icon-unlock" title="Public"></i>
                     <select class="tiddler-type">
                         <option value="text/x-markdown">Markdown</option>
                         <option value="text/plain">Plain Text</option>
