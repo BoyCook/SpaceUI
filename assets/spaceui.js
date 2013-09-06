@@ -437,7 +437,7 @@ SPA.prototype.getPrivateTiddlers = function(callBack) {
     var context = this; 
     var success = function(data) {
         context.setPrivateFilterList();
-        context.renderNavigationList('private', context.html.generateTiddlersList, context.space.getLists()['private']);    
+        context.renderNavigationList('private', context.html.generateTiddlersList, context.space.getLists()['private']);
         if (callBack) {
             callBack();
         }
@@ -449,6 +449,7 @@ SPA.prototype.filter = function(text) {
     var list = $('input:radio[name=searchType]:checked').val();
     var filtered = this.filteredLists[list].filter('title', text);
     // this.renderNavigationList(list, filtered);
+    this.renderNavigationList(list, this._getListTemplate(list), filtered);    
 };
 
 SPA.prototype.switchList = function(name) {
