@@ -12,6 +12,7 @@ function HTMLGenerator() {
 		view: Handlebars.compile($("#tiddler-view-template").html()),
 		edit: Handlebars.compile($("#tiddler-edit-template").html())
 	};
+	this._registerHandlers();
 }
 
 HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
@@ -20,28 +21,6 @@ HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
 
 HTMLGenerator.prototype.generateEditTiddler = function(tiddler) {
 	return this.templates.edit(tiddler);
-	// var container = new HTML('section', undefined, { id: tiddler.id, class: 'tiddler tiddler-edit-mode' });
-	// var header = new HTML('section');
-	// header.append(new HTML('input', undefined, { type: 'text', value: tiddler.title, class: 'tiddler-title' }));
-	
-	// var config = new HTML('section', undefined, { class: 'tiddler-edit-config' });
-	// config.append(new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'private' }));
-	// config.append( new HTML('i', undefined, { class: 'icon-lock', title: 'Private' }));
-	// config.append(new HTML('input', undefined, { type: 'radio', name: 'privacy', value: 'public', checked: 'checked' }));
-	// config.append(new HTML('i', undefined, { class: 'icon-unlock', title: 'Public' }));
-	// config.append(this.generateTypeOptions(tiddler.type ? tiddler.type : 'application/json'));
-	
-	// var content = new HTML('section');
-	// content.append(new HTML('textarea', tiddler.text, { class: 'tiddler-text'}));	
-	// var footer = new HTML('section');
-	// footer.append(new HTML('input', undefined, { type: 'text', value: tiddler.tags.toString().replace(/\,/g, ' '), class: 'tiddler-tags' }));
-
-	// container.append(this.generateEditToolbar(tiddler));
-	// container.append(header);
-	// container.append(config);
-	// container.append(content);
-	// container.append(footer);
-	// return container.asHTML();
 };
 
 HTMLGenerator.prototype.generateTiddlersList = function(tiddlers) {
@@ -74,66 +53,6 @@ HTMLGenerator.prototype.generateTagItem = function(tag) {
 	return item;
 };
 
-HTMLGenerator.prototype.generateViewToolbar = function(tiddler) {
-	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
-	var maximize = new HTML('a', undefined, { href: "#maximize/" + tiddler.id, title: 'Maximize' });
-	maximize.append(new HTML('i', undefined, { class: 'icon-resize-full'}));		
-	var minimize = new HTML('a', undefined, { href: "#minimize/" + tiddler.id, title: 'Minimize', class: 'hidden' });
-	minimize.append(new HTML('i', undefined, { class: 'icon-resize-small'}));		
-	var edit = new HTML('a', undefined, { href: "#tiddler/" + tiddler.title + "/edit", title: 'Edit tiddler' });
-	edit.append(new HTML('i', undefined, { class: 'icon-file-edit' }));	
-	var close = new HTML('a', undefined, { href: "#tiddler/" + tiddler.title + "/close", title: 'Close tiddler' });
-	close.append(new HTML('i', undefined, { class: 'icon-remove' }));
-	toolbar.append(edit);
-	toolbar.append(close);
-	toolbar.append(maximize);
-	toolbar.append(minimize);
-	return toolbar;
-};
-
-HTMLGenerator.prototype.generateEditToolbar = function(tiddler) {
-	var toolbar = new HTML('section', undefined, { class: 'toolbar' });
-	var save = new HTML('a', undefined, { href: "#tiddler/" + tiddler.title + "/save", title: 'Save changes' });
-	save.append(new HTML('i', undefined, { class: 'icon-ok' }));		
-	var cancel = new HTML('a', undefined, { href: "#tiddler/" + tiddler.title + "/canceledit" });
-	cancel.append(new HTML('i', undefined, { class: 'icon-reverse-alt', title: 'Cancel changes' }));		
-	var maximize = new HTML('a', undefined, { href: "#maximize/" + tiddler.id, title: 'Maximize' });
-	maximize.append(new HTML('i', undefined, { class: 'icon-resize-full' }));		
-	var minimize = new HTML('a', undefined, { href: "#minimize/" + tiddler.id, title: 'Minimize', class: 'hidden' });
-	minimize.append(new HTML('i', undefined, { class: 'icon-resize-small'}));		
-	var del = new HTML('a', undefined, { href: "#tiddler/" + tiddler.title + "/delete", title: 'Delete tiddler' });
-	del.append(new HTML('i', undefined, { class: 'icon-trash' }));			
-	toolbar.append(save);
-	toolbar.append(cancel);
-	toolbar.append(del);
-	toolbar.append(maximize);
-	toolbar.append(minimize);
-	return toolbar;
-};
-
-HTMLGenerator.prototype.generateTypeOptions = function(selected) {
-	// TODO: make this more eloquent
-	var list = new HTML('select', undefined, { class: 'tiddler-type' });
-	var values = {
-		'Markdown': { value: 'text/x-markdown' },
-		'Plain Text': { value: 'text/plain' },
-		'HTML': { value: 'text/html' },
-		'CSS': { value: 'text/css' },
-		'JavaScript': { value: 'text/javascript' },
-		'TiddlyWiki Text': { value: 'text/x-tiddlywiki' },
-	};
-	var type = this.contentTypes[selected];
-	if (values.hasOwnProperty(type)) {
-		values[type].selected = 'true';
-	} else {
-		values['Markdown'].selected = 'true';
-	}
-	for (var key in values) {
-		list.append(new HTML('option', key, values[key]));
-	}
-	return list;
-};
-
 HTMLGenerator.prototype.isCode = function(tiddler) {
 	if (tiddler.type === 'application/json' || 
 		tiddler.type === 'application/javascript' || 
@@ -154,4 +73,28 @@ HTMLGenerator.prototype.isImage = function(tiddler) {
 	} else {
 		return false;
 	}
+};
+
+HTMLGenerator.prototype._registerHandlers = function() {
+	var context = this;
+	Handlebars.registerHelper('tiddlertags', function(tags) {
+	  return tags.toString().replace(/\,/g, ' ');
+	});	
+	Handlebars.registerHelper('tiddlertype', function(type, option) {
+ 		if (type == option) {
+ 			return "selected=selected"
+ 		} else {
+ 			return "";
+ 		}
+	});		
+	Handlebars.registerHelper('tiddlertext', function(tiddler) {
+		var text = (tiddler.render ? tiddler.render : tiddler.text);
+		if (context.isCode(tiddler)) {
+			return '<pre>' + text + '<pre/>';
+		} else if (context.isImage(tiddler)) {	
+			return '<img src="' + tiddler.uri + '" />';
+		} else {
+			return text;
+		}
+	});			
 };

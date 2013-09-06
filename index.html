@@ -71,7 +71,7 @@
                 <section>
                     <h3 class="tiddler-title">{{this.title}}</h3><p class="tiddler-modified">{{this.displaydate}}</p>
                 </section>
-                <article>{{{this.render}}}</article>
+                <article>{{{ tiddlertext this }}}</article>
             </section>          
         </script>
         <script id="tiddler-edit-template" type="text/x-handlebars-template">
@@ -86,18 +86,18 @@
                 <section><input type="text" value="{{this.title}}" class="tiddler-title"></section>
                 <section class="tiddler-edit-config">
                     <input type="radio" name="privacy" value="private"><i class="icon-lock" title="Private"></i>
-                    <input type="radio" name="privacy" value="public"><i class="icon-unlock" title="Public"></i>
+                    <input type="radio" name="privacy" value="public" checked="checked"><i class="icon-unlock" title="Public"></i>
                     <select class="tiddler-type">
-                        <option value="text/x-markdown">Markdown</option>
-                        <option value="text/plain">Plain Text</option>
-                        <option value="text/html">HTML</option>
-                        <option value="text/css">CSS</option>
-                        <option value="text/javascript">JavaScript</option>
-                        <option value="text/x-tiddlywiki">TiddlyWiki Text</option>
+                        <option value="text/x-markdown"{{ tiddlertype this.type "text/x-markdown" }}>Markdown</option>
+                        <option value="text/plain"{{ tiddlertype this.type "text/plain"}}>Plain Text</option>
+                        <option value="text/html"{{ tiddlertype this.type "text/html"}}>HTML</option>
+                        <option value="text/css"{{ tiddlertype this.type "text/css"}}>CSS</option>
+                        <option value="text/javascript"{{ tiddlertype this.type "text/javascript"}}>JavaScript</option>
+                        <option value="text/x-tiddlywiki"{{ tiddlertype this.type "text/x-tiddlywiki"}}>TiddlyWiki Text</option>
                     </select>
                 </section>
                 <section><textarea class="tiddler-text">{{this.text}}</textarea></section>
-                <section><input type="text" value="{{this.tags}}" class="tiddler-tags"></section></section>          
+                <section><input type="text" value="{{ tiddlertags this.tags }}" class="tiddler-tags"></section></section>          
         </script>        
 
         <script src="http://tiddlyspace.com/bags/common/tiddlers/backstage.js"></script>        
