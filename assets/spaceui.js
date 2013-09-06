@@ -94,7 +94,6 @@ function SPA(host, port) {
         tags: new Filter([]),
         loaded: new Filter([])
     };
-    // this.tiddlerFilter = undefined;
 	this.html = new HTMLGenerator();
     this.space = new Space(this.baseURL, this.spaceName, this);
     this.maximized = false;
@@ -343,11 +342,12 @@ SPA.prototype.editTiddler = function(title) {
 
 SPA.prototype.cancelEditTiddler = function(title) {
     var tiddler = this.space.getTiddler(title);
+    var selector = "section[data-title='" + title + "']";
     if (typeof tiddler === "undefined") {
-        $('#' + this.space.getId({title: title})).remove();   
+        $(selector).remove();
     } else {
         var html = this.html.generateViewTiddler(tiddler);
-        $("section[data-title='" + title + "']").replaceWith(html);
+        $(selector).replaceWith(html);
     }
 };
 
