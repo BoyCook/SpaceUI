@@ -361,7 +361,6 @@ SPA.prototype.saveTiddler = function(title) {
 };
 
 SPA.prototype.addTiddler = function(tiddler) {
-    var context = this; 
     var selector = this._getSelector(tiddler.title);
     this._readTiddlerForm(selector, tiddler);
     tiddler.bag = this.spaceName + '_' + $(selector + ' input[name=privacy]:checked').val();
@@ -369,7 +368,6 @@ SPA.prototype.addTiddler = function(tiddler) {
 };
 
 SPA.prototype.updateTiddler = function(tiddler) {
-    var context = this; 
     var selector = this._getSelector(tiddler.title);
     this._readTiddlerForm(selector, tiddler);
     //TODO: can a tiddler switch between public/private (or is it delete/copy)
@@ -410,16 +408,6 @@ SPA.prototype._readTiddlerForm = function(selector, tiddler) {
     tiddler.type = $(selector + ' .tiddler-type').val();
 };
 
-SPA.prototype.setFilteredLists = function() {
-    this.filteredLists.all = new Filter(this.space.getLists().all);
-    this.filteredLists.modified = new Filter(this.space.getLists().modified);
-    this.filteredLists.tags = new Filter(this.space.getLists().tags, true);
-};
-
-SPA.prototype.setPrivateFilterList = function() {
-    this.filteredLists.private = new Filter(this.space.getLists().private);
-};
-
 SPA.prototype.getAllList = function(callBack) {
     var context = this; 
     var success = function(data) {
@@ -437,7 +425,7 @@ SPA.prototype.getPrivateTiddlers = function(callBack) {
     var context = this; 
     var success = function(data) {
         context.setPrivateFilterList();
-        context.renderNavigationList('private', context.html.generateTiddlersList, context.space.getLists()['private']);
+        context.renderNavigationList('private', context.html.generateTiddlersList, context.space.getLists().tiddlers.private);
         if (callBack) {
             callBack();
         }
@@ -448,7 +436,6 @@ SPA.prototype.getPrivateTiddlers = function(callBack) {
 SPA.prototype.filter = function(text) {
     var list = $('input:radio[name=searchType]:checked').val();
     var filtered = this.filteredLists[list].filter('title', text);
-    // this.renderNavigationList(list, filtered);
     this.renderNavigationList(list, this._getListTemplate(list), filtered);    
 };
 
@@ -459,31 +446,43 @@ SPA.prototype.switchList = function(name) {
 
 SPA.prototype.addToLists = function(tiddler) {
     //TODO - add to different lists
-    this.space.addToList(tiddler);
-    this.tiddlerFilter.data = this.space.getLists().all;
+    this.space.addTiddler(tiddler);
+    // this.tiddlerFilter.data = this.space.getLists().tiddlers.public;
     var item = this.html.generateTiddlerItem(tiddler);
     $('nav .navigation-list').append(item.asHTML());
 };
 
 SPA.prototype.removeFromList = function(tiddler) {
     this.space.removeFromList(tiddler);
-    this.tiddlerFilter.data = this.space.getLists().all;
+    // this.tiddlerFilter.data = this.space.getLists().all;
     $("nav ul li a[href='#" + tiddler.id + "']").parent().remove()
 };
 
 SPA.prototype.moveToTopOfList = function(tiddler) {
     this.space.moveToTopOfList(tiddler);
-    this.tiddlerFilter.data = this.space.getLists().all;
+    // this.tiddlerFilter.data = this.space.getLists().all;
     var original = $("nav ul li a[href='#" + tiddler.id + "']").parent();
     var item = original.clone();
     original.remove();
     $('nav .navigation-list').prepend(item);
 };
 
+SPA.prototype.setFilteredLists = function() {
+    var sort = new Sort(this.space.getLists().tiddlers.public);
+    this.filteredLists.all = new Filter(sort.sort('title'));
+    this.filteredLists.modified = new Filter(sort.sort('-modified'));
+    this.filteredLists.tags = new Filter(this.space.getLists().tags, true);
+};
+
+SPA.prototype.setPrivateFilterList = function() {
+    var sort = new Sort(this.space.getLists().tiddlers.private);
+    this.filteredLists.private = new Filter(sort.sort('title'));
+};
+
 SPA.prototype.renderNavigationLists = function() {
-    this.renderNavigationList('modified', this.html.generateTiddlersList, this.space.getLists().modified);
-    this.renderNavigationList('all', this.html.generateTiddlersList, this.space.getLists().all);
-    this.renderNavigationList('tags', this.html.generateTagsList, this.space.getLists().tags);    
+    this.renderNavigationList('modified', this.html.generateTiddlersList, this.filteredLists.modified.data);
+    this.renderNavigationList('all', this.html.generateTiddlersList, this.filteredLists.all.data);
+    this.renderNavigationList('tags', this.html.generateTagsList, this.filteredLists.tags.data);    
 };
 
 SPA.prototype.renderNavigationList = function(name, renderer, data) {

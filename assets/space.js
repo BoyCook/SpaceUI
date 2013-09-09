@@ -5,9 +5,10 @@ function Space(baseURL, name, parent) {
 	this.bagName = this.name + '_public';
 	this.tiddlers = {};
     this.lists = {
-        all: [],
-        modified: [],
-        "private": [],
+        tiddlers: {
+            "public": [],
+            "private": [],            
+        },
         tags: []
     };
     this.http = new HTTP();
@@ -55,9 +56,9 @@ Space.prototype.setTiddler = function(tiddler) {
 };
 
 Space.prototype.getSummaryTiddler = function(title) {
-    var summary = this._getTiddlerByTitle(title, this.lists.all);
+    var summary = this._getTiddlerByTitle(title, this.lists.tiddlers.public);
     if (typeof summary === "undefined") {
-        summary = this._getTiddlerByTitle(title, this.lists.private);
+        summary = this._getTiddlerByTitle(title, this.lists.tiddlers.private);
     }
     return summary;
 };
@@ -76,10 +77,9 @@ Space.prototype.getLists = function(tiddlers) {
     return this.lists;
 };
 
-Space.prototype._setTiddlerLists = function(tiddlers) {
-    var sort = new Sort(tiddlers);
-    this.lists.all = sort.sort('title');
-    this.lists.modified = sort.sort('-modified');
+//TODO - rename _setPublicTiddlerList
+Space.prototype._setPublicTiddlerList = function(tiddlers) {
+    this.lists.tiddlers.public = tiddlers;
 };
 
 Space.prototype._calculateTags = function(tiddlers) {
@@ -123,22 +123,39 @@ Space.prototype._populateTiddlerIDs = function(tiddlers) {
     }
 };
 
-Space.prototype.addToList = function(tiddler) {
-    //TODO: specify list
-    //Move to bottom of list???
-    if (this.lists.all.unshift) {
-        this.lists.all.unshift(tiddler);
+Space.prototype.addTiddler = function(tiddler) {
+    if (this.isPrivate(tiddler)) {
+        this._addToList(tiddler, this.lists.private);
     } else {
-        this.lists.all.push(tiddler);
+        this._addToList(tiddler, this.lists.public);
     }
 };
 
+Space.prototype._addToList = function(tiddler, list) {
+    //Move to top of list???
+    if (list.unshift) {
+        list.unshift(tiddler);
+    } else {
+        list.push(tiddler);
+    }       
+};
+
 Space.prototype.removeFromList = function(tiddler) {
-    //TODO: specify list
-    for (var i=0,len=this.lists.all.length; i < len; i++) {
-        var item = this.lists.all[i];
+    //TODO: use _removeFromList
+    for (var i=0,len=this.lists.tiddlers.public.length; i < len; i++) {
+        var item = this.lists.tiddlers.public[i];
         if (item.title == tiddler.title) {
-            this.lists.all.splice(i, 1);
+            this.public.all.splice(i, 1);
+            return;
+        }
+    }
+};
+
+Space.prototype._removeFromList = function(tiddler, list) {
+    for (var i=0,len=list.length; i < len; i++) {
+        var item = list[i];
+        if (item.title == tiddler.title) {
+            list.splice(i, 1);
             return;
         }
     }
@@ -147,7 +164,7 @@ Space.prototype.removeFromList = function(tiddler) {
 Space.prototype.moveToTopOfList = function(tiddler) {
     //TODO: specify list
     this.removeFromList(tiddler);
-    this.addToList(tiddler);
+    this.addTiddler(tiddler);
 };
 
 Space.prototype.getReplies = function(title, success, error) {
@@ -162,7 +179,7 @@ Space.prototype.getRecentList = function(success, error) {
 Space.prototype.getPrivateTiddlers = function(success, error) {
     var context = this;
     var callBack = function(data) {
-        context.lists.private = data;
+        context.lists.tiddlers.private = data;
         if (success) {
             success(data);
         }
@@ -175,7 +192,7 @@ Space.prototype.getAllList = function(params, success, error) {
     var callBack = function(data) {
         context._populateTiddlerIDs(data);
         context._calculateTags(data);
-        context._setTiddlerLists(data);
+        context._setPublicTiddlerList(data);
         if (success) {
             success(data);
         }
@@ -201,6 +218,10 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
         }
     }
     this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, callBack, error);
+};
+
+Space.prototype.isPrivate = function(tiddler) {
+    return tiddler.bag.indexOf('_private') > -1
 };
 
 Space.prototype.getId = function(tiddler) {
