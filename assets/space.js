@@ -2,7 +2,6 @@
 function Space(baseURL, name, parent) {
 	this.baseURL = baseURL;
 	this.name = name;
-	this.bagName = this.name + '_public';
 	this.tiddlers = {};
     this.lists = {
         tiddlers: {
@@ -33,7 +32,6 @@ Space.prototype.fetchTiddler = function(summary, success, error) {
 Space.prototype._fetchTiddler = function(summary, success, error) {
     var context = this;
     var callBack = function(tiddler) {
-        tiddler.id = context.getId(tiddler);
         context.setTiddler(tiddler);
         if (success) {
             success.call(context.parent, tiddler);
@@ -103,23 +101,6 @@ Space.prototype._calculateTags = function(tiddlers) {
     }
     //TODO - merge
     this.lists.tags = tags;
-};
-
-Space.prototype._checkItems = function(list, items) {
-    for (var i=0,len=items.length; i < len; i++) {
-        var item = items[i];
-        if (item.indexOf(',') > -1) {
-            this.__checkItems(list, item.split(','));
-        } else if (list.indexOf(item) == -1) {
-            list.push(item);
-        }                    
-    }
-};
-
-Space.prototype._populateTiddlerIDs = function(tiddlers) {
-    for (var i=0,len=tiddlers.length; i < len; i++) {
-        tiddlers[i].id = this.getId(tiddlers[i]);
-    }
 };
 
 Space.prototype._addSummaryTiddler = function(tiddler) {
@@ -225,19 +206,6 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
 
 Space.prototype.isPrivate = function(tiddler) {
     return tiddler.bag.indexOf('_private') > -1
-};
-
-Space.prototype.getId = function(tiddler) {
-    return 'tiddler' + tiddler.title
-    .replace(/ /g,"_")
-    .replace(/\./g,"_")
-    .replace(/\?/g,"_")
-    .replace(/\[/g,"_")
-    .replace(/\]/g,"_")
-    .replace(/\{/g,"_")
-    .replace(/\}/g,"_")
-    .replace(/\(/g,"_")
-    .replace(/\)/g,"_");
 };
 
 Space.prototype.getDate = function() {
