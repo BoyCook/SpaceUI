@@ -1,1 +1,2 @@
+install: "npm install -g mocha"
 script: "make test"
