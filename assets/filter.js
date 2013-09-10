@@ -2,7 +2,6 @@
 function Filter(data, isString) {
 	this.data = data;
 	this.text = '';
-	var context = this;
 	if (isString) {
 		this.filter = this.filterString;		
 	} else {
