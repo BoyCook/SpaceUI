@@ -136,7 +136,6 @@ SPA.prototype._loadDefaults = function(callBack) {
             if (index == loader.titles.length) {
                 return;
             }
-          
             var next = function(tiddler) {
                 context._tiddlerLoaded(tiddler);
                 loader.cnt++;
@@ -232,7 +231,7 @@ SPA.prototype.openTiddler = function(title) {
         if (fetch == true) {
             this.space.fetchTiddler(summary, this._tiddlerLoaded, this.ajaxError);        
         } else {
-            if ($('#' + this.space.getId(summary)).length == 0) {
+            if ($(this._getSelector(summary.title)).length == 0) {
                 this.renderTiddler(typeof tiddler !== "undefined" ? tiddler : summary); 
             }
             //else anchor click jumps to tiddler
@@ -445,9 +444,18 @@ SPA.prototype.switchList = function(name) {
 };
 
 SPA.prototype.addToLists = function(tiddler) {
+    // this..data = this.space.getLists().tiddlers.public;
+    //TODO - sort and update filter
+    if (this.space.isPrivate(tiddler)) {
+        this.filteredLists.private.data.push(tiddler);
+    } else {
+        this.filteredLists.all.data.push(tiddler);
+        this.filteredLists.modified.data.push(tiddler);
+    }
+
     //TODO - add to different lists
-    this.space.addTiddler(tiddler);
-    // this.tiddlerFilter.data = this.space.getLists().tiddlers.public;
+    this.space.addTiddlerToList(tiddler);
+    
     var item = this.html.generateTiddlerItem(tiddler);
     $('nav .navigation-list').append(item.asHTML());
 };
