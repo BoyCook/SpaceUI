@@ -35,3 +35,16 @@ Filter.prototype.filterObject = function(key, value) {
 	}
 	return filtered;
 };
+
+function SortedFilter(data, isString, by) {
+	this.sort = new Sort(data);
+	Filter.call(this, sort.sort(by), isString);
+}
+
+SortedFilter.prototype = new Filter();
+SortedFilter.prototype.constructor = SortedFilter;
+// SortedFilter.prototype.count = function() {
+//     this.countDown();
+// };
+
+
