@@ -1,0 +1,44 @@
+{
+    "name": "http-file-server",
+    "version": "0.0.1-RC01",
+    "author": "BoyCook",
+    "description": "Simple file based HTTP server in JavaScript for node.js",
+    "contributors": [
+        {
+            "name": "Craig Cook",
+            "id": "BoyCook"
+        }
+    ],
+    "scripts": {
+        "start": "node serve.js",
+        "test": "make test",
+        "predeploy": "echo This will be run before deploying the app",
+        "postdeploy": "echo This will be run after deploying the app"
+    },
+    "main": "./lib/server",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/BoyCook/HttpFileServerJS.git"
+    },
+    "keywords": [
+        "HTTP",
+        "File",
+        "Server"
+    ],
+    "dependencies": {
+        "object-utils": "https://github.com/BoyCook/ObjectUtilsJS/tarball/master",
+        "string-builder": "https://github.com/BoyCook/StringBuilderJS/tarball/master"
+    },
+    "devDependencies": {
+        "zombie": "*",
+        "request": "*",
+        "should": "latest"
+    },
+    "bundledDependencies": [
+        "string-builder"
+    ],
+    "engines": {
+        "node": ">=0.6"
+    }
+}
+
