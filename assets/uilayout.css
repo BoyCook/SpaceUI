@@ -14,12 +14,15 @@ body {
 nav {
     font-size: 1em;
     margin-left: 74%;
-    position: absolute;
+    position: fixed;
     float: right;    
+    height: 100%;
+    overflow: scroll;
 }
 
 nav ul {
     list-style: none;   
+    overflow: auto;
 }
 
 nav li {
