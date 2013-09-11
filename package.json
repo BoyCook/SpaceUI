@@ -1,8 +1,8 @@
 {
-    "name": "http-file-server",
+    "name": "space-ui",
     "version": "0.0.1-RC01",
     "author": "BoyCook",
-    "description": "Simple file based HTTP server in JavaScript for node.js",
+    "description": "A lightweight and repsponsive UI for TiddlySpace",
     "contributors": [
         {
             "name": "Craig Cook",
@@ -18,24 +18,22 @@
     "main": "./lib/server",
     "repository": {
         "type": "git",
-        "url": "https://github.com/BoyCook/HttpFileServerJS.git"
+        "url": "https://github.com/BoyCook/SpaceUI.git"
     },
     "keywords": [
         "HTTP",
         "File",
         "Server"
     ],
-    "dependencies": {
-        "object-utils": "https://github.com/BoyCook/ObjectUtilsJS/tarball/master",
-        "string-builder": "https://github.com/BoyCook/StringBuilderJS/tarball/master"
-    },
     "devDependencies": {
+        "coveralls": "latest",
+        "mocha-lcov-reporter": "latest",
         "zombie": "*",
         "request": "*",
         "should": "latest"
     },
     "bundledDependencies": [
-        "string-builder"
+        
     ],
     "engines": {
         "node": ">=0.6"
