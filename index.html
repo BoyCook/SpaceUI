@@ -63,7 +63,9 @@
         <script id="tiddler-view-template" type="text/x-handlebars-template">
             <section data-title="{{this.title}}" class="tiddler">
                 <section class="toolbar">
+                    {{#canEditTiddler bag=this.bag }}
                     <a href="#tiddler/{{this.title}}/edit" title="Edit tiddler"><i class="icon-file-edit"></i></a>
+                    {{/canEditTiddler}}
                     <a href="#tiddler/{{this.title}}/close" title="Close tiddler"><i class="icon-remove"></i></a>
                     <a href="#maximize/{{this.title}}" title="Maximize"><i class="icon-resize-full"></i></a>
                     <a href="#minimize/{{this.title}}" title="Minimize" class="hidden"><i class="icon-resize-small"></i></a>

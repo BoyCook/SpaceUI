@@ -1,7 +1,8 @@
 
-function HTMLGenerator() {
+function HTMLGenerator(spaceName) {
 	this._loadTemplates();
 	this._registerHandlers();
+	this.spaceName = spaceName;
 }
 
 HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
@@ -58,6 +59,14 @@ HTMLGenerator.prototype._loadTemplates = function() {
 
 HTMLGenerator.prototype._registerHandlers = function() {
 	var context = this;
+	Handlebars.registerHelper('canEditTiddler', function(options) {
+ 		if (options.hash.bag.indexOf(context.spaceName) == 0) {
+ 			return options.fn(this);
+  		} else {
+    		return options.inverse(this);    		
+  		}		
+		// return bag.indexOf(context.spaceName) == 0;
+	});			
 	Handlebars.registerHelper('tiddlertags', function(tags) {
 	  return tags.toString().replace(/\,/g, ' ');
 	});	

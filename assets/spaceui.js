@@ -94,7 +94,7 @@ function SPA(host, port) {
         tags: new Filter([]),
         loaded: new Filter([])
     };
-	this.html = new HTMLGenerator();
+	this.html = new HTMLGenerator(this.spaceName);
     this.space = new Space(this.baseURL, this.spaceName, this);
     this.maximized = false;
 }
