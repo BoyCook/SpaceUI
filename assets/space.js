@@ -2,12 +2,12 @@
 function Space(baseURL, name, parent) {
 	this.baseURL = baseURL;
 	this.name = name;
-	this.bagName = this.name + '_public';
 	this.tiddlers = {};
     this.lists = {
-        all: [],
-        modified: [],
-        "private": [],
+        tiddlers: {
+            "public": [],
+            "private": [],            
+        },
         tags: []
     };
     this.http = new HTTP();
@@ -16,7 +16,6 @@ function Space(baseURL, name, parent) {
 
 Space.prototype.init = function() {
     //TODO: init local state
-    // this.getPrivateTiddlers();
 };
 
 Space.prototype.fetchTiddler = function(summary, success, error) {
@@ -33,7 +32,6 @@ Space.prototype.fetchTiddler = function(summary, success, error) {
 Space.prototype._fetchTiddler = function(summary, success, error) {
     var context = this;
     var callBack = function(tiddler) {
-        tiddler.id = context.getId(tiddler);
         context.setTiddler(tiddler);
         if (success) {
             success.call(context.parent, tiddler);
@@ -55,9 +53,9 @@ Space.prototype.setTiddler = function(tiddler) {
 };
 
 Space.prototype.getSummaryTiddler = function(title) {
-    var summary = this._getTiddlerByTitle(title, this.lists.all);
+    var summary = this._getTiddlerByTitle(title, this.lists.tiddlers.public);
     if (typeof summary === "undefined") {
-        summary = this._getTiddlerByTitle(title, this.lists.private);
+        summary = this._getTiddlerByTitle(title, this.lists.tiddlers.private);
     }
     return summary;
 };
@@ -72,14 +70,12 @@ Space.prototype._getTiddlerByTitle = function(title, tiddlers) {
     return undefined;
 };
 
-Space.prototype.getLists = function(tiddlers) {
-    return this.lists;
+Space.prototype._setPublicTiddlers = function(tiddlers) {
+    this.lists.tiddlers.public = tiddlers;
 };
 
-Space.prototype._setTiddlerLists = function(tiddlers) {
-    var sort = new Sort(tiddlers);
-    this.lists.all = sort.sort('title');
-    this.lists.modified = sort.sort('-modified');
+Space.prototype._setPrivateTiddlers = function(tiddlers) {
+    this.lists.tiddlers.private = tiddlers;
 };
 
 Space.prototype._calculateTags = function(tiddlers) {
@@ -103,51 +99,53 @@ Space.prototype._calculateTags = function(tiddlers) {
             }
         }
     }
+    //TODO - merge
     this.lists.tags = tags;
 };
 
-Space.prototype._checkItems = function(list, items) {
-    for (var i=0,len=items.length; i < len; i++) {
-        var item = items[i];
-        if (item.indexOf(',') > -1) {
-            this.__checkItems(list, item.split(','));
-        } else if (list.indexOf(item) == -1) {
-            list.push(item);
-        }                    
-    }
-};
-
-Space.prototype._populateTiddlerIDs = function(tiddlers) {
-    for (var i=0,len=tiddlers.length; i < len; i++) {
-        tiddlers[i].id = this.getId(tiddlers[i]);
-    }
-};
-
-Space.prototype.addToList = function(tiddler) {
-    //TODO: specify list
-    //Move to bottom of list???
-    if (this.lists.all.unshift) {
-        this.lists.all.unshift(tiddler);
+Space.prototype._addSummaryTiddler = function(tiddler) {
+    var summary = this.getSummaryTiddler(tiddler.title);
+    if (typeof summary === "undefined") {
+        tiddler.modified = this.getDate();
+        this.addSummaryTiddler(tiddler);
     } else {
-        this.lists.all.push(tiddler);
+        summary.modified = this.getDate();
     }
 };
 
-Space.prototype.removeFromList = function(tiddler) {
-    //TODO: specify list
-    for (var i=0,len=this.lists.all.length; i < len; i++) {
-        var item = this.lists.all[i];
+Space.prototype.addSummaryTiddler = function(tiddler) {
+    if (this.isPrivate(tiddler)) {
+        this._addToList(tiddler, this.lists.tiddlers.private);
+    } else {
+        this._addToList(tiddler, this.lists.tiddlers.public);
+    }
+};
+
+Space.prototype._addToList = function(tiddler, list) {
+    //Move to top of list???
+    if (list.unshift) {
+        list.unshift(tiddler);
+    } else {
+        list.push(tiddler);
+    }       
+};
+
+Space.prototype.removeSummaryTiddler = function(tiddler) {
+    if (this.isPrivate(tiddler)) {
+        this._removeFromList(tiddler, this.lists.tiddlers.private);
+    } else {
+        this._removeFromList(tiddler, this.lists.tiddlers.public);
+    }
+};
+
+Space.prototype._removeFromList = function(tiddler, list) {
+    for (var i=0,len=list.length; i < len; i++) {
+        var item = list[i];
         if (item.title == tiddler.title) {
-            this.lists.all.splice(i, 1);
+            list.splice(i, 1);
             return;
         }
     }
-};
-
-Space.prototype.moveToTopOfList = function(tiddler) {
-    //TODO: specify list
-    this.removeFromList(tiddler);
-    this.addToList(tiddler);
 };
 
 Space.prototype.getReplies = function(title, success, error) {
@@ -155,14 +153,11 @@ Space.prototype.getReplies = function(title, success, error) {
     this.http.doGet(this.baseURL + '/search?q=title:"' + title + '"', success, error);    
 };
 
-Space.prototype.getRecentList = function(success, error) {
-	this.getAllList('?sort=-modified', success, error);
-};
-
 Space.prototype.getPrivateTiddlers = function(success, error) {
     var context = this;
     var callBack = function(data) {
-        context.lists.private = data;
+        // context._calculateTags(data);
+        context._setPrivateTiddlers(data);
         if (success) {
             success(data);
         }
@@ -170,17 +165,16 @@ Space.prototype.getPrivateTiddlers = function(success, error) {
     this.http.doGet(this.baseURL + '/bags/' + this.name + '_private/tiddlers', callBack, error);
 };
 
-Space.prototype.getAllList = function(params, success, error) {
+Space.prototype.getPublicTiddlers = function(success, error) {
     var context = this;
     var callBack = function(data) {
-        context._populateTiddlerIDs(data);
         context._calculateTags(data);
-        context._setTiddlerLists(data);
+        context._setPublicTiddlers(data);
         if (success) {
             success(data);
         }
     };
-    this.getRecipe(this.name + '_public', params, callBack, error);
+    this.getRecipe(this.name + '_public', '', callBack, error);
 };
 
 Space.prototype.getRecipe = function(name, params, success, error) {
@@ -188,30 +182,45 @@ Space.prototype.getRecipe = function(name, params, success, error) {
 };
 
 Space.prototype.saveTiddler = function(tiddler, success, error) {
-    delete tiddler.render;
-    this.http.doPut(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, tiddler, success, error);
+    var context = this;
+    var callBack = function() {
+        context._addSummaryTiddler(tiddler);
+        if (success) {
+            success.call(context.parent, tiddler);
+        }
+    };
+    this.http.doPut(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, tiddler, callBack, error);
 };
 
 Space.prototype.deleteTiddler = function(tiddler, success, error) {
     var context = this;
     var callBack = function() {
+        context.removeSummaryTiddler(tiddler);
         context.removeTiddler(tiddler.title);
         if (success) {
-            success(tiddler);
+            success.call(context.parent, tiddler);
         }
     }
     this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, callBack, error);
 };
 
-Space.prototype.getId = function(tiddler) {
-    return 'tiddler' + tiddler.title
-    .replace(/ /g,"_")
-    .replace(/\./g,"_")
-    .replace(/\?/g,"_")
-    .replace(/\[/g,"_")
-    .replace(/\]/g,"_")
-    .replace(/\{/g,"_")
-    .replace(/\}/g,"_")
-    .replace(/\(/g,"_")
-    .replace(/\)/g,"_");
+Space.prototype.isPrivate = function(tiddler) {
+    return tiddler.bag.indexOf('_private') > -1
+};
+
+Space.prototype.getDate = function() {
+    var now = new Date();
+    return now.getFullYear() +
+        this.toFull((now.getMonth() + 1).toString()) +
+        this.toFull(now.getDate().toString()) +
+        this.toFull(now.getHours().toString()) +
+        this.toFull(now.getMinutes().toString()) +
+        this.toFull(now.getSeconds().toString());
+};
+
+Space.prototype.toFull = function(v) {
+    if (v.length == 1) {
+        v = "0" + v;
+    }
+    return v;
 };

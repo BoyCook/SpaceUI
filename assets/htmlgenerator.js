@@ -1,7 +1,8 @@
 
-function HTMLGenerator() {
+function HTMLGenerator(spaceName) {
 	this._loadTemplates();
 	this._registerHandlers();
+	this.spaceName = spaceName;
 }
 
 HTMLGenerator.prototype.generateViewTiddler = function(tiddler) {
@@ -18,6 +19,10 @@ HTMLGenerator.prototype.generateTiddlersList = function(items) {
 
 HTMLGenerator.prototype.generateTagsList = function(items) {
 	return this.templates.tags(items);
+};
+
+HTMLGenerator.prototype.generateTiddlerItem = function(tiddler) {
+	return this.templates.item(tiddler);	
 };
 
 HTMLGenerator.prototype.isCode = function(tiddler) {
@@ -47,12 +52,21 @@ HTMLGenerator.prototype._loadTemplates = function() {
 		view: Handlebars.compile($("#tiddler-view-template").html()),
 		edit: Handlebars.compile($("#tiddler-edit-template").html()),
 		tiddlers: Handlebars.compile($("#tiddler-list-template").html()),
+		item: Handlebars.compile($("#tiddler-item-template").html()),
 		tags: Handlebars.compile($("#tag-list-template").html())
 	};	
 };
 
 HTMLGenerator.prototype._registerHandlers = function() {
 	var context = this;
+	Handlebars.registerHelper('canEditTiddler', function(options) {
+ 		if (options.hash.bag.indexOf(context.spaceName) == 0) {
+ 			return options.fn(this);
+  		} else {
+    		return options.inverse(this);    		
+  		}		
+		// return bag.indexOf(context.spaceName) == 0;
+	});			
 	Handlebars.registerHelper('tiddlertags', function(tags) {
 	  return tags.toString().replace(/\,/g, ' ');
 	});	

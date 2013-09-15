@@ -59,11 +59,13 @@
             <ul class="navigation-list navigation-list-loaded"></ul>
         </nav>        
         <section id="content"></section>        
-
+        <!-- Handlebars templates: -->
         <script id="tiddler-view-template" type="text/x-handlebars-template">
             <section data-title="{{this.title}}" class="tiddler">
                 <section class="toolbar">
+                    {{#canEditTiddler bag=this.bag }}
                     <a href="#tiddler/{{this.title}}/edit" title="Edit tiddler"><i class="icon-file-edit"></i></a>
+                    {{/canEditTiddler}}
                     <a href="#tiddler/{{this.title}}/close" title="Close tiddler"><i class="icon-remove"></i></a>
                     <a href="#maximize/{{this.title}}" title="Maximize"><i class="icon-resize-full"></i></a>
                     <a href="#minimize/{{this.title}}" title="Minimize" class="hidden"><i class="icon-resize-small"></i></a>
@@ -100,20 +102,19 @@
                 <section><input type="text" value="{{ tiddlertags this.tags }}" class="tiddler-tags"></section></section>          
         </script>        
         <script id="tiddler-list-template" type="text/x-handlebars-template">
-            <ul class="navigation-list navigation-list-{{name}}">
             {{#each items}}
                 <li><a href="#tiddler/{{this.title}}/open">{{this.title}}</a></li>
             {{/each}}
-            </ul>
         </script>
         <script id="tag-list-template" type="text/x-handlebars-template">
-            <ul class="navigation-list navigation-list-{{name}}">
             {{#each items}}
                 <li><a href="#tag/{{this}}/open">{{this}}</a></li>
             {{/each}}
-            </ul>
-        </script>        
-
+        </script>
+        <script id="tiddler-item-template" type="text/x-handlebars-template">
+            <li><a href="#tiddler/{{this.title}}/open">{{this.title}}</a></li>
+        </script>                
+        <!-- END TEMPLATES -->
         <script src="http://tiddlyspace.com/bags/common/tiddlers/backstage.js"></script>        
         <script type="text/javascript" src="/bags/common/tiddlers/jquery.js"></script>
         <script type="text/javascript" src="/bags/spaceui_public/tiddlers/underscore-min.js"></script>

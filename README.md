@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/BoyCook/SpaceUI.png?branch=master)](https://travis-ci.org/BoyCook/SpaceUI)
+[![Dependency Status](https://gemnasium.com/BoyCook/SpaceUI.png)](https://gemnasium.com/BoyCook/SpaceUI)
+
 ## About
 Space UI is a lightweight responsive UI for TiddlySpace
 

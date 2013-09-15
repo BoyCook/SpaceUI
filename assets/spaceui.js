@@ -94,7 +94,7 @@ function SPA(host, port) {
         tags: new Filter([]),
         loaded: new Filter([])
     };
-	this.html = new HTMLGenerator();
+	this.html = new HTMLGenerator(this.spaceName);
     this.space = new Space(this.baseURL, this.spaceName, this);
     this.maximized = false;
 }
@@ -104,8 +104,9 @@ SPA.prototype.setup = function(callBack) {
     var done = function(){
         context._loadSiteTitle();
         context._loadDefaults(callBack);
+        context.switchList('modified');
     };
-    this.getAllList(done); 
+    this.getPublicTiddlers(done); 
     this.getPrivateTiddlers();
     this.switchList($('input:radio[name=searchType]:checked').val());
 };
@@ -136,7 +137,6 @@ SPA.prototype._loadDefaults = function(callBack) {
             if (index == loader.titles.length) {
                 return;
             }
-          
             var next = function(tiddler) {
                 context._tiddlerLoaded(tiddler);
                 loader.cnt++;
@@ -223,7 +223,6 @@ SPA.prototype.minimize = function(title) {
 };
 
 SPA.prototype.openTiddler = function(title) {
-    var context = this; 
     var summary = this.space.getSummaryTiddler(title);
     var tiddler = this.space.getTiddler(title);
     if (typeof summary !== "undefined") {
@@ -232,7 +231,7 @@ SPA.prototype.openTiddler = function(title) {
         if (fetch == true) {
             this.space.fetchTiddler(summary, this._tiddlerLoaded, this.ajaxError);        
         } else {
-            if ($('#' + this.space.getId(summary)).length == 0) {
+            if ($(this._getSelector(summary.title)).length == 0) {
                 this.renderTiddler(typeof tiddler !== "undefined" ? tiddler : summary); 
             }
             //else anchor click jumps to tiddler
@@ -361,7 +360,6 @@ SPA.prototype.saveTiddler = function(title) {
 };
 
 SPA.prototype.addTiddler = function(tiddler) {
-    var context = this; 
     var selector = this._getSelector(tiddler.title);
     this._readTiddlerForm(selector, tiddler);
     tiddler.bag = this.spaceName + '_' + $(selector + ' input[name=privacy]:checked').val();
@@ -369,7 +367,6 @@ SPA.prototype.addTiddler = function(tiddler) {
 };
 
 SPA.prototype.updateTiddler = function(tiddler) {
-    var context = this; 
     var selector = this._getSelector(tiddler.title);
     this._readTiddlerForm(selector, tiddler);
     //TODO: can a tiddler switch between public/private (or is it delete/copy)
@@ -383,24 +380,23 @@ SPA.prototype.deleteTiddler = function(title) {
 };
 
 SPA.prototype.addedTiddler = function(tiddler) {
-    $.growl.notice({ title: 'Success',  message: 'Added tiddler ' + title });
-    $(selector).remove();
-    context.addToLists(tiddler);
-    context.openTiddler(tiddler.title);    
+    $.growl.notice({ title: 'Success',  message: 'Added tiddler ' + tiddler.title });
+    $(this._getSelector(tiddler.title)).remove();
+    this.refreshLists();
+    this.openTiddler(tiddler.title);    
 };
 
 SPA.prototype.updatedTiddler = function(tiddler) {
-    $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + title });
-    $("section[data-title='" + title + "']").remove();
-    context.space.removeTiddler(tiddler.title);
-    context.moveToTopOfList(tiddler);
-    context.openTiddler(tiddler.title);
+    $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + tiddler.title });
+    $("section[data-title='" + tiddler.title + "']").remove();
+    this.refreshLists();
+    this.openTiddler(tiddler.title);
 };
 
 SPA.prototype.removedTiddler = function(tiddler) {
-    $.growl.notice({ title: 'Success', message: 'Deleted tiddler ' + title });
-    $("section[data-title='" + title + "']").remove();
-    context.removeFromList(tiddler);
+    $.growl.notice({ title: 'Success', message: 'Deleted tiddler ' + tiddler.title });
+    $("section[data-title='" + tiddler.title + "']").remove();
+    this.refreshLists();
 };
 
 SPA.prototype._readTiddlerForm = function(selector, tiddler) {
@@ -410,26 +406,16 @@ SPA.prototype._readTiddlerForm = function(selector, tiddler) {
     tiddler.type = $(selector + ' .tiddler-type').val();
 };
 
-SPA.prototype.setFilteredLists = function() {
-    this.filteredLists.all = new Filter(this.space.getLists().all);
-    this.filteredLists.modified = new Filter(this.space.getLists().modified);
-    this.filteredLists.tags = new Filter(this.space.getLists().tags, true);
-};
-
-SPA.prototype.setPrivateFilterList = function() {
-    this.filteredLists.private = new Filter(this.space.getLists().private);
-};
-
-SPA.prototype.getAllList = function(callBack) {
+SPA.prototype.getPublicTiddlers = function(callBack) {
     var context = this; 
     var success = function(data) {
-        context.setFilteredLists();
-        context.renderNavigationLists();
+        context.setPublicFilteredLists();
+        context.renderPublicNavigationLists();
         if (callBack) {
             callBack();
         }
     };
-    this.space.getAllList('', success, this.ajaxError);
+    this.space.getPublicTiddlers(success, this.ajaxError);
 };
 
 SPA.prototype.getPrivateTiddlers = function(callBack) {
@@ -437,7 +423,7 @@ SPA.prototype.getPrivateTiddlers = function(callBack) {
     var context = this; 
     var success = function(data) {
         context.setPrivateFilterList();
-        context.renderNavigationList('private', context.html.generateTiddlersList, context.space.getLists()['private']);
+        context.renderPrivateNavigationList();
         if (callBack) {
             callBack();
         }
@@ -456,38 +442,46 @@ SPA.prototype.switchList = function(name) {
     $('.navigation-list-' + name).show();
 };
 
-SPA.prototype.addToLists = function(tiddler) {
-    //TODO - add to different lists
-    this.space.addToList(tiddler);
-    this.tiddlerFilter.data = this.space.getLists().all;
-    var item = this.html.generateTiddlerItem(tiddler);
-    $('nav .navigation-list').append(item.asHTML());
+SPA.prototype.refreshLists = function() {
+    this.setFilteredLists();
+    this.renderNavigationLists();
 };
 
-SPA.prototype.removeFromList = function(tiddler) {
-    this.space.removeFromList(tiddler);
-    this.tiddlerFilter.data = this.space.getLists().all;
-    $("nav ul li a[href='#" + tiddler.id + "']").parent().remove()
+SPA.prototype.setFilteredLists = function() {
+    this.setPublicFilteredLists();
+    this.setPrivateFilterList();
 };
 
-SPA.prototype.moveToTopOfList = function(tiddler) {
-    this.space.moveToTopOfList(tiddler);
-    this.tiddlerFilter.data = this.space.getLists().all;
-    var original = $("nav ul li a[href='#" + tiddler.id + "']").parent();
-    var item = original.clone();
-    original.remove();
-    $('nav .navigation-list').prepend(item);
+SPA.prototype.setPublicFilteredLists = function() {
+    var sort = new Sort(this.space.lists.tiddlers.public);
+    this.filteredLists.all = new Filter(sort.sort('title'));
+    this.filteredLists.modified = new Filter(sort.sort('-modified'));
+    this.filteredLists.tags = new Filter(this.space.lists.tags, true);
+};
+
+SPA.prototype.setPrivateFilterList = function() {
+    var sort = new Sort(this.space.lists.tiddlers.private);
+    this.filteredLists.private = new Filter(sort.sort('title'));
 };
 
 SPA.prototype.renderNavigationLists = function() {
-    this.renderNavigationList('modified', this.html.generateTiddlersList, this.space.getLists().modified);
-    this.renderNavigationList('all', this.html.generateTiddlersList, this.space.getLists().all);
-    this.renderNavigationList('tags', this.html.generateTagsList, this.space.getLists().tags);    
+    this.renderPublicNavigationLists();
+    this.renderPrivateNavigationList();
+};
+
+SPA.prototype.renderPublicNavigationLists = function() {
+    this.renderNavigationList('modified', this.html.generateTiddlersList, this.filteredLists.modified.data);
+    this.renderNavigationList('all', this.html.generateTiddlersList, this.filteredLists.all.data);
+    this.renderNavigationList('tags', this.html.generateTagsList, this.filteredLists.tags.data);    
+};
+
+SPA.prototype.renderPrivateNavigationList = function() {
+    this.renderNavigationList('private', this.html.generateTiddlersList, this.filteredLists.private.data);    
 };
 
 SPA.prototype.renderNavigationList = function(name, renderer, data) {
     var selector = 'nav .navigation-list-' + name;
-    $(selector).replaceWith(renderer.call(this.html, { name: name, items: data }));
+    $(selector).html(renderer.call(this.html, { name: name, items: data }));
 };
 
 SPA.prototype._getListTemplate = function(name) {
@@ -498,7 +492,7 @@ SPA.prototype._getListTemplate = function(name) {
     return typeof generator === "undefined" ? this.html.generateTiddlersList : generator;
 };
 
-SPA.prototype.toggleMenu = function(tiddlers) {
+SPA.prototype.toggleMenu = function() {
     if ($('nav').hasClass('visible')) {
         this.closeMenu();
     } else {
@@ -506,11 +500,11 @@ SPA.prototype.toggleMenu = function(tiddlers) {
     }
 };
 
-SPA.prototype.openMenu = function(tiddlers) {
+SPA.prototype.openMenu = function() {
     $('nav').addClass('visible');
 };
 
-SPA.prototype.closeMenu = function(tiddlers) {
+SPA.prototype.closeMenu = function() {
     $('nav').removeClass('visible');
 };
 
