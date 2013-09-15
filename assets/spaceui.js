@@ -448,7 +448,6 @@ SPA.prototype.getPrivateTiddlers = function(callBack) {
 SPA.prototype.filter = function(text) {
     var list = $('input:radio[name=searchType]:checked').val();
     var filtered = this.filteredLists[list].filter('title', text);
-    // this.renderNavigationList(list, filtered);
     this.renderNavigationList(list, this._getListTemplate(list), filtered);    
 };
 
