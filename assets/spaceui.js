@@ -391,6 +391,7 @@ SPA.prototype.updatedTiddler = function(tiddler) {
     $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + tiddler.title });
     $("section[data-title='" + tiddler.title + "']").remove();
     this.refreshLists();
+    this.space.removeTiddler(tiddler.title);
     this.closeTiddler(tiddler.originalTitle);
     this.openTiddler(tiddler.title);
 };
