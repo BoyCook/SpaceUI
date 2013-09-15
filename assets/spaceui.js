@@ -383,6 +383,7 @@ SPA.prototype.addedTiddler = function(tiddler) {
     $.growl.notice({ title: 'Success',  message: 'Added tiddler ' + tiddler.title });
     $(this._getSelector(tiddler.title)).remove();
     this.refreshLists();
+    this.closeTiddler(tiddler.originalTitle);
     this.openTiddler(tiddler.title);    
 };
 
@@ -390,6 +391,7 @@ SPA.prototype.updatedTiddler = function(tiddler) {
     $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + tiddler.title });
     $("section[data-title='" + tiddler.title + "']").remove();
     this.refreshLists();
+    this.closeTiddler(tiddler.originalTitle);
     this.openTiddler(tiddler.title);
 };
 
@@ -400,6 +402,7 @@ SPA.prototype.removedTiddler = function(tiddler) {
 };
 
 SPA.prototype._readTiddlerForm = function(selector, tiddler) {
+    tiddler.originalTitle = tiddler.title;
     tiddler.title = $(selector + ' .tiddler-title').val();
     tiddler.text = $(selector + ' .tiddler-text').val();
     tiddler.tags = $(selector + ' .tiddler-tags').val().split(' ');
