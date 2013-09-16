@@ -35,9 +35,6 @@
         "grunt-cli": "0.1.9",
         "grunt-mocha-cov": "0.0.7"
     },
-    "bundledDependencies": [
-        
-    ],
     "engines": {
         "node": ">=0.6"
     }
