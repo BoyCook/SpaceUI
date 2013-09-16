@@ -497,7 +497,7 @@ SPA.prototype._getListTemplate = function(name) {
 };
 
 SPA.prototype.toggleMenu = function() {
-    document.location.href = '#';
+    this.clearAnchor();
     if ($('nav').hasClass('visible')) {
         this.closeMenu();
     } else {
@@ -525,7 +525,12 @@ SPA.prototype.renderTiddler = function(tiddler) {
    $('#content').prepend(this.html.generateViewTiddler(tiddler));	
 };
 
+SPA.prototype.clearAnchor = function() {
+    document.location.href = '#';
+};
+
 SPA.prototype.ajaxError = function(xhr, error, exc) {
+    this.clearAnchor();
     var defaultText = 'There was an unknown error - check your connectivity';
     var text = (xhr.responseText !== '' ? xhr.responseText : (xhr.statusText !== '' ? xhr.statusText : defaultText));
     var msg = 'ERROR (' + xhr.status + ') [' + text + ']';
