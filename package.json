@@ -35,6 +35,7 @@
         "request": "*",
         "should": "latest",
         "grunt": "~0.4.1",
+        "grunt-cli": "~0.1.9",
         "grunt-mocha-cov": "0.0.7"
     },
     "bundledDependencies": [
