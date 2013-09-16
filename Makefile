@@ -3,6 +3,7 @@ TESTS = test/spec
 REPORTER = spec
 XML_FILE = reports/TEST-all.xml
 HTML_FILE = reports/coverage.html
+COVERALLS = ./node_modules/coveralls/bin/coveralls.js
 
 test: test-mocha
 
@@ -20,8 +21,14 @@ test-mocha:
 		--reporter $(REPORTER) \
 		$(TESTS)
 
+test-blanket:
+	@NODE_ENV=test SUI_COV=1 \ mocha \
+		--require blanket \
+		--reporter mocha-lcov-reporter | $(COVERALLS) \
+		$(TESTS)
+
 test-cov: lib-cov
-	@HFS_COV=1 $(MAKE) test-mocha REPORTER=html-cov > $(HTML_FILE)
+	@SUI_COV=1 $(MAKE) test-mocha REPORTER=html-cov > $(HTML_FILE)
 
 lib-cov:
 	jscoverage lib lib-cov
