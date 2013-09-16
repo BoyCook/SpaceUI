@@ -33,6 +33,9 @@ test-cov: lib-cov
 lib-cov:
 	jscoverage lib lib-cov
 
+npm:
+	npm publish ./
+
 clean:
 	rm -f reports/*
 	rm -fr lib-cov
