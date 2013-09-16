@@ -10,20 +10,20 @@
         }
     ],
     "scripts": {
-        "start": "node serve.js",
-        "test": "make test",
+        "start": "echo start",
+        "test": "echo test",
         "predeploy": "echo This will be run before deploying the app",
         "postdeploy": "echo This will be run after deploying the app"
     },
-    "main": "./lib/server",
     "repository": {
         "type": "git",
         "url": "https://github.com/BoyCook/SpaceUI.git"
     },
     "keywords": [
-        "HTTP",
-        "File",
-        "Server"
+        "space",
+        "ui",
+        "SpaceUI",
+        "TiddlySpace"
     ],
     "devDependencies": {
         "coveralls": "latest",
