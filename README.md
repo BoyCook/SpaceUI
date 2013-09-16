@@ -13,9 +13,9 @@ http://spaceui.tiddlyspace.com
 Simply include the spaceui via the space management tool, reachable from `/_space`
 
 ## Actions
-	`make test` runs the tests
-	`tsapp serve` runs the app locally
-	`sh load.sh` pushes the app files to tiddlyspace
+* `make test` runs the tests
+* `tsapp serve` runs the app locally
+* `sh load.sh` pushes the app files to tiddlyspace
 
 ## Dependencies
 http://ksylvest.github.io/jquery-growl
