@@ -8,7 +8,7 @@ describe('Filter', function () {
     before(function() {
         vm.runInThisContext(fs.readFileSync('assets/filter.js'));
         stringData =  ['e', 'b', 'd', 'c', 'a'];
-        objectData = [
+        objectData = [ 
             { key: 'e' },
             { key: 'a' },
             { key: 'd' },

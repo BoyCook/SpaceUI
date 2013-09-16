@@ -37,7 +37,7 @@ Filter.prototype.filterObject = function(key, value) {
 
 function SortedFilter(data, isString, by) {
 	this.sort = new Sort(data);
-	Filter.call(this, sort.sort(by), isString);
+	Filter.call(this, this.sort.sort(by), isString);
 }
 
 SortedFilter.prototype = new Filter();

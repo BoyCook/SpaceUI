@@ -22,30 +22,27 @@ module.exports = function(grunt) {
         all: ['test/spec/*.js']
     },
     mochacov: {
-      options: {
-        // quiet: true,
-        reporter: 'html-cov',
-        require: ['should'],
-        output: 'coverage.html'
+      coverage: {
+        options: {
+          coveralls: {
+            serviceName: 'travis-ci'
+          }
+        }
       },
-      all: ['test/spec/*.js']
-    }    
+      test: {
+        options: {
+          reporter: 'spec'
+        }
+      },
+      options: {
+        require: ['should'],
+        files: 'test/spec/*.js'
+      }
+    }
   });
 
-  // Load the plugin that provides the "uglify" task.
-  // grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-mocha-cov');
-  // grunt.loadNpmTasks('grunt-contrib-jshint');
-  // grunt.loadNpmTasks('grunt-contrib-connect');  
-  // grunt.loadNpmTasks('grunt-istanbul-coverage');
-
-  // grunt.loadNpmTasks('grunt-karma');
-  // grunt.loadNpmTasks('grunt-karma-coveralls');
-
-  // Default task(s).
-  // grunt.registerTask('test', ['connect', 'mocha']);  
-  // grunt.registerTask('test', ['mochacli']);
-  grunt.registerTask('test', ['mochacov']);
-  grunt.registerTask('default', ['mochacli']);
+  grunt.registerTask('travis', ['mochacov:coverage']);
+  grunt.registerTask('test', ['mochacov:test']);
+  grunt.registerTask('default', ['test']);
 };

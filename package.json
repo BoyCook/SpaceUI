@@ -13,7 +13,10 @@
         "start": "node serve.js",
         "test": "make test",
         "predeploy": "echo This will be run before deploying the app",
-        "postdeploy": "echo This will be run after deploying the app"
+        "postdeploy": "echo This will be run after deploying the app",
+        "blanket": {
+            "pattern": ["assets"]
+        }
     },
     "main": "./lib/server",
     "repository": {
@@ -28,20 +31,11 @@
     ],
     "devDependencies": {
         "coveralls": "2.3.0",
-        "mocha-lcov-reporter": "0.0.1",
         "blanket": "1.1.5",
-        "zombie": "*",
         "request": "*",
         "should": "latest",
         "grunt": "~0.4.1",
-        "grunt-contrib-uglify": "~0.2.4",
-        "karma-mocha": "~0.1.0",
-        "grunt-karma": "~0.6.2",
-        "grunt-mocha": "~0.4.1",
-        "grunt-istanbul-coverage": "0.0.2",
-        "grunt-contrib-jshint": "~0.6.4",
-        "grunt-contrib-connect": "~0.5.0",
-        "grunt-mocha-cli": "~1.1.0",
+        "grunt-cli": "~0.1.6",
         "grunt-mocha-cov": "0.0.7"
     },
     "bundledDependencies": [
