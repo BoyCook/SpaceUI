@@ -497,6 +497,7 @@ SPA.prototype._getListTemplate = function(name) {
 };
 
 SPA.prototype.toggleMenu = function() {
+    document.location.href = '#';
     if ($('nav').hasClass('visible')) {
         this.closeMenu();
     } else {
