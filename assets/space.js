@@ -177,6 +177,10 @@ Space.prototype.getPublicTiddlers = function(success, error) {
     this.getRecipe(this.name + '_public', '', callBack, error);
 };
 
+Space.prototype.getTiddlersWithTag = function(tag, success, error) {
+    this.getRecipe(this.name + '_public', '?q=tag:' + tag, success, error);
+};
+
 Space.prototype.getRecipe = function(name, params, success, error) {
     this.http.doGet(this.baseURL + '/recipes/' + name + '/tiddlers' + params, success, error);
 };
