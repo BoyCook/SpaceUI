@@ -1,5 +1,5 @@
 language: node_js
 node_js:
   - '0.10'
-before_script: 'npm install -g istanbul'
+before_script: 'npm install -g istanbul && npm install -g mocha'
 script: 'make test-travis'
