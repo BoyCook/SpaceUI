@@ -514,7 +514,12 @@ SPA.prototype.closeMenu = function() {
 };
 
 SPA.prototype.openTag = function(tag) {
-    $.growl.warning({ title: 'Coming soon...',  message: "Opening tags isn't implemented yet" });
+    // TODO - implement
+    var success = function(data) {
+        $.growl.warning({ title: 'Tag [' + tag + ']',  message: data });
+    };
+    this.space.getTiddlersWithTag(tag, success, this.ajaxError);
+    // $.growl.warning({ title: 'Coming soon...',  message: "Opening tags isn't implemented yet" });
 };
 
 SPA.prototype._getSelector = function(title) {
@@ -530,7 +535,7 @@ SPA.prototype.clearAnchor = function() {
 };
 
 SPA.prototype.ajaxError = function(xhr, error, exc) {
-    this.clearAnchor();
+    document.location.href = '#';
     var defaultText = 'There was an unknown error - check your connectivity';
     var text = (xhr.responseText !== '' ? xhr.responseText : (xhr.statusText !== '' ? xhr.statusText : defaultText));
     var msg = 'ERROR (' + xhr.status + ') [' + text + ']';
