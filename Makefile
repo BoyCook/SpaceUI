@@ -15,7 +15,9 @@ test-mocha:
 
 test-travis: test-cov coveralls clean
 
-test-cov:
+test-cov: istanbul clean
+
+istanbul:
 	istanbul cover _mocha -- -R spec test/spec
 
 coveralls:
