@@ -41,6 +41,7 @@ function load_explicit() {
 	tsapp push spaceui filter.js
 	tsapp push spaceui space.js
 	tsapp push spaceui spaceui.js
+	tsapp push spaceui default.js
 	tsapp push spaceui spaceui.css
 	tsapp push spaceui uilayout.css	
 }
