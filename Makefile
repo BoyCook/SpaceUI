@@ -16,7 +16,7 @@ test-mocha:
 test-travis: test-cov coveralls clean
 
 test-cov:
-	istanbul cover _mocha -- -R spec test/spec
+	istanbul cover node_modules/.bin/_mocha -- -R spec test/spec
 
 coveralls:
 	cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
