@@ -13,7 +13,7 @@ test-mocha:
 		--reporter $(REPORTER) \
 		$(TESTS)
 
-test-travis: test-cov coveralls clean
+test-travis: istanbul coveralls clean
 
 test-cov: istanbul clean
 
