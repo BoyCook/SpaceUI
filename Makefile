@@ -13,9 +13,7 @@ test-mocha:
 		--reporter $(REPORTER) \
 		$(TESTS)
 
-test-travis: istanbul coveralls clean
-
-test-cov: istanbul clean
+test-cov: istanbul
 
 istanbul:
 	istanbul cover _mocha -- -R spec test/spec
