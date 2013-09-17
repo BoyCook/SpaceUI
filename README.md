@@ -20,3 +20,6 @@ Simply include the spaceui via the space management tool, reachable from `/_spac
 
 ## Dependencies
 http://ksylvest.github.io/jquery-growl
+
+https://github.com/gotwarlost/istanbul/issues/90
+https://github.com/gotwarlost/istanbul/issues/44

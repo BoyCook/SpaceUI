@@ -1,11 +1,11 @@
 var should = require('should');
 var fs = require('fs');
 var vm = require('vm');
+var Sort = require('../../assets/sort.js').Sort;
 
 describe('Sort', function () {
     var data = undefined;
     before(function() {
-        vm.runInThisContext(fs.readFileSync('assets/sort.js'));
         data = [
             { key: 'e' },
             { key: 'a' },

@@ -20,3 +20,8 @@ Sort.prototype.sort = function(key) {
 		return 0;
 	});
 };
+
+if (!(typeof exports === "undefined")) {
+    exports.Sort = Sort;
+}
+

@@ -46,4 +46,7 @@ SortedFilter.prototype.constructor = SortedFilter;
 //     this.countDown();
 // };
 
-
+if (!(typeof exports === "undefined")) {
+    exports.Filter = Filter;
+    exports.SortedFilter = SortedFilter;
+}

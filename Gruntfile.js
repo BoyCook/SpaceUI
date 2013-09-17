@@ -21,6 +21,12 @@ module.exports = function(grunt) {
         },
         all: ['test/spec/*.js']
     },
+    blanket: {
+      options: {},
+      files: {
+        'assets-cov': ['assets'],
+      },
+    },    
     mochacov: {
       coverage: {
         options: {
@@ -29,6 +35,15 @@ module.exports = function(grunt) {
           }
         }
       },
+      coveragemanual: {
+        options: {
+          coveralls: {
+            serviceName: 'travis-ci',
+            serviceJobId: '000000001',
+            repoToken: 'DkSQyzanXTf3LMBZ3MmvTCY0oDj5uxAuA'
+          }
+        }
+      },      
       test: {
         options: {
           reporter: 'spec'
@@ -42,7 +57,9 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-mocha-cov');
+  grunt.loadNpmTasks('grunt-blanket');
   grunt.registerTask('travis', ['mochacov:coverage']);
   grunt.registerTask('test', ['mochacov:test']);
+  grunt.registerTask('cov', ['mochacov:coveragemanual']);
   grunt.registerTask('default', ['test']);
 };

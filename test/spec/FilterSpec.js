@@ -1,12 +1,12 @@
 var should = require('should');
 var fs = require('fs');
 var vm = require('vm');
+var Filter = require('../../assets/filter.js').Filter;
 
 describe('Filter', function () {
     var stringData = undefined;
     var objectData = undefined;
     before(function() {
-        vm.runInThisContext(fs.readFileSync('assets/filter.js'));
         stringData =  ['e', 'b', 'd', 'c', 'a'];
         objectData = [ 
             { key: 'e' },
