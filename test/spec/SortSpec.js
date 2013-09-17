@@ -1,6 +1,4 @@
 var should = require('should');
-var fs = require('fs');
-var vm = require('vm');
 var Sort = require('../../assets/sort.js').Sort;
 
 describe('Sort', function () {

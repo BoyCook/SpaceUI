@@ -1,6 +1,4 @@
 var should = require('should');
-var fs = require('fs');
-var vm = require('vm');
 var Filter = require('../../assets/filter.js').Filter;
 
 describe('Filter', function () {

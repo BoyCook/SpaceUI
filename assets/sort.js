@@ -24,4 +24,3 @@ Sort.prototype.sort = function(key) {
 if (!(typeof exports === "undefined")) {
     exports.Sort = Sort;
 }
-
