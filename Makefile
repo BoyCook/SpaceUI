@@ -1,9 +1,9 @@
 
 TESTS = test/spec
 REPORTER = spec
-XML_FILE = reports/TEST-all.xml
-HTML_FILE = reports/coverage.html
+COVERAGE_REPORT = ./coverage/lcov.info
 COVERALLS = ./node_modules/coveralls/bin/coveralls.js
+ASSETS := $(wildcard assets/*)
 
 test: test-mocha
 
@@ -16,10 +16,13 @@ test-mocha:
 test-cov: istanbul
 
 istanbul:
-	istanbul cover _mocha -- -R spec test/spec
+	istanbul cover _mocha -- -R spec $(TESTS)
 
 coveralls:
-	cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+	cat $(COVERAGE_REPORT) | $(COVERALLS)
+
+push:
+	@for asset in $(ASSETS); do tsapp push_hard spaceui `echo $$asset | cut -d '/' -f 2` ; done
 
 npm:
 	npm publish ./
