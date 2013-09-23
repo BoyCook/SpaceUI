@@ -178,7 +178,7 @@ Space.prototype.getPublicTiddlers = function(success, error) {
 };
 
 Space.prototype.getTiddlersWithTag = function(tag, success, error) {
-    this.getRecipe(this.name + '_public', '?q=tag:' + tag, success, error);
+    this.getRecipe(this.name + '_public', '?select=tag:' + tag, success, error);
 };
 
 Space.prototype.getRecipe = function(name, params, success, error) {
@@ -228,3 +228,7 @@ Space.prototype.toFull = function(v) {
     }
     return v;
 };
+
+if (!(typeof exports === "undefined")) {
+    exports.Space = Space;
+}
