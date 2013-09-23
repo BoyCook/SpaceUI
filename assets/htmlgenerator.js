@@ -88,3 +88,7 @@ HTMLGenerator.prototype._registerHandlers = function() {
 		}
 	});			
 };
+
+if (!(typeof exports === "undefined")) {
+    exports.HTMLGenerator = HTMLGenerator;
+}

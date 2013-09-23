@@ -1,6 +1,12 @@
 language: node_js
 node_js:
   - '0.10'
+tiddlyspace_username: 
+	secure: "WSe/BnLGq4922pzlVu1Q/xAosY/FMm02jWEObvK3ugxVZvYoGAkd2446gcImzrHQ+QiqtD2+FiXM5wqSlX+uzKKu2KrZzmuYJPNWlhfwuLD84HUyGKUpFQ6WFiGjQW0ryH1BNyS7Fz+YZmJavlvcsdnGppSTkOH5i11o1A5JzAs="
+tiddlyspace_password: 
+	secure: "W54GgWZveoO2mEP/svwbhMkT4iDD8Ur2nQHsrjW7xvW/xR7QllFc/kwbCDL+NbVtqv+ABfr5o20Ap6q5YILIGp8k+ChNCLPYQq+krGiStbrYRgbVRlOo4CPC7ztaWdTeQgf3j+C13o7QaETP2uZcJmQ4zmO/ufi1y1oaZ5Ss1q4="
 before_script: 'npm install -g istanbul && npm install -g mocha'
 script: 'make test-cov'
-after_success: 'make coveralls'
+after_success: 
+	- 'make coveralls'
+	- 'make auth'

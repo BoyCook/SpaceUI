@@ -47,5 +47,5 @@ function load_explicit() {
 }
 
 # load_dir assets
-# load_statics_explicit
-load_explicit
+load_statics_explicit
+# load_explicit

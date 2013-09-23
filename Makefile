@@ -21,11 +21,19 @@ istanbul:
 coveralls:
 	cat $(COVERAGE_REPORT) | $(COVERALLS)
 
+cov-html: test-cov html-cov-report
+
+html-cov-report: 
+	istanbul report html	
+
 push:
 	@for asset in $(ASSETS); do tsapp push_hard spaceui `echo $$asset | cut -d '/' -f 2` ; done
 
 npm:
 	npm publish ./
+
+auth:
+	echo "auth_token:$(tiddlyspace_username):$(tiddlyspace_password)" >> .tsapp
 
 clean:
 	rm -rf ./coverage

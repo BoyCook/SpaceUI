@@ -42,3 +42,8 @@ HTTP.prototype.doAjax = function(url, method, contentType, dataType, data, succe
     }
     $.ajax(config);     
 }
+
+if (!(typeof exports === "undefined")) {
+    exports.HTTP = HTTP;
+}
+
