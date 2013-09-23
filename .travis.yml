@@ -1,12 +1,12 @@
-language: node_js
 node_js:
-  - '0.10'
-tiddlyspace_username: 
-	secure: "WSe/BnLGq4922pzlVu1Q/xAosY/FMm02jWEObvK3ugxVZvYoGAkd2446gcImzrHQ+QiqtD2+FiXM5wqSlX+uzKKu2KrZzmuYJPNWlhfwuLD84HUyGKUpFQ6WFiGjQW0ryH1BNyS7Fz+YZmJavlvcsdnGppSTkOH5i11o1A5JzAs="
-tiddlyspace_password: 
-	secure: "W54GgWZveoO2mEP/svwbhMkT4iDD8Ur2nQHsrjW7xvW/xR7QllFc/kwbCDL+NbVtqv+ABfr5o20Ap6q5YILIGp8k+ChNCLPYQq+krGiStbrYRgbVRlOo4CPC7ztaWdTeQgf3j+C13o7QaETP2uZcJmQ4zmO/ufi1y1oaZ5Ss1q4="
-before_script: 'npm install -g istanbul && npm install -g mocha'
-script: 'make test-cov'
-after_success: 
-	- 'make coveralls'
-	- 'make auth'
+- "0.10"
+language: node_js
+tiddlyspace_username:
+  secure: ZM2RSwbykNA5FQaqi1mvMONBOhuWX8FFVvK6wMQ5LbDXne1/880uZxbPbaUPvRq+vjuotQEU3AL7o8xyKNfffvvVM3quLYxIFzZmNp9q2faDJB/bSg00gNWB5aAeqWhg9gfoo0mPzq/+MZV3NIRKns2m6JRHfoxzR9PLy/LM19c=
+tiddlyspace_password:
+  secure: Kd4qbeNHOKWEf75oKIlTK6qoN/0IfTBIHa+fpxAZGZPRdPQ/tuFonLOyLcoGu2jG4WF1yKhYA1ms28RznwouFhVjvtWkS2QhBGqbAwabCHrzGtsCBBygdvDVo0OrPl/VFrmmbFlCvC5p24wvc2v4mD8/0jqJb54BXNQXLYyLO0s=
+before_script: npm install -g istanbul && npm install -g mocha
+script: make test-cov
+after_success:
+  - make coveralls
+  - make auth

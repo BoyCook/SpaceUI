@@ -35,5 +35,8 @@ npm:
 auth:
 	echo "auth_token:$(tiddlyspace_username):$(tiddlyspace_password)" >> .tsapp
 
+check:
+	travis-lint .travis.yml
+
 clean:
 	rm -rf ./coverage
