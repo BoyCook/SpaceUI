@@ -1,12 +1,16 @@
-node_js:
+node_js: 
 - "0.10"
 language: node_js
-tiddlyspace_username:
-  secure: ZM2RSwbykNA5FQaqi1mvMONBOhuWX8FFVvK6wMQ5LbDXne1/880uZxbPbaUPvRq+vjuotQEU3AL7o8xyKNfffvvVM3quLYxIFzZmNp9q2faDJB/bSg00gNWB5aAeqWhg9gfoo0mPzq/+MZV3NIRKns2m6JRHfoxzR9PLy/LM19c=
-tiddlyspace_password:
-  secure: Kd4qbeNHOKWEf75oKIlTK6qoN/0IfTBIHa+fpxAZGZPRdPQ/tuFonLOyLcoGu2jG4WF1yKhYA1ms28RznwouFhVjvtWkS2QhBGqbAwabCHrzGtsCBBygdvDVo0OrPl/VFrmmbFlCvC5p24wvc2v4mD8/0jqJb54BXNQXLYyLO0s=
-before_script: npm install -g istanbul && npm install -g mocha
+env: 
+  global: 
+  matrix: 
+  - secure: XuI+q48xC4Rv4uEqXTMFd6Ok8E03iKU8Pae2kWcGH3IVfb3PL+1lVqcC/zFuLL7k4yB0QWSnGb8OLQYbuyFSd8ykTwdDMLWIEfXEOnzHs0xuuXo46lfRSicaisRg8tZau/coR5eq0RHfPzhe4mS6Tju37D/3+8vVXiL59DDgOCU=
+  - secure: NGuRML6rtOsQVjVQGTmlYGRExc+ug/SVtYHWwKaEyA78ZzwyCJChIHocrTzNxMzKUX6ALGjUEOnRXrbKqvDhtZcEmsk/4qpkpRLxGkKaZ6md9tiHiZo1vYlxgkgCbJaiP7wA5nUJVqP1RQHAqCQzdSZNt8pUdbMrkLmHWCrQCzg=
+before_script: 
+- npm install -g istanbul
+- npm install -g mocha
+- pip install -U tsapp
 script: make test-cov
-after_success:
-  - make coveralls
-  - make auth
+after_success: 
+- make coveralls
+- make auth

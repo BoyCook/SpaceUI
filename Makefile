@@ -32,8 +32,10 @@ push:
 npm:
 	npm publish ./
 
-auth:
-	echo "auth_token:$(tiddlyspace_username):$(tiddlyspace_password)" >> .tsapp
+auth: authfile
+
+authfile:
+	echo "auth_token:$(TIDDLYSPACE_USERNAME):$(TIDDLYSPACE_PASSWORD)" >> .tsapp
 
 check:
 	travis-lint .travis.yml
