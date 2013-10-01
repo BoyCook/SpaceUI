@@ -29,6 +29,12 @@ html-cov-report:
 push:
 	@for asset in $(ASSETS); do tsapp push_hard spaceui `echo $$asset | cut -d '/' -f 2` ; done
 
+push-assets:
+	echo assets
+
+push-custom:
+	echo special
+
 npm:
 	npm publish ./
 

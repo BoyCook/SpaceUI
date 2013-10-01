@@ -290,7 +290,11 @@ SPA.prototype.updateTiddler = function(tiddler) {
     var selector = this._getSelector(tiddler.title);
     this._readTiddlerForm(selector, tiddler);
     //TODO: can a tiddler switch between public/private (or is it delete/copy)
-    this.space.saveTiddler(tiddler, this.updatedTiddler, this.ajaxError);
+    var callBack = this.updatedTiddler;
+    if (tiddler.title !== tiddler.originalTitle) {
+        callBack = this.renamedTiddler;
+    }
+    this.space.saveTiddler(tiddler, callBack, this.ajaxError);
 };
 
 SPA.prototype.deleteTiddler = function(title) {
@@ -309,11 +313,25 @@ SPA.prototype.addedTiddler = function(tiddler) {
 
 SPA.prototype.updatedTiddler = function(tiddler) {
     $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + tiddler.title });
-    $("section[data-title='" + tiddler.title + "']").remove();
+    $("section[data-title='" + tiddler.originalTitle + "']").remove();
     this.refreshLists();
-    this.space.removeTiddler(tiddler.title);
+    this.space.removeTiddler(tiddler.originalTitle);
     this.closeTiddler(tiddler.originalTitle);
     this.openTiddler(tiddler.title);
+};
+
+SPA.prototype.renamedTiddler = function(tiddler) {
+    $.growl.notice({ title: 'Success',  message: 'Updated tiddler ' + tiddler.title });
+    $("section[data-title='" + tiddler.originalTitle + "']").remove();
+    this.openTiddler(tiddler.title);
+    // this.deleteTiddler(tiddler.originalTitle);
+    // tiddler.type = 'application/json';
+    var del = { 
+        title: tiddler.originalTitle,
+        bag: tiddler.bag,
+        type: 'application/json'
+    };
+    this.space.deleteTiddler(del, this.removedTiddler, this.ajaxError);    
 };
 
 SPA.prototype.removedTiddler = function(tiddler) {
