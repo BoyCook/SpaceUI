@@ -32,18 +32,18 @@ function load_statics_explicit() {
 }
 
 function load_explicit() {
-	tsapp push spaceui index.html
-	tsapp push spaceui dateago.js
-	tsapp push spaceui html.js
-	tsapp push spaceui htmlgenerator.js
-	tsapp push spaceui http.js
-	tsapp push spaceui sort.js
-	tsapp push spaceui filter.js
-	tsapp push spaceui space.js
-	tsapp push spaceui spaceui.js
-	tsapp push spaceui default.js
-	tsapp push spaceui spaceui.css
-	tsapp push spaceui uilayout.css	
+	tsapp push_hard spaceui index.html
+	tsapp push_hard spaceui dateago.js
+	tsapp push_hard spaceui html.js
+	tsapp push_hard spaceui htmlgenerator.js
+	tsapp push_hard spaceui http.js
+	tsapp push_hard spaceui sort.js
+	tsapp push_hard spaceui filter.js
+	tsapp push_hard spaceui space.js
+	tsapp push_hard spaceui spaceui.js
+	tsapp push_hard spaceui default.js
+	tsapp push_hard spaceui spaceui.css
+	tsapp push_hard spaceui uilayout.css	
 }
 
 # load_dir assets

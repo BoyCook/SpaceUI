@@ -370,7 +370,7 @@ SPA.prototype.getPrivateTiddlers = function(callBack) {
             callBack();
         }
     };
-    this.space.getPrivateTiddlers(success, this.ajaxError);
+    this.space.getPrivateTiddlers(success, this.silentError);
 };
 
 SPA.prototype.filter = function(text) {
@@ -474,6 +474,14 @@ SPA.prototype.renderTiddler = function(tiddler) {
 
 SPA.prototype.clearAnchor = function() {
     document.location.href = '#';
+};
+
+SPA.prototype.silentError = function(xhr, error, exc) {
+    document.location.href = '#';
+    var defaultText = 'There was an unknown error - check your connectivity';
+    var text = (xhr.responseText !== '' ? xhr.responseText : (xhr.statusText !== '' ? xhr.statusText : defaultText));
+    var msg = 'ERROR (' + xhr.status + ') [' + text + ']';    
+    console.log(msg);
 };
 
 SPA.prototype.ajaxError = function(xhr, error, exc) {
