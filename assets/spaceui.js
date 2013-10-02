@@ -41,8 +41,8 @@ SPA.prototype._loadSiteTitle = function() {
                     title += ' - ' + subTitleTiddler.text;
                     $('title').text(title);
                     $('header h1').text(title);                
-            }, context.ajaxError);                    
-    }, context.ajaxError);        
+            }, context.silentError);                    
+    }, context.silentError);        
 };
 
 SPA.prototype._loadDefaults = function(callBack) {
@@ -79,7 +79,15 @@ SPA.prototype._loadDefaults = function(callBack) {
             var items = context._stripChars(text, '[[', ']]');
             var len = items.length -1;
             new Loader(items, callBack).execute();
-    }, this.ajaxError);        
+    }, function(xhr, error, exc) {
+        var defaultText = 'There was an unknown error - check your connectivity';
+        var text = (xhr.responseText !== '' ? xhr.responseText : (xhr.statusText !== '' ? xhr.statusText : defaultText));
+        var msg = 'ERROR (' + xhr.status + ') [' + text + ']';    
+        console.log(msg);    
+        if (callBack) {
+            callBack();
+        }
+    });        
 };
 
 SPA.prototype._stripChars = function(text, left, right) {
