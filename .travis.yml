@@ -9,7 +9,7 @@ env:
 before_script: 
 - npm install -g istanbul
 - npm install -g mocha
-- pip install -U tsapp
+# - pip install -U tsapp
 script: make test-cov
 after_success: 
 - make coveralls
