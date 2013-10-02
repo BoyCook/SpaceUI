@@ -1,5 +1,5 @@
 var should = require('should');
-var Sort = require('../../assets/sort.js').Sort;
+var Sort = require('../assets/sort.js').Sort;
 
 describe('Sort', function () {
     var data = undefined;

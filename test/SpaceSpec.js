@@ -1,8 +1,8 @@
 var should = require('should');
 var fs = require('fs');
 var vm = require('vm');
-var HTTP = require('../../assets/http.js').HTTP;
-var Space = require('../../assets/space.js').Space;
+var HTTP = require('../assets/http.js').HTTP;
+var Space = require('../assets/space.js').Space;
 
 describe('Space', function () {
 	var space = undefined;

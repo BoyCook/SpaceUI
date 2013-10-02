@@ -1,5 +1,5 @@
 var should = require('should');
-var Filter = require('../../assets/filter.js').Filter;
+var Filter = require('../assets/filter.js').Filter;
 
 describe('Filter', function () {
     var stringData = undefined;

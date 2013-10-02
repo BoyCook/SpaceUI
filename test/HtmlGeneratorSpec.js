@@ -1,7 +1,7 @@
 var should = require('should');
 var fs = require('fs');
 var vm = require('vm');
-var HTMLGenerator = require('../../assets/htmlgenerator.js').HTMLGenerator;
+var HTMLGenerator = require('../assets/htmlgenerator.js').HTMLGenerator;
 
 describe('HTMLGenerator', function () {
 	var html = undefined;
