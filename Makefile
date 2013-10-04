@@ -1,5 +1,5 @@
 
-TESTS = test
+TESTS = test/*Spec.js
 REPORTER = spec
 COVERAGE_REPORT = ./coverage/lcov.info
 COVERALLS = ./node_modules/coveralls/bin/coveralls.js
