@@ -85,9 +85,7 @@ Space.prototype._calculateTags = function(tiddlers) {
         var tiddler = tiddlers[i];
         for (var x=0,tagLen=tiddler.tags.length; x < tagLen; x++) {
             var tag = tiddler.tags[x];
-            if (tag === '') {
-
-            } else if (tag.indexOf(',') > -1) {
+            if (tag.indexOf(',') > -1) {
                 var splitTag = tag.split(',');
                 for (var y=0,splitTagLen=splitTag.length; y < splitTagLen; y++) {
                     if (tags.indexOf(splitTag[y]) === -1) {
