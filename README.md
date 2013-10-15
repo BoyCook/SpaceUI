@@ -25,6 +25,7 @@ http://ksylvest.github.io/jquery-growl
 https://github.com/gotwarlost/istanbul/issues/90
 https://github.com/gotwarlost/istanbul/issues/44
 
+## Travis
 `travis encrypt MY_SECRET_ENV=super_secret --add env.matrix`
 `sudo travis encrypt {var_name}={var_value} --add {varname}`
 `sudo travis encrypt TIDDLYSPACE_USERNAME={var_value} --add env.matrix`
