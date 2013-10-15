@@ -63,7 +63,7 @@ Space.prototype.getSummaryTiddler = function(title) {
 Space.prototype._getTiddlerByTitle = function(title, tiddlers) {
     for (var i=0,len=tiddlers.length; i < len; i++) {
         var item = tiddlers[i];
-        if (item.title == title) {
+        if (item.title === title) {
             return item;
         }
     }    
@@ -85,16 +85,16 @@ Space.prototype._calculateTags = function(tiddlers) {
         var tiddler = tiddlers[i];
         for (var x=0,tagLen=tiddler.tags.length; x < tagLen; x++) {
             var tag = tiddler.tags[x];
-            if (tag == '') {
+            if (tag === '') {
 
             } else if (tag.indexOf(',') > -1) {
                 var splitTag = tag.split(',');
                 for (var y=0,splitTagLen=splitTag.length; y < splitTagLen; y++) {
-                    if (tags.indexOf(splitTag[y]) == -1) {
+                    if (tags.indexOf(splitTag[y]) === -1) {
                         tags.push(splitTag[y]);
                     }                    
                 }
-            } else if (tags.indexOf(tag) == -1) {
+            } else if (tags.indexOf(tag) === -1) {
                 tags.push(tag);
             }
         }
@@ -141,7 +141,7 @@ Space.prototype.removeSummaryTiddler = function(tiddler) {
 Space.prototype._removeFromList = function(tiddler, list) {
     for (var i=0,len=list.length; i < len; i++) {
         var item = list[i];
-        if (item.title == tiddler.title) {
+        if (item.title === tiddler.title) {
             list.splice(i, 1);
             return;
         }
@@ -223,7 +223,7 @@ Space.prototype.getDate = function() {
 };
 
 Space.prototype.toFull = function(v) {
-    if (v.length == 1) {
+    if (v.length === 1) {
         v = "0" + v;
     }
     return v;
