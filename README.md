@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/BoyCook/SpaceUI.png?branch=master)](https://travis-ci.org/BoyCook/SpaceUI)
 [![Coverage Status](https://coveralls.io/repos/BoyCook/SpaceUI/badge.png)](https://coveralls.io/r/BoyCook/SpaceUI)
+[![Code Climate](https://codeclimate.com/repos/525d55d9c7f3a335da039f25/badges/21401df2e908de70bff3/gpa.png)](https://codeclimate.com/repos/525d55d9c7f3a335da039f25/feed)
 [![Dependency Status](https://gemnasium.com/BoyCook/SpaceUI.png)](https://gemnasium.com/BoyCook/SpaceUI)
 
 [![NPM](https://nodei.co/npm/space-ui.png?downloads=true)](https://nodei.co/npm/space-ui) 
