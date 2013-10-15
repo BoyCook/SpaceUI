@@ -36,7 +36,7 @@ Space.prototype._fetchTiddler = function(summary, success, error) {
         if (success) {
             success.call(context.parent, tiddler);
         }
-    }
+    };
 	this.http.doGet(this.baseURL + '/bags/' + summary.bag + '/tiddlers/' + summary.title + '?render=1', callBack, error);
 };
 
@@ -202,12 +202,12 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
         if (success) {
             success.call(context.parent, tiddler);
         }
-    }
+    };
     this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, callBack, error);
 };
 
 Space.prototype.isPrivate = function(tiddler) {
-    return tiddler.bag.indexOf('_private') > -1
+    return tiddler.bag.indexOf('_private') > -1;
 };
 
 Space.prototype.getDate = function() {
