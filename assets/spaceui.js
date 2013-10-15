@@ -77,7 +77,6 @@ SPA.prototype._loadDefaults = function(callBack) {
         function(defaultTiddlers) {
             var text = context._stripDoubleWhiteSpaces(context._stripNewLines(defaultTiddlers.text));
             var items = context._stripChars(text, '[[', ']]');
-            var len = items.length -1;
             new Loader(items, callBack).execute();
     }, function(xhr, error, exc) {
         var defaultText = 'There was an unknown error - check your connectivity';
@@ -219,6 +218,7 @@ SPA.prototype.isFetch = function(tiddler) {
         case "text/css":
         case "application/vnd.ms-fontobject":
         case "image/svg+xml":
+            break;
         default:
             fetch = true;
             break;                  
@@ -243,7 +243,7 @@ SPA.prototype.getTiddlerJSON = function(title) {
         text: "Type the text for '" + title + "'",
         tags: ''
     };    
-}
+};
 
 SPA.prototype.newTiddler = function(title) {
     var selector = this._getSelector(title);
