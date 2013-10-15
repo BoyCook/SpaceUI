@@ -32,7 +32,7 @@ DateAgo.prototype.get = function() {
     } else if (diff > this.units.year) { // > 1 year (1000*60*60*24*52)
         return this.calculate("year", this.units.year, "month", this.units.month, diff);
     }
-    return diff + " ms ago"
+    return diff + " ms ago";
 };
 
 DateAgo.prototype.calculate = function(unitName, unit, lowerUnitName, lowerUnit, diff) {

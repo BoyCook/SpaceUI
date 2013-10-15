@@ -5,7 +5,7 @@ function Sort(data) {
 
 Sort.prototype.sort = function(key) {
 	var asc = true;
-	if (key.indexOf('-') == 0) {
+	if (key.indexOf('-') === 0) {
 		key = key.substring(1);
 		asc = false;
 	}

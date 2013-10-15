@@ -1,4 +1,4 @@
-var app = undefined;
+var app;
 var Router = Backbone.Router.extend({
     initialized: true,
     routes: {
@@ -18,7 +18,7 @@ var Router = Backbone.Router.extend({
         "minimize/:tiddler":         "minimze",
         "fullscreen":                "fullscreen"
     },
-    menu: function(title) {
+    menu: function() {
         app.toggleMenu(); 
     },        
     closeall: function() {
@@ -61,7 +61,7 @@ var Router = Backbone.Router.extend({
 
 $(document).ready(function () {
     var loaded = function() {
-        new Router();
+        var router = new Router();
         Backbone.history.start();
     };
     app = new SPA(window.location.hostname, window.location.port);
