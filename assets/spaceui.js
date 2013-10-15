@@ -54,14 +54,14 @@ SPA.prototype._loadDefaults = function(callBack) {
         this.execute = function(index) {
             var loader = this;
             index = typeof index === "undefined" ? this.cnt : index;
-            if (index == loader.titles.length) {
+            if (index === loader.titles.length) {
                 return;
             }
             var next = function(tiddler) {
                 context._tiddlerLoaded(tiddler);
                 loader.cnt++;
                 //It's done
-                if (loader.cnt == loader.titles.length && loader.callBack) {
+                if (loader.cnt === loader.titles.length && loader.callBack) {
                     loader.callBack();
                 } else {
                     //Do next
@@ -156,10 +156,10 @@ SPA.prototype.openTiddler = function(title) {
     if (typeof summary !== "undefined") {
         var tiddler = this.space.getTiddler(summary.title);
         var fetch = this.isDoFetch(summary, tiddler);
-        if (fetch == true) {
+        if (fetch === true) {
             this.space.fetchTiddler(summary, this._tiddlerLoaded, this.ajaxError);        
         } else {
-            if ($(this._getSelector(summary.title)).length == 0) {
+            if ($(this._getSelector(summary.title)).length === 0) {
                 this.renderTiddler(typeof tiddler !== "undefined" ? tiddler : summary); 
             }
             //else anchor click jumps to tiddler
@@ -251,7 +251,7 @@ SPA.prototype.newTiddler = function(title) {
     var tiddler = this.space.getTiddler(summary.title);
     if (typeof tiddler === "undefined") {
         //If box isn't already open
-        if ($(selector).length == 0) {
+        if ($(selector).length === 0) {
             var html = this.html.generateEditTiddler(summary);
             $('#content').prepend(html);  
         }
