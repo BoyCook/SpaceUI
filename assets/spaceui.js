@@ -160,6 +160,7 @@ SPA.prototype.openTiddler = function(title) {
         } else {
             if ($(this._getSelector(summary.title)).length === 0) {
                 this.renderTiddler(typeof tiddler !== "undefined" ? tiddler : summary); 
+                this._fixTiddlerTextURLs(tiddler);    
             }
             //else anchor click jumps to tiddler
         }
@@ -173,6 +174,7 @@ SPA.prototype._tiddlerLoaded = function(tiddler) {
     this._setTiddlerDate(tiddler);
     this._setLoadedCache(tiddler);
     this.renderTiddler(tiddler);
+    this._fixTiddlerTextURLs(tiddler);    
 };
 
 SPA.prototype._setLoadedCache = function(tiddler) {
@@ -182,6 +184,17 @@ SPA.prototype._setLoadedCache = function(tiddler) {
 
 SPA.prototype._setTiddlerDate = function(tiddler) {
     tiddler.displaydate = new DateAgo(new Date(), this._parseDate(tiddler.modified)).get();    
+};
+
+SPA.prototype._fixTiddlerTextURLs = function(tiddler) {
+    $("section[data-title='" + tiddler.title + "'] a.wikilink").each(function(){
+        var href = $(this).attr('href');
+        if (href.indexOf('http') === 0) {
+            $(this).attr('target', '_blank');
+        } else {
+            $(this).attr('href', '#' + href);
+        }
+    });
 };
 
 SPA.prototype._parseDate = function(date) {

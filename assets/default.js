@@ -16,7 +16,8 @@ var Router = Backbone.Router.extend({
         "newtiddler":                "newtidder", 
         "maximize/:tiddler":         "maximize",
         "minimize/:tiddler":         "minimze",
-        "fullscreen":                "fullscreen"
+        "fullscreen":                "fullscreen",
+        ":title":                    "open", 
     },
     menu: function() {
         app.toggleMenu(); 
