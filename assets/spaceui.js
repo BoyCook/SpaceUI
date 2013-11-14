@@ -187,7 +187,7 @@ SPA.prototype._setTiddlerDate = function(tiddler) {
 };
 
 SPA.prototype._fixTiddlerTextURLs = function(tiddler) {
-    $("section[data-title='" + tiddler.title + "'] a.wikilink").each(function(){
+    $("section[data-title='" + tiddler.title + "'] article a").each(function(){
         var href = $(this).attr('href');
         if (href.indexOf('http') === 0) {
             $(this).attr('target', '_blank');
