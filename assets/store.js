@@ -1,13 +1,13 @@
 /*
     Some overrides for storing objects
 */
-Storage.prototype.setItem = function(key, obj) {
-    return this.setItem(key, JSON.stringify(obj))
-};
+// Storage.prototype.setItem = function(key, obj) {
+//     return this.setItem(key, JSON.stringify(obj));
+// };
 
-Storage.prototype.getItem = function(key) {
-    return JSON.parse(this.getItem(key))
-};
+// Storage.prototype.getItem = function(key) {
+//     return JSON.parse(this.getItem(key));
+// };
 
 /*
     Space Store wrapper
@@ -29,15 +29,15 @@ Store.hasStorage = function(title) {
 };
 
 Store.prototype.getTiddler = function(title) {
-    return localStorage.getItem(this.prefix = 'tiddlyspace-tiddler-' + title);
+    return JSON.parse(localStorage.getItem(this.prefix + title));
 };
 
 Store.prototype.setTiddler = function(tiddler) {
-    localStorage.setItem(this.prefix = 'tiddlyspace-tiddler-' + tiddler.title, tiddler);
+    localStorage.setItem(this.prefix + tiddler.title, JSON.stringify(tiddler));
 };
 
 Store.prototype.removeTiddler = function(title) {
-    localStorage.removeItem(this.prefix = 'tiddlyspace-tiddler-' + title);
+    localStorage.removeItem(this.prefix + title);
 };
 
 Store.prototype.getTiddlers = function() {

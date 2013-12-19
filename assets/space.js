@@ -10,6 +10,7 @@ function Space(baseURL, name, parent) {
         },
         tags: []
     };
+    this.store = new Store();
     this.http = new HTTP();
     this.parent = parent;
 }
@@ -41,7 +42,8 @@ Space.prototype._fetchTiddler = function(summary, success, error) {
 };
 
 Space.prototype.getTiddler = function(title) {
-    return this.tiddlers[title];
+    // return this.tiddlers[title];
+    return this.store.getTiddler(title);
 };
 
 Space.prototype.removeTiddler = function(title) {
@@ -49,6 +51,9 @@ Space.prototype.removeTiddler = function(title) {
 };
 
 Space.prototype.setTiddler = function(tiddler) {
+    this.store.setTiddler(tiddler);
+    // this.store.setTiddler({"title": "tiddler1"});
+    // localStorage.setItem("tiddler-" + tiddler.title, JSON.stringify(tiddler));
     this.tiddlers[tiddler.title] = tiddler;
 };
 
