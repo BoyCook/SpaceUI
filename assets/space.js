@@ -21,7 +21,7 @@ Space.prototype.init = function() {
 
 Space.prototype.fetchTiddler = function(summary, success, error) {
 	var tiddler = this.getTiddler(summary.title); 
-	if (typeof tiddler === "undefined") {
+	if (typeof tiddler === "undefined" || tiddler === null) {
 		this._fetchTiddler(summary, success, error);
 	} else {
         if (success) {
@@ -52,8 +52,6 @@ Space.prototype.removeTiddler = function(title) {
 
 Space.prototype.setTiddler = function(tiddler) {
     this.store.setTiddler(tiddler);
-    // this.store.setTiddler({"title": "tiddler1"});
-    // localStorage.setItem("tiddler-" + tiddler.title, JSON.stringify(tiddler));
     this.tiddlers[tiddler.title] = tiddler;
 };
 
