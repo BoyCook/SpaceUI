@@ -19,7 +19,7 @@ Store.hasStorage = function(title) {
 };
 
 Store.prototype.getTiddler = function(title) {
-    return JSON.parse(localStorage.getItem(this.prefix + title));
+    return this._return(JSON.parse(localStorage.getItem(this.prefix + title)));
 };
 
 Store.prototype.setTiddler = function(tiddler) {
@@ -31,7 +31,7 @@ Store.prototype.removeTiddler = function(title) {
 };
 
 Store.prototype.getTiddlers = function() {
-	return localStorage.getItem('tiddlers');
+	return this._return(localStorage.getItem('tiddlers'));
 };
 
 Store.prototype.setPublicTiddlers = function(name, tiddlers) {
@@ -48,7 +48,7 @@ Store.prototype.setTiddlers = function(name, tiddler) {
 
 Store.prototype._getTiddler = function(title) {
     var tiddlers = this.getTiddlers();
-    return tiddlers[title];
+    return this._return(tiddlers[title]);
 };
 
 Store.prototype._setTiddler = function(tiddler) {
@@ -61,4 +61,15 @@ Store.prototype._removeTiddler = function(title) {
 	var tiddlers = this.getTiddlers();
     delete tiddlers[tiddler.title];
     this.setTiddlers(tiddlers);
+};
+
+Store.prototype._return = function(data) {
+    if (typeof tiddler === "undefined" || 
+        typeof tiddler === "null" || 
+        tiddler === undefined ||
+        tiddler === null) {
+        return undefined;
+    } else {
+        return data;
+    }
 };
