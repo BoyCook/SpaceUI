@@ -196,13 +196,16 @@ Space.prototype.saveTiddler = function(tiddler, success, error) {
         }
     };
     var fail = function() {
-    /*
-        TODO: - if save fails mark tiddler for resubmit
-              - add list of unsubbmitted tiddlers (highlight red???)  
-              - submit when back online
-    */
+        /*
+            TODO: - if save fails mark tiddler for resubmit
+                  - add list of unsubbmitted tiddlers (highlight red???)  
+                  - submit when back online
+        */
+        if (error) {
+            error.call(context.parent);
+        }
     };
-    this.http.doPut(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, tiddler, callBack, error);
+    this.http.doPut(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, tiddler, callBack, fail);
 };
 
 Space.prototype.deleteTiddler = function(tiddler, success, error) {
