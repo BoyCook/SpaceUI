@@ -7,16 +7,35 @@ function SPA(host, port) {
     } else {
         this.spaceName = host;
     }
-    this.filteredLists = {
-        all: new Filter([]),
-        modified: new Filter([]),
-        private: new Filter([]),
-        tags: new Filter([]),
-        loaded: new Filter([])
-    };
 	this.html = new HTMLGenerator(this.spaceName);
     this.space = new Space(this.baseURL, this.spaceName, this);
     this.maximized = false;
+    this.filteredLists = {
+        all: {
+            filter: new Filter([]),
+            renderer: this.html.generateTiddlersList
+        },
+        modified: {
+            filter: new Filter([]),
+            renderer: this.html.generateTiddlersList
+        },
+        private: {
+            filter: new Filter([]),
+            renderer: this.html.generateTiddlersList
+        },
+        tags: {
+            filter: new Filter([]),
+            renderer: this.html.generateTagsList
+        },
+        loaded: {
+            filter: new Filter([]),
+            renderer: this.html.generateTiddlersList
+        },
+        cached: {
+            filter: new Filter([]),
+            renderer: this.html.generateTiddlersList
+        }
+    };    
 }
 
 SPA.prototype.setup = function(callBack) {
@@ -178,8 +197,8 @@ SPA.prototype._tiddlerLoaded = function(tiddler) {
 };
 
 SPA.prototype._setLoadedCache = function(tiddler) {
-    this.filteredLists.loaded.data.push(tiddler);
-    this.renderNavigationList('loaded', this.html.generateTiddlersList, this.filteredLists.loaded.data);
+    this.filteredLists.loaded.filter.data.push(tiddler);
+    this.renderNavigationList('loaded');
 };
 
 SPA.prototype._setTiddlerDate = function(tiddler) {
@@ -396,8 +415,8 @@ SPA.prototype.getPrivateTiddlers = function(callBack) {
 
 SPA.prototype.filter = function(text) {
     var list = $('input:radio[name=searchType]:checked').val();
-    var filtered = this.filteredLists[list].filter('title', text);
-    this.renderNavigationList(list, this._getListTemplate(list), filtered);    
+    var filtered = this.filteredLists[list].filter.filter('title', text);
+    this.renderNavigationListWithData(list, filtered);
 };
 
 SPA.prototype.switchList = function(name) {
@@ -417,42 +436,46 @@ SPA.prototype.setFilteredLists = function() {
 
 SPA.prototype.setPublicFilteredLists = function() {
     var sort = new Sort(this.space.lists.tiddlers.public);
-    this.filteredLists.all = new Filter(sort.sort('title'));
-    this.filteredLists.modified = new Filter(sort.sort('-modified'));
-    this.filteredLists.tags = new Filter(this.space.lists.tags, true);
+    this.filteredLists.all.filter = new Filter(sort.sort('title'));
+    this.filteredLists.modified.filter = new Filter(sort.sort('-modified'));
+    this.filteredLists.tags.filter = new Filter(this.space.lists.tags, true);
 };
 
 SPA.prototype.setPrivateFilterList = function() {
     var sort = new Sort(this.space.lists.tiddlers.private);
-    this.filteredLists.private = new Filter(sort.sort('title'));
+    this.filteredLists.private.filter = new Filter(sort.sort('title'));
 };
 
 SPA.prototype.renderNavigationLists = function() {
-    this.renderPublicNavigationLists();
-    this.renderPrivateNavigationList();
+    for (var key in this.filteredLists) {
+        if (this.filteredLists.hasOwnProperty(key)) {
+            this.renderNavigationList(key);
+        }
+    }
 };
 
 SPA.prototype.renderPublicNavigationLists = function() {
-    this.renderNavigationList('modified', this.html.generateTiddlersList, this.filteredLists.modified.data);
-    this.renderNavigationList('all', this.html.generateTiddlersList, this.filteredLists.all.data);
-    this.renderNavigationList('tags', this.html.generateTagsList, this.filteredLists.tags.data);    
+    this.renderNavigationList('modified');
+    this.renderNavigationList('all');
+    this.renderNavigationList('tags');
 };
 
 SPA.prototype.renderPrivateNavigationList = function() {
-    this.renderNavigationList('private', this.html.generateTiddlersList, this.filteredLists.private.data);    
+    this.renderNavigationList('private');
 };
 
-SPA.prototype.renderNavigationList = function(name, renderer, data) {
+SPA.prototype.renderNavigationList = function(name) {
+    var list = this.filteredLists[name];
+    this._renderNavigationList(name, list.renderer, list.filter.data);
+};
+
+SPA.prototype.renderNavigationListWithData = function(name, data) {
+    this._renderNavigationList(name, this.filteredLists[name].renderer, data);
+};
+
+SPA.prototype._renderNavigationList = function(name, renderer, data) {
     var selector = 'nav .navigation-list-' + name;
     $(selector).html(renderer.call(this.html, { name: name, items: data }));
-};
-
-SPA.prototype._getListTemplate = function(name) {
-    var generators = {
-        tags: this.html.generateTagsList
-    };
-    var generator = generators[name];
-    return typeof generator === "undefined" ? this.html.generateTiddlersList : generator;
 };
 
 SPA.prototype.toggleMenu = function() {

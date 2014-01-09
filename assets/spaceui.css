@@ -144,3 +144,6 @@ i:hover {
 	color: red;
 }
 
+li.red label, li.red i {
+	color: red
+}

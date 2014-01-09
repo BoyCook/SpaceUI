@@ -6,7 +6,8 @@ function Space(baseURL, name, parent) {
     this.lists = {
         tiddlers: {
             "public": [],
-            "private": [],            
+            "private": [],
+            "cached": []
         },
         tags: []
     };
