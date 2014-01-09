@@ -194,6 +194,13 @@ Space.prototype.saveTiddler = function(tiddler, success, error) {
             success.call(context.parent, tiddler);
         }
     };
+    var fail = function() {
+    /*
+        TODO: - if save fails mark tiddler for resubmit
+              - add list of unsubbmitted tiddlers (highlight red???)  
+              - submit when back online
+    */
+    };
     this.http.doPut(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, tiddler, callBack, error);
 };
 
@@ -205,6 +212,13 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
         if (success) {
             success.call(context.parent, tiddler);
         }
+    };
+    var fail = function() {
+    /*
+        TODO: - if delete fails mark tiddler for resubmit
+              - add list of unsubbmitted tiddlers (highlight red???)  
+              - submit when back online
+    */
     };
     this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, callBack, error);
 };

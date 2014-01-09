@@ -13,9 +13,10 @@
     Space Store wrapper
 */
 function Store() {
-	//Local storage wrapper for tiddlers
     // this.setup();
     this.prefix = 'tiddlyspace-tiddler-';
+    this.publicTiddlers = 'tiddlers-public';
+    this.privateTiddlers = 'tiddlers-private';
 }
 
 Store.prototype.setup = function(title) {
@@ -44,8 +45,16 @@ Store.prototype.getTiddlers = function() {
 	return localStorage.getItem('tiddlers');
 };
 
-Store.prototype.setTiddlers = function(tiddlers) {
-	localStorage.setItem('tiddlers', tiddlers);
+Store.prototype.setPublicTiddlers = function(name, tiddlers) {
+    this.setTiddlers(this.publicTiddlers, tiddlers)
+};
+
+Store.prototype.setPrivateTiddlers = function(name, tiddlers) {
+    this.setTiddlers(this.privateTiddlers, tiddlers)
+};
+
+Store.prototype.setTiddlers = function(name, tiddler) {
+	localStorage.setItem(name, JSON.stringify(tiddlers));
 };
 
 Store.prototype._getTiddler = function(title) {
@@ -64,9 +73,3 @@ Store.prototype._removeTiddler = function(title) {
     delete tiddlers[tiddler.title];
     this.setTiddlers(tiddlers);
 };
-
-// var store = new Store();
-// var obj1 = { "title": "tiddler1" };
-// localStorage.setItem("tiddler1", JSON.stringify(obj1));
-// localStorage.getItem("tiddler1");
-

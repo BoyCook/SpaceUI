@@ -473,16 +473,13 @@ SPA.prototype.closeMenu = function() {
 };
 
 SPA.prototype.openTag = function(tag) {
-    // TODO - implement
     var context = this;
     var success = function(data) {
-        // $.growl.warning({ title: 'Tag [' + tag + ']',  message: data });
         for (var i=0,len=data.length; i<len; i++) {
             context.openTiddler(data[i].title);
         }
     };
     this.space.getTiddlersWithTag(tag, success, this.ajaxError);
-    // $.growl.warning({ title: 'Coming soon...',  message: "Opening tags isn't implemented yet" });
 };
 
 SPA.prototype._getSelector = function(title) {
