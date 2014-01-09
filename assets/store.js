@@ -1,15 +1,4 @@
 /*
-    Some overrides for storing objects
-*/
-// Storage.prototype.setItem = function(key, obj) {
-//     return this.setItem(key, JSON.stringify(obj));
-// };
-
-// Storage.prototype.getItem = function(key) {
-//     return JSON.parse(this.getItem(key));
-// };
-
-/*
     Space Store wrapper
 */
 function Store() {
