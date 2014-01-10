@@ -246,7 +246,7 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
             error.call(context.parent);
         }        
     };
-    this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, callBack, error);
+    this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, callBack, fail);
 };
 
 Space.prototype.isPrivate = function(tiddler) {
