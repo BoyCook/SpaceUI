@@ -11,11 +11,12 @@ function Store() {
             cached: 'tiddlers-cached'
         }
     };
+    this.setup();
 }
 
 Store.prototype.setup = function(title) {
-    if (!localStorage.key('cachedTiddlers')) {
-        localStorage.setItem('cachedTiddlers', []);
+    if (!this.isItem('tiddlers-cached')) {
+        localStorage.setItem('tiddlers-cached', []);
     }
 };
 
@@ -23,14 +24,20 @@ Store.hasStorage = function(title) {
     return typeof(Storage) !== "undefined";
 };
 
-Store.prototype.updateCache = function(tiddler) {
-    var list = this.getItem(this.keys.list.cached);
-    var key = this.keys.cached + tiddler.title;
-
-    this.setItem(key, tiddler);
-    if (list.indexOf(key) == -1) {
+Store.prototype.cacheTiddler = function(tiddler) {
+    var list = this.getItem(this.keys.lists.cached);
+    if (list.indexOf(tiddler.title) === -1) {
         list.push(key);
-        this.setItem(this.keys.list.cached, list);
+        this.setItem(tiddler.title, list);
+    }
+};
+
+Store.prototype.deCacheTiddler = function(tiddler) {
+    var list = this.getItem(this.keys.lists.cached);
+    var index = list.indexOf(tiddler.title); 
+    if (index === -1) {
+        list.splice(index, 1);
+        this.setItem(tiddler.title, list);
     }
 };
 
@@ -43,11 +50,11 @@ Store.prototype.setTiddler = function(tiddler) {
 };
 
 Store.prototype.setPublicTiddlers = function(name, tiddlers) {
-    this.setTiddlers(this.keys.list.public, tiddlers)
+    this.setTiddlers(this.keys.lists.public, tiddlers)
 };
 
 Store.prototype.setPrivateTiddlers = function(name, tiddlers) {
-    this.setTiddlers(this.keys.list.private, tiddlers)
+    this.setTiddlers(this.keys.lists.private, tiddlers)
 };
 
 Store.prototype.setTiddlers = function(name, tiddler) {
@@ -66,11 +73,15 @@ Store.prototype.setItem = function(name, data) {
     localStorage.setItem(name, JSON.stringify(data));
 };
 
+Store.prototype.isItem = function(name) {
+    return !(localStorage.getItem(name) === null);
+};
+
 Store.prototype._return = function(data) {
-    if (typeof tiddler === "undefined" || 
-        typeof tiddler === "null" || 
-        tiddler === undefined ||
-        tiddler === null) {
+    if (typeof data === "undefined" || 
+        typeof data === "null" || 
+        data === undefined ||
+        data === null) {
         return undefined;
     } else {
         return data;

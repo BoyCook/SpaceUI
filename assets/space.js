@@ -48,12 +48,15 @@ Space.prototype.getTiddler = function(title) {
 };
 
 Space.prototype.removeTiddler = function(title) {
-    delete this.tiddlers[title];
+    //TODO: remove from store
+    this.store.removeTiddler(title);
+    // delete this.tiddlers[title];
 };
 
+// TODO - underscore this
 Space.prototype.setTiddler = function(tiddler) {
     this.store.setTiddler(tiddler);
-    this.tiddlers[tiddler.title] = tiddler;
+    // this.tiddlers[tiddler.title] = tiddler;
 };
 
 Space.prototype.getSummaryTiddler = function(title) {
@@ -187,6 +190,30 @@ Space.prototype.getRecipe = function(name, params, success, error) {
     this.http.doGet(this.baseURL + '/recipes/' + name + '/tiddlers' + params, success, error);
 };
 
+Space.prototype._cacheSave = function(tiddler) {
+    /*
+        TODO: - if save fails mark tiddler for resubmit
+              - add list of unsubbmitted tiddlers (highlight red???)  
+              - submit when back online
+    */    
+    this._addSummaryTiddler(tiddler);
+    this.setTiddler(tiddler);    
+    this.store.cacheTiddler(tiddler);
+};
+
+Space.prototype._cacheDelete = function(tiddler) {
+    /*
+        TODO: - if delete fails mark tiddler for resubmit
+              - add list of unsubbmitted tiddlers (highlight red???)  
+              - submit when back online
+        - if it hasn't be created yet, remove from the save cache
+        - add to delete cache
+    */
+    // context.removeTiddler(tiddler.title);        
+    // this.store.deCacheTiddler    
+    var cached = this.store.cacheTiddler(tiddler);
+};
+
 Space.prototype.saveTiddler = function(tiddler, success, error) {
     var context = this;
     var callBack = function() {
@@ -196,13 +223,7 @@ Space.prototype.saveTiddler = function(tiddler, success, error) {
         }
     };
     var fail = function() {
-        /*
-            TODO: - if save fails mark tiddler for resubmit
-                  - add list of unsubbmitted tiddlers (highlight red???)  
-                  - submit when back online
-        */
-        context._addSummaryTiddler(tiddler);
-        context._addToCache(tiddler);
+        context._cacheSave(tiddler);
         if (error) {
             error.call(context.parent);
         }
@@ -220,11 +241,10 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
         }
     };
     var fail = function() {
-    /*
-        TODO: - if delete fails mark tiddler for resubmit
-              - add list of unsubbmitted tiddlers (highlight red???)  
-              - submit when back online
-    */
+        context._cacheDelete(tiddler);
+        if (error) {
+            error.call(context.parent);
+        }        
     };
     this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, callBack, error);
 };

@@ -48,6 +48,7 @@ SPA.prototype.setup = function(callBack) {
     this.getPublicTiddlers(done); 
     this.getPrivateTiddlers();
     this.switchList($('input:radio[name=searchType]:checked').val());
+    // TODO - make sure local cache is in consistent state after getPublicTiddlers
 };
 
 SPA.prototype._loadSiteTitle = function() {
