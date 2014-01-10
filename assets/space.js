@@ -201,6 +201,8 @@ Space.prototype.saveTiddler = function(tiddler, success, error) {
                   - add list of unsubbmitted tiddlers (highlight red???)  
                   - submit when back online
         */
+        context._addSummaryTiddler(tiddler);
+        context._addToCache(tiddler);
         if (error) {
             error.call(context.parent);
         }

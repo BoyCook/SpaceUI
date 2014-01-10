@@ -517,12 +517,29 @@ SPA.prototype.clearAnchor = function() {
     document.location.href = '#';
 };
 
+SPA.prototype._errorMsg = function(xhr, error, exc) {
+    document.location.href = '#';
+    var defaultText = 'There was an unknown error - check your connectivity';
+    var text = (xhr.responseText !== '' ? xhr.responseText : (xhr.statusText !== '' ? xhr.statusText : defaultText));
+    return 'ERROR (' + xhr.status + ') [' + text + ']';    
+};
+
 SPA.prototype.silentError = function(xhr, error, exc) {
     document.location.href = '#';
     var defaultText = 'There was an unknown error - check your connectivity';
     var text = (xhr.responseText !== '' ? xhr.responseText : (xhr.statusText !== '' ? xhr.statusText : defaultText));
     var msg = 'ERROR (' + xhr.status + ') [' + text + ']';    
     console.log(msg);
+};
+
+SPA.prototype.updateError = function(xhr, error, exc) {
+    document.location.href = '#';
+    var defaultText = 'There was an unknown error - check your connectivity';
+    var text = (xhr.responseText !== '' ? xhr.responseText : (xhr.statusText !== '' ? xhr.statusText : defaultText));
+    var msg = 'ERROR (' + xhr.status + ') [' + text + ']';    
+    console.log(msg);
+    $.growl.error({ message: msg });
+    //TODO: reload cache list
 };
 
 SPA.prototype.ajaxError = function(xhr, error, exc) {

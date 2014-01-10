@@ -2,15 +2,20 @@
     Space Store wrapper
 */
 function Store() {
-    // this.setup();
-    this.prefix = 'tiddlyspace-tiddler-';
-    this.publicTiddlers = 'tiddlers-public';
-    this.privateTiddlers = 'tiddlers-private';
+    this.keys = {
+        tiddler: 'tiddlyspace-tiddler-',
+        cached: 'tiddlyspace-cached-',
+        lists: {
+            public: 'tiddlers-public',
+            private: 'tiddlers-private',
+            cached: 'tiddlers-cached'
+        }
+    };
 }
 
 Store.prototype.setup = function(title) {
-    if (!localStorage.key('tiddlers')) {
-        localStorage.setItem('tiddlers', []);
+    if (!localStorage.key('cachedTiddlers')) {
+        localStorage.setItem('cachedTiddlers', []);
     }
 };
 
@@ -18,49 +23,47 @@ Store.hasStorage = function(title) {
     return typeof(Storage) !== "undefined";
 };
 
+Store.prototype.updateCache = function(tiddler) {
+    var list = this.getItem(this.keys.list.cached);
+    var key = this.keys.cached + tiddler.title;
+
+    this.setItem(key, tiddler);
+    if (list.indexOf(key) == -1) {
+        list.push(key);
+        this.setItem(this.keys.list.cached, list);
+    }
+};
+
 Store.prototype.getTiddler = function(title) {
-    return this._return(JSON.parse(localStorage.getItem(this.prefix + title)));
+    return this.getItem(this.keys.tiddler + title);
 };
 
 Store.prototype.setTiddler = function(tiddler) {
-    localStorage.setItem(this.prefix + tiddler.title, JSON.stringify(tiddler));
-};
-
-Store.prototype.removeTiddler = function(title) {
-    localStorage.removeItem(this.prefix + title);
-};
-
-Store.prototype.getTiddlers = function() {
-	return this._return(localStorage.getItem('tiddlers'));
+    this.setItem(this.keys.tiddler + tiddler.title, tiddler);
 };
 
 Store.prototype.setPublicTiddlers = function(name, tiddlers) {
-    this.setTiddlers(this.publicTiddlers, tiddlers)
+    this.setTiddlers(this.keys.list.public, tiddlers)
 };
 
 Store.prototype.setPrivateTiddlers = function(name, tiddlers) {
-    this.setTiddlers(this.privateTiddlers, tiddlers)
+    this.setTiddlers(this.keys.list.private, tiddlers)
 };
 
 Store.prototype.setTiddlers = function(name, tiddler) {
-	localStorage.setItem(name, JSON.stringify(tiddlers));
+    this.setItem(name, tiddlers);
 };
 
-Store.prototype._getTiddler = function(title) {
-    var tiddlers = this.getTiddlers();
-    return this._return(tiddlers[title]);
+Store.prototype.removeTiddler = function(title) {
+    localStorage.removeItem(this.keys.tiddler + title);
 };
 
-Store.prototype._setTiddler = function(tiddler) {
-    var tiddlers = this.getTiddlers();
-    tiddlers[tiddler.title] = tiddler;
-    this.setTiddlers(tiddlers);
+Store.prototype.getItem = function(name) {
+    return this._return(JSON.parse(localStorage.getItem(name)));
 };
 
-Store.prototype._removeTiddler = function(title) {
-	var tiddlers = this.getTiddlers();
-    delete tiddlers[tiddler.title];
-    this.setTiddlers(tiddlers);
+Store.prototype.setItem = function(name, data) {
+    localStorage.setItem(name, JSON.stringify(data));
 };
 
 Store.prototype._return = function(data) {
