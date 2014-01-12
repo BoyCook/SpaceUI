@@ -8,10 +8,6 @@ function Space(baseURL, name, parent) {
     this.parent = parent;
 }
 
-Space.prototype.init = function() {
-    //TODO: init local state
-};
-
 Space.prototype.fetchTiddler = function(summary, success, error) {
 	var tiddler = this.getTiddler(summary.title); 
 	if (typeof tiddler === "undefined" || tiddler === null) {
