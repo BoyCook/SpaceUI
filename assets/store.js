@@ -48,7 +48,7 @@ Store.prototype.setTiddler = function(tiddler) {
 };
 
 Store.prototype.getPublicTiddlers = function() {
-    return this.getItem(this.keys.lists.public);
+    return this.asArray(this.getItem(this.keys.lists.public));
 };
 
 Store.prototype.setPublicTiddlers = function(tiddlers) {
@@ -56,7 +56,7 @@ Store.prototype.setPublicTiddlers = function(tiddlers) {
 };
 
 Store.prototype.getPrivateTiddlers = function() {
-    return this.getItem(this.keys.lists.private);
+    return this.asArray(this.getItem(this.keys.lists.private));
 };
 
 Store.prototype.setPrivateTiddlers = function(tiddlers) {
@@ -64,7 +64,7 @@ Store.prototype.setPrivateTiddlers = function(tiddlers) {
 };
 
 Store.prototype.getTags = function() {
-    return this.getItem(this.keys.lists.tags);
+    return this.asArray(this.getItem(this.keys.lists.tags));
 };
 
 Store.prototype.setTags = function(tags) {
