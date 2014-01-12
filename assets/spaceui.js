@@ -38,17 +38,39 @@ function SPA(host, port) {
     };    
 }
 
-SPA.prototype.setup = function(callBack) {
+SPA.prototype.setup = function() {
     var context = this;
-    var done = function(){
+    var loaded = function() {
+        var router = new Router();
+        Backbone.history.start();
+    };    
+    var done = function() {
         context._loadSiteTitle();
-        context._loadDefaults(callBack);
+        context._loadDefaults(loaded);
         context.switchList('modified');
-    };
-    this.getPublicTiddlers(done); 
+    };    
+    var error = function(xhr, error, exc) {
+        done();
+        context.ajaxError(xhr, error, exc);
+    }
+    this.getPublicTiddlers(done, error); 
     this.getPrivateTiddlers();
     this.switchList($('input:radio[name=searchType]:checked').val());
     // TODO - make sure local cache is in consistent state after getPublicTiddlers
+};
+
+SPA.prototype.afterDataLoaded = function() {
+    var context = this;
+    var loaded = function() {
+        var router = new Router();
+        Backbone.history.start();
+    };    
+    var done = function() {
+        context._loadSiteTitle();
+        context._loadDefaults(loaded);
+        context.switchList('modified');
+    };
+    done();
 };
 
 SPA.prototype._loadSiteTitle = function() {
@@ -389,7 +411,7 @@ SPA.prototype._readTiddlerForm = function(selector, tiddler) {
     tiddler.type = $(selector + ' .tiddler-type').val();
 };
 
-SPA.prototype.getPublicTiddlers = function(callBack) {
+SPA.prototype.getPublicTiddlers = function(callBack, error) {
     var context = this; 
     var success = function(data) {
         context.setPublicFilteredLists();
@@ -398,7 +420,7 @@ SPA.prototype.getPublicTiddlers = function(callBack) {
             callBack();
         }
     };
-    this.space.getPublicTiddlers(success, this.ajaxError);
+    this.space.getPublicTiddlers(success, error);
 };
 
 SPA.prototype.getPrivateTiddlers = function(callBack) {

@@ -61,12 +61,8 @@ var Router = Backbone.Router.extend({
 });
 
 $(document).ready(function () {
-    var loaded = function() {
-        var router = new Router();
-        Backbone.history.start();
-    };
     app = new SPA(window.location.hostname, window.location.port);
-    app.setup(loaded);
+    app.setup();
     $('#filterBox').keyup(function (e) {
         if (!(e.keyCode >= 37 && e.keyCode <= 40)) {
             app.filter($('#filterBox').val());
