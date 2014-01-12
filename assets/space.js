@@ -3,14 +3,6 @@ function Space(baseURL, name, parent) {
 	this.baseURL = baseURL;
 	this.name = name;
 	this.tiddlers = {};
-    this.lists = {
-        tiddlers: {
-            "public": [],
-            "private": [],
-            "cached": []
-        },
-        tags: []
-    };
     this.store = new Store();
     this.http = new HTTP();
     this.parent = parent;
@@ -60,9 +52,9 @@ Space.prototype.setTiddler = function(tiddler) {
 };
 
 Space.prototype.getSummaryTiddler = function(title) {
-    var summary = this._getTiddlerByTitle(title, this.lists.tiddlers.public);
+    var summary = this._getTiddlerByTitle(title, this.store.getPublicTiddlers());
     if (typeof summary === "undefined") {
-        summary = this._getTiddlerByTitle(title, this.lists.tiddlers.private);
+        summary = this._getTiddlerByTitle(title, this.store.getPrivateTiddlers());
     }
     return summary;
 };
@@ -78,11 +70,11 @@ Space.prototype._getTiddlerByTitle = function(title, tiddlers) {
 };
 
 Space.prototype._setPublicTiddlers = function(tiddlers) {
-    this.lists.tiddlers.public = tiddlers;
+    this.store.setPublicTiddlers(tiddlers);
 };
 
 Space.prototype._setPrivateTiddlers = function(tiddlers) {
-    this.lists.tiddlers.private = tiddlers;
+    this.store.setPublicTiddlers(tiddlers);
 };
 
 Space.prototype._calculateTags = function(tiddlers) {
@@ -105,7 +97,7 @@ Space.prototype._calculateTags = function(tiddlers) {
         }
     }
     //TODO - merge
-    this.lists.tags = tags;
+    this.store.setTags(tags);
 };
 
 Space.prototype._addSummaryTiddler = function(tiddler) {
@@ -120,9 +112,9 @@ Space.prototype._addSummaryTiddler = function(tiddler) {
 
 Space.prototype.addSummaryTiddler = function(tiddler) {
     if (this.isPrivate(tiddler)) {
-        this._addToList(tiddler, this.lists.tiddlers.private);
+        this._addToList(tiddler, this.store.getPrivateTiddlers());
     } else {
-        this._addToList(tiddler, this.lists.tiddlers.public);
+        this._addToList(tiddler, this.store.getPublicTiddlers());
     }
 };
 
@@ -137,9 +129,9 @@ Space.prototype._addToList = function(tiddler, list) {
 
 Space.prototype.removeSummaryTiddler = function(tiddler) {
     if (this.isPrivate(tiddler)) {
-        this._removeFromList(tiddler, this.lists.tiddlers.private);
+        this._removeFromList(tiddler, this.store.getPrivateTiddlers());
     } else {
-        this._removeFromList(tiddler, this.lists.tiddlers.public);
+        this._removeFromList(tiddler, this.store.getPublicTiddlers());
     }
 };
 

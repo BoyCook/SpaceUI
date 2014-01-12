@@ -8,7 +8,8 @@ function Store() {
         lists: {
             public: 'tiddlers-public',
             private: 'tiddlers-private',
-            cached: 'tiddlers-cached'
+            cached: 'tiddlers-cached',
+            tags: 'tiddler-tags'
         }
     };
 }
@@ -46,15 +47,31 @@ Store.prototype.setTiddler = function(tiddler) {
     this.setItem(this.keys.tiddler + tiddler.title, tiddler);
 };
 
-Store.prototype.setPublicTiddlers = function(name, tiddlers) {
-    this.setTiddlers(this.keys.lists.public, tiddlers)
+Store.prototype.getPublicTiddlers = function() {
+    return this.getItem(this.keys.lists.public);
 };
 
-Store.prototype.setPrivateTiddlers = function(name, tiddlers) {
-    this.setTiddlers(this.keys.lists.private, tiddlers)
+Store.prototype.setPublicTiddlers = function(tiddlers) {
+    this.setTiddlers(this.keys.lists.public, tiddlers);
 };
 
-Store.prototype.setTiddlers = function(name, tiddler) {
+Store.prototype.getPrivateTiddlers = function() {
+    return this.getItem(this.keys.lists.private);
+};
+
+Store.prototype.setPrivateTiddlers = function(tiddlers) {
+    this.setTiddlers(this.keys.lists.private, tiddlers);
+};
+
+Store.prototype.getTags = function() {
+    return this.getItem(this.keys.lists.tags);
+};
+
+Store.prototype.setTags = function(tags) {
+    this.setTiddlers(this.keys.lists.tags, tags);
+};
+
+Store.prototype.setTiddlers = function(name, tiddlers) {
     this.setItem(name, tiddlers);
 };
 

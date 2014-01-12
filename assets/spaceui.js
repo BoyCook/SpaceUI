@@ -436,14 +436,14 @@ SPA.prototype.setFilteredLists = function() {
 };
 
 SPA.prototype.setPublicFilteredLists = function() {
-    var sort = new Sort(this.space.lists.tiddlers.public);
+    var sort = new Sort(this.space.store.getPublicTiddlers());
     this.filteredLists.all.filter = new Filter(sort.sort('title'));
     this.filteredLists.modified.filter = new Filter(sort.sort('-modified'));
-    this.filteredLists.tags.filter = new Filter(this.space.lists.tags, true);
+    this.filteredLists.tags.filter = new Filter(this.space.store.getTags(), true);
 };
 
 SPA.prototype.setPrivateFilterList = function() {
-    var sort = new Sort(this.space.lists.tiddlers.private);
+    var sort = new Sort(this.space.store.getPrivateTiddlers());
     this.filteredLists.private.filter = new Filter(sort.sort('title'));
 };
 
@@ -517,6 +517,8 @@ SPA.prototype.renderTiddler = function(tiddler) {
 SPA.prototype.clearAnchor = function() {
     document.location.href = '#';
 };
+
+// TODO: refactor error handlers and generify
 
 SPA.prototype._errorMsg = function(xhr, error, exc) {
     document.location.href = '#';
