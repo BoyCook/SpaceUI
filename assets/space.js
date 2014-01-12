@@ -2,7 +2,6 @@
 function Space(baseURL, name, parent) {
 	this.baseURL = baseURL;
 	this.name = name;
-	this.tiddlers = {};
     this.store = new Store();
     this.http = new HTTP();
     this.parent = parent;
@@ -31,20 +30,16 @@ Space.prototype._fetchTiddler = function(summary, success, error) {
 };
 
 Space.prototype.getTiddler = function(title) {
-    // return this.tiddlers[title];
     return this.store.getTiddler(title);
 };
 
 Space.prototype.removeTiddler = function(title) {
-    //TODO: remove from store
     this.store.removeTiddler(title);
-    // delete this.tiddlers[title];
 };
 
 // TODO - underscore this
 Space.prototype.setTiddler = function(tiddler) {
     this.store.setTiddler(tiddler);
-    // this.tiddlers[tiddler.title] = tiddler;
 };
 
 Space.prototype.getSummaryTiddler = function(title) {
