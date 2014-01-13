@@ -51,6 +51,8 @@ SPA.prototype.setup = function() {
     };    
     var error = function(xhr, error, exc) {
         done();
+        context.setPublicFilteredLists();
+        context.renderPublicNavigationLists();        
         context.ajaxError(xhr, error, exc);
     }
     this.getPublicTiddlers(done, error); 
