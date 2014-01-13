@@ -190,7 +190,7 @@ Space.prototype.saveTiddler = function(tiddler, success, error) {
         context._cacheSave(tiddler);
         if (success) {
             success.call(context.parent, tiddler);
-        }        
+        }
         if (error) {
             error.call(context.parent, xhr, ex, exc);
         }

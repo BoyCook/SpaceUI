@@ -590,8 +590,6 @@ SPA.prototype.ajaxError = function(xhr, error, exc) {
     var msg = 'ERROR (' + xhr.status + ') [' + text + ']';
     console.log(msg);
     $.growl.error({ message: msg });
-    this.refreshLists();
-    this.checkCache();
 };
 
 if (!(typeof exports === "undefined")) {
