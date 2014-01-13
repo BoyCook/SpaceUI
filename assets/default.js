@@ -70,7 +70,7 @@ $(document).ready(function () {
     });    
     $('input:radio[name=searchType]').change(function() {
         var list = $('input:radio[name=searchType]:checked').val();
-        $('#filterBox').val(app.filteredLists[list].text);
+        $('#filterBox').val(app.filteredLists[list].filter.text);
         app.switchList(list);            
     });   
 });
