@@ -205,10 +205,10 @@ Space.prototype.saveTiddler = function(tiddler, success, error) {
             success.call(context.parent, tiddler);
         }
     };
-    var fail = function() {
+    var fail = function(xhr, ex, exc) {
         context._cacheSave(tiddler);
         if (error) {
-            error.call(context.parent);
+            error.call(context.parent, xhr, ex, exc);
         }
     };
     this.http.doPut(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, tiddler, callBack, fail);
@@ -223,10 +223,10 @@ Space.prototype.deleteTiddler = function(tiddler, success, error) {
             success.call(context.parent, tiddler);
         }
     };
-    var fail = function() {
+    var fail = function(xhr, ex, exc) {
         context._cacheDelete(tiddler);
         if (error) {
-            error.call(context.parent);
+            error.call(context.parent, xhr, ex, exc);
         }        
     };
     this.http.doDelete(this.baseURL + '/bags/' + tiddler.bag + '/tiddlers/' + tiddler.title, callBack, fail);

@@ -60,6 +60,12 @@ nav .navigation-list {
 	/* Try to overlay textbox and search icon */
 }
 
+ul.navigation-menu li span {
+	color: red;
+	font-weight: bold;
+	padding-left: 5px;
+}
+
 .tiddler {
 	position: relative;
 	padding-left: 25px;

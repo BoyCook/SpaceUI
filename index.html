@@ -27,15 +27,15 @@
                     <i class='icon-search'></i>
                     <input type="text" id="filterBox" placeholder="Type to filter..." />
                 </li>
-                <li>
+                <li class="recent-item">
                     <input type="radio" name="searchType" value="modified" checked="checked" title="Recently edited tiddlers" />
                     <i class='icon-time' title="Recently edited tiddlers"></i>
-                    <label>Recent</label>
+                    <label>Recent</label><span></span>
                 </li>
-                <li>
+                <li class="all-item">
                     <input type="radio" name="searchType" value="all" title="All tiddlers" />
                     <i class='icon-resize-vertical' title="All tiddlers"></i>
-                    <label>All</label>
+                    <label>All</label><span></span>
                 </li>                          
                 <li>
                     <input type="radio" name="searchType" value="private" title="Private tiddlers" />
@@ -52,10 +52,10 @@
                     <i class='icon-download' title="Tiddlers loaded"></i>
                     <label>Loaded</label>
                 </li>
-                <li class="red">
+                <li class="hidden cached-item">
                     <input type="radio" name="searchType" value="cached" title="Tiddlers cached" />
                     <i class='icon-upload' title="Tiddlers cached"></i>
-                    <label>Cached</label>
+                    <label>Cached</label><span></span>
                 </li>                
             </ul>
             <ul class="navigation-list navigation-list-modified"></ul>

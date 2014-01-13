@@ -48,6 +48,7 @@ SPA.prototype.setup = function() {
         context._loadSiteTitle();
         context._loadDefaults(loaded);
         context.switchList('modified');
+        context.checkCache();
     };    
     var error = function(xhr, error, exc) {
         done();
@@ -449,6 +450,21 @@ SPA.prototype.switchList = function(name) {
     $('.navigation-list-' + name).show();
 };
 
+SPA.prototype.checkCache = function() {
+    var list = this.space.store.getCacheList();
+    if (list.length > 0 ) {
+        $('.cached-item').removeClass('hidden');
+        $('.cached-item span').text('(' + list.length + ')');
+        $('.recent-item span').text('(' + list.length + ')');
+        $('.all-item span').text('(' + list.length + ')');        
+    } else {
+        $('.cached-item').addClass('hidden');
+        $('.cached-item span').text('');
+        $('.recent-item span').text('');
+        $('.all-item span').text('');
+    }
+};
+
 SPA.prototype.refreshLists = function() {
     this.setFilteredLists();
     this.renderNavigationLists();
@@ -576,6 +592,7 @@ SPA.prototype.ajaxError = function(xhr, error, exc) {
     var msg = 'ERROR (' + xhr.status + ') [' + text + ']';
     console.log(msg);
     $.growl.error({ message: msg });
+    this.checkCache();
 };
 
 if (!(typeof exports === "undefined")) {
