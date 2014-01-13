@@ -55,12 +55,55 @@ Store.prototype.setPublicTiddlers = function(tiddlers) {
     this.setTiddlers(this.keys.lists.public, tiddlers);
 };
 
+Store.prototype.addPublicTiddler = function(tiddler) {
+    var list = this.getPublicTiddlers();
+    this._addToList(tiddler, list);
+    this.setPublicTiddlers(list);
+};
+
+Store.prototype.removePublicTiddler = function(tiddler) {
+    var list = this.getPublicTiddlers();
+    this._removeFromList(tiddler, list);
+    this.setPublicTiddlers(list);    
+};
+
 Store.prototype.getPrivateTiddlers = function() {
     return this.asArray(this.getItem(this.keys.lists.private));
 };
 
 Store.prototype.setPrivateTiddlers = function(tiddlers) {
     this.setTiddlers(this.keys.lists.private, tiddlers);
+};
+
+Store.prototype.addPrivateTiddler = function(tiddler) {
+    var list = this.getPrivateTiddlers();
+    this._addToList(tiddler, list);
+    this.setPrivateTiddlers(list);        
+};
+
+Store.prototype.removePrivateTiddler = function(tiddler) {
+    var list = this.getPrivateTiddlers();
+    this._removeFromList(tiddler, list);
+    this.setPrivateTiddlers(list);            
+};
+
+Store.prototype._addToList = function(tiddler, list) {
+    //Move to top of list???
+    if (list.unshift) {
+        list.unshift(tiddler);
+    } else {
+        list.push(tiddler);
+    }       
+};
+
+Store.prototype._removeFromList = function(tiddler, list) {
+    for (var i=0,len=list.length; i < len; i++) {
+        var item = list[i];
+        if (item.title === tiddler.title) {
+            list.splice(i, 1);
+            return;
+        }
+    }
 };
 
 Store.prototype.getTags = function() {

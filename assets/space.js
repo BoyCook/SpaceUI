@@ -103,36 +103,17 @@ Space.prototype._addSummaryTiddler = function(tiddler) {
 
 Space.prototype.addSummaryTiddler = function(tiddler) {
     if (this.isPrivate(tiddler)) {
-        this._addToList(tiddler, this.store.getPrivateTiddlers());
+        this.store.addPrivateTiddler(tiddler);
     } else {
-        this._addToList(tiddler, this.store.getPublicTiddlers());
+        this.store.addPublicTiddler(tiddler);
     }
-};
-
-Space.prototype._addToList = function(tiddler, list) {
-    //Move to top of list???
-    if (list.unshift) {
-        list.unshift(tiddler);
-    } else {
-        list.push(tiddler);
-    }       
 };
 
 Space.prototype.removeSummaryTiddler = function(tiddler) {
     if (this.isPrivate(tiddler)) {
-        this._removeFromList(tiddler, this.store.getPrivateTiddlers());
+        this.store.removePrivateTiddler(tiddler);
     } else {
-        this._removeFromList(tiddler, this.store.getPublicTiddlers());
-    }
-};
-
-Space.prototype._removeFromList = function(tiddler, list) {
-    for (var i=0,len=list.length; i < len; i++) {
-        var item = list[i];
-        if (item.title === tiddler.title) {
-            list.splice(i, 1);
-            return;
-        }
+        this.store.removePublicTiddler(tiddler);
     }
 };
 
@@ -207,6 +188,9 @@ Space.prototype.saveTiddler = function(tiddler, success, error) {
     };
     var fail = function(xhr, ex, exc) {
         context._cacheSave(tiddler);
+        if (success) {
+            success.call(context.parent, tiddler);
+        }        
         if (error) {
             error.call(context.parent, xhr, ex, exc);
         }
